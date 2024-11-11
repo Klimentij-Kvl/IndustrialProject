@@ -9,7 +9,7 @@ public class Main {
         kekw.add("LOL KEK CHEBYKER");
         kekw.add("bozhecki koshecki");
         fileWriter out = new fileWriter();
-        out.setFileNameAndFormat("out.xml");
+        out.setFileNameAndFormat("out.yaml");
         out.write(kekw);
     }
 }

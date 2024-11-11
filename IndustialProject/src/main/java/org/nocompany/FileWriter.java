@@ -3,8 +3,8 @@ package org.nocompany;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
-import javax.sql.rowset.spi.XmlWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -50,6 +50,14 @@ class fileWriter{
 
             File outputFile = new File(fileName + "."  + format);
             ObjectMapper mapper = new XmlMapper();
+            mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            try {
+                mapper.writeValue(outputFile, text);
+            }catch (IOException e){ System.out.println(e.getMessage());}
+        }
+        else if(format.equals("yaml")){
+            File outputFile = new File(fileName + "."  + format);
+            ObjectMapper mapper = new YAMLMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             try {
                 mapper.writeValue(outputFile, text);
