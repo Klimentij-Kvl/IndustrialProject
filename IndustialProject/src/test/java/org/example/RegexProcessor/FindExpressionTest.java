@@ -148,25 +148,25 @@ class FindExpressionTest {
     }
 
     @Test
-    void testFindExpression() {
+    void testFind() {
         List<String> input1 = asList("Бим б, 1 + 5 Бом","Парарам");
         List<String> expected1 = List.of("1+5");
-        assertEquals(expected1, FindExpression.findExpression(input1), "Ошибка с примером \"" + input1 + "\"");
+        assertEquals(expected1, FindExpression.find(input1), "Ошибка с примером \"" + input1 + "\"");
 
         List<String> input2 = asList("Бара + 2 / 3 + бэмля-ля"," 8 / 6 + 1 Валера 22 + 2");
         List<String> expected2 = asList("2/3", "8/6+1", "22+2");
-        assertEquals(expected2, FindExpression.findExpression(input2), "Ошибка с примером \"" + input2 + "\"");
+        assertEquals(expected2, FindExpression.find(input2), "Ошибка с примером \"" + input2 + "\"");
 
         List<String> input3 = List.of("Проверяй, (3+(3* 8) должно быть изменено на двадцать семь");
         List<String> expected3 = List.of("3+(3*8)");
-        assertEquals(expected3, FindExpression.findExpression(input3), "Ошибка с примером \"" + input3 + "\"");
+        assertEquals(expected3, FindExpression.find(input3), "Ошибка с примером \"" + input3 + "\"");
 
         List<String> input4 = List.of("*- 3 +++ 5 -+-- 2)");
         List<String> expected4 = List.of("-3+5-2");
-        assertEquals(expected4, FindExpression.findExpression(input4), "Ошибка с примером \"" + input4 + "\"");
+        assertEquals(expected4, FindExpression.find(input4), "Ошибка с примером \"" + input4 + "\"");
 
         List<String> input5 = List.of(") (+10) * ((3 + 5) / 2 ");
         List<String> expected5 = List.of("10*(3+5)/2");
-        assertEquals(expected5, FindExpression.findExpression(input5), "Ошибка с примером \"" + input5 + "\"");
+        assertEquals(expected5, FindExpression.find(input5), "Ошибка с примером \"" + input5 + "\"");
     }
 }

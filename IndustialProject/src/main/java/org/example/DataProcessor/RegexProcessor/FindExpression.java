@@ -79,7 +79,7 @@ public class FindExpression {
     }
 
     //Получение итоговых выражений
-    public static List<String> findExpression(List<String> input) {
+    public static List<String> find(List<String> input) {
         //Находим допустимые выражения
         //Удаляем пробелы
         //Удаляем бесполезные скобки
