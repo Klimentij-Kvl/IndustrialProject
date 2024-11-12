@@ -1,4 +1,4 @@
-package org.example.RegexProcessor;
+package org.example.DataProcessor.RegexProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-class FindExpression {
+public class FindExpression {
 
     //Поиск выражения, возможного выражения для подсчёта
     public static List<String> findComputableExpressions(String input) {
