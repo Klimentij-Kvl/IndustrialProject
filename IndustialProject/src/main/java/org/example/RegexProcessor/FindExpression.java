@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 
 class FindExpression {
 
-    //Поиск выражения, возможного для подсчёта
+    //Поиск выражения, возможного выражения для подсчёта
     public static List<String> findComputableExpressions(String input) {
         List<String> expressions = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("([\\s\\(\\)\\-\\+]*\\d+[ \\(\\)]*([\\+\\-\\*\\÷\\/][ \\(\\)\\-\\+]*\\d+[ \\(\\)]*)+)+");
+        Pattern pattern = Pattern.compile("([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+");
         Matcher matcher = pattern.matcher(input);
 
         while (matcher.find()) {
@@ -28,35 +28,17 @@ class FindExpression {
 
     //Замена () на [] в строке (Сохранение полезных скобок)
     public static String saveUsefulBrackets(String input) {
-        String modified;
-        do {
-            modified = input;
-            input = input.replaceAll("\\(([^\\(\\)]*)\\)", "[$1]");
-        } while (!input.equals(modified));
-
-        return input;
+        return normalizePattern(input,"\\(([^\\(\\)]*)\\)", "[$1]");
     }
 
     //Удаление () в строке  (Удаление бесполезных скобок)
     public static String deleteSingleObjectBrackets(String input) {
-        String modified;
-        do {
-            modified = input;
-            input = input.replaceAll("\\(([-+*/\\÷]*?\\d*[-+]*)\\)", "$1");
-        } while (!input.equals(modified));
-
-        return input;
+        return normalizePattern(input,"\\(([-+*/\\÷]*?\\d*[-+]*)\\)", "$1");
     }
 
     //Замена [] на () в строке (Возвращение полезных скобок)
     public static String returnUsefulBrackets(String input) {
-        String modified;
-        do {
-            modified = input;
-            input = input.replaceAll("\\[([^\\[\\]]*)\\]", "($1)");
-        } while (!input.equals(modified));
-
-        return input;
+        return normalizePattern(input,"\\[([^\\[\\]]*)\\]", "($1)");
     }
 
     //Удаление всех ()   (Удаление лишних скобок)
@@ -66,12 +48,7 @@ class FindExpression {
 
     //Замена -- в +
     public static String convertRedundantMinuses(String input) {
-        String modified;
-        do {
-            modified = input;
-            input = input.replaceAll("-([+]*?)-", "$1+");
-        } while (!input.equals(modified));
-        return input;
+        return normalizePattern(input,"-([+]*?)-", "$1+");
     }
 
     //Замена +...+ в +
@@ -81,20 +58,17 @@ class FindExpression {
 
     //Замена +- на -
     public static String chooseSign(String input) {
-        String modified;
-        do {
-            modified = input;
-            input = input.replaceAll("(\\-\\+)|(\\+\\-)", "-");
-        } while (!input.equals(modified));
-        return input;
+        return normalizePattern(input,"(\\-\\+)|(\\+\\-)", "-");
     }
+
     //Удаление + не влияющих на выражение
-    public static String removeUslessPlus(String input) {
-        input = input.replaceAll("([*/\\÷][\\(\\)]*)\\+(\\d*)", "$1$2");
-        input = input.replaceAll("(\\D\\(*)*\\+(\\(*\\d*)", "$1$2");
+    public static String removeUselessPlus(String input) {
+        input = input.replaceAll("([*/÷][()]*)\\+(\\d*)", "$1$2");
+        input = input.replaceAll("^\\(*\\+(\\(*\\d+)", "$1");
         return input;
     }
 
+    //Циклическая обработка регулярным выражением, пока есть изменения
     private static String normalizePattern(String input, String regex, String replacement) {
         String modified;
         do {
@@ -106,7 +80,17 @@ class FindExpression {
 
     //Получение итоговых выражений
     public static List<String> findExpression(List<String> input) {
-        List<String> expressions = input.stream()
+        //Находим допустимые выражения
+        //Удаляем пробелы
+        //Удаляем бесполезные скобки
+        //Сохранение взаимодействующих
+        //Удаление остальных скобок
+        //Возвращение сохранённых скобок
+        //Превращение избыточных минусов в плюсы
+        //Удаление избыточных плюсов
+        //Выбор знака в случае -+
+        //Удаление остаточных ненужных плюсов
+        return input.stream()
                 .flatMap(line -> findComputableExpressions(line).stream()) //Находим допустимые выражения
                 .map(FindExpression::deleteSpaces)                         //Удаляем пробелы
                 .map(FindExpression::deleteSingleObjectBrackets)           //Удаляем бесполезные скобки
@@ -116,8 +100,7 @@ class FindExpression {
                 .map(FindExpression::convertRedundantMinuses)              //Превращение избыточных минусов в плюсы
                 .map(FindExpression::removeRedundantPluses)                //Удаление избыточных плюсов
                 .map(FindExpression::chooseSign)                           //Выбор знака в случае -+
-                .map(FindExpression::removeUslessPlus)                     //Удаление остаточных ненужных плюсов
+                .map(FindExpression::removeUselessPlus)                     //Удаление остаточных ненужных плюсов
                 .collect(Collectors.toList());
-        return expressions;
     }
 }

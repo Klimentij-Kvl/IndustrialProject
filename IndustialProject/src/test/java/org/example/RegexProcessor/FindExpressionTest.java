@@ -4,30 +4,47 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static java.util.Arrays.*;
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.Arrays;
 import java.util.List;
 
 class FindExpressionTest {
-    String input1 = "Бим б, 1 + 5 Бом";
-    String input2 = "Бара + 2 / 3 + бэм" +
-            "ля-ля 8 / 6 + 1 Валера 22 + 2";
-    String input3 = "т(ы5*3в";
 
     @Test
     void testFindComputableExpression() {
-        List<String> expected1 = Arrays.asList(" 1 + 5 ");
+        String input1 = "Бим б, 1 + 5 Бом";
+        List<String> expected1 = List.of(" 1 + 5 ");
         assertEquals(expected1, FindExpression.findComputableExpressions(input1), "Ошибка с примером \"" + input1 + "\"");
 
-        List<String> expected2 = Arrays.asList(" + 2 / 3 ", " 8 / 6 + 1 ", " 22 + 2");
+        String input2 = "Бара + 2 / 3 + бэмля-ля 8 / 6 + 1 Валера 22 + 2";
+        List<String> expected2 = asList(" + 2 / 3 ", " 8 / 6 + 1 ", " 22 + 2");
         assertEquals(expected2, FindExpression.findComputableExpressions(input2), "Ошибка с примером \"" + input2 + "\"");
+
+        String input3 = "т(ы5*3в";
+        List<String> expected3 = List.of("5*3");
+        assertEquals(expected3, FindExpression.findComputableExpressions(input3), "Ошибка с примером \"" + input3 + "\"");
+
+        String input4 = "3 +++ 5 --- 2";
+        List<String> expected4 = List.of("3 +++ 5 --- 2");
+        assertEquals(expected4, FindExpression.findComputableExpressions(input4), "Ошибка с примером \"" + input4 + "\"");
+
+        String input5 = " 10 * ((3 + 5) / 2 ";
+        List<String> expected5 = List.of(" 10 * ((3 + 5) / 2 ");
+        assertEquals(expected5, FindExpression.findComputableExpressions(input5), "Ошибка с примером \"" + input5 + "\"");
+
+        String input6 = "1 + 2 - 3 * 4 / 5 + 6";
+        List<String> expected6 = List.of("1 + 2 - 3 * 4 / 5 + 6");
+        assertEquals(expected6, FindExpression.findComputableExpressions(input6), "Ошибка с примером \"" + input6 + "\"");
     }
 
-    @Test
-    void testDeleteSpaces() {
-        assertEquals("Бимб,1+5Бом", FindExpression.deleteSpaces(input1));
-        assertEquals("Бара+2/3+бэмля-ля8/6+1Валера22+2", FindExpression.deleteSpaces(input2));
-        assertEquals("т(ы5*3в", FindExpression.deleteSpaces(input3));
+    @ParameterizedTest
+    @CsvSource({
+            "1 3 5,135",
+            "qwerty,qwerty",
+            "1    +     5,1+5"
+    })
+    void testDeleteSpaces(String input, String expected) {
+        assertEquals(expected, FindExpression.deleteSpaces(input));
     }
 
     @ParameterizedTest
@@ -90,13 +107,15 @@ class FindExpressionTest {
     @ParameterizedTest
     @CsvSource({
             "+10, 10",
+            "10+5,10+5",
+            "1+1++1,1+1++1",
             "5*+11, 5*11",
             "5*(+11, 5*(11",
             "5*7*+3, 5*7*3",
             "5*(+11, 5*(11"
     })
-    void testRemoveUslessPlus(String input, String expectedOutput) {
-        assertEquals(expectedOutput, FindExpression.removeUslessPlus(input));
+    void testRemoveUselessPlus(String input, String expectedOutput) {
+        assertEquals(expectedOutput, FindExpression.removeUselessPlus(input));
     }
 
     @ParameterizedTest
@@ -113,6 +132,7 @@ class FindExpressionTest {
     void testRemoveRedundantPluses(String input, String expectedOutput) {
         assertEquals(expectedOutput, FindExpression.removeRedundantPluses(input));
     }
+
     @ParameterizedTest
     @CsvSource({
             "'10+-5', '10-5'",
@@ -124,5 +144,28 @@ class FindExpressionTest {
     })
     void testChooseSign(String input, String expectedOutput) {
         assertEquals(expectedOutput, FindExpression.chooseSign(input));
+    }
+
+    @Test
+    void testFindExpression() {
+        List<String> input1 = asList("Бим б, 1 + 5 Бом","Парарам");
+        List<String> expected1 = List.of("1+5");
+        assertEquals(expected1, FindExpression.findExpression(input1), "Ошибка с примером \"" + input1 + "\"");
+
+        List<String> input2 = asList("Бара + 2 / 3 + бэмля-ля"," 8 / 6 + 1 Валера 22 + 2");
+        List<String> expected2 = asList("2/3", "8/6+1", "22+2");
+        assertEquals(expected2, FindExpression.findExpression(input2), "Ошибка с примером \"" + input2 + "\"");
+
+        List<String> input3 = List.of("Проверяй, (3+(3* 8) должно быть изменено на двадцать семь");
+        List<String> expected3 = List.of("3+(3*8)");
+        assertEquals(expected3, FindExpression.findExpression(input3), "Ошибка с примером \"" + input3 + "\"");
+
+        List<String> input4 = List.of("*- 3 +++ 5 -+-- 2)");
+        List<String> expected4 = List.of("-3+5-2");
+        assertEquals(expected4, FindExpression.findExpression(input4), "Ошибка с примером \"" + input4 + "\"");
+
+        List<String> input5 = List.of(") (+10) * ((3 + 5) / 2 ");
+        List<String> expected5 = List.of("10*(3+5)/2");
+        assertEquals(expected5, FindExpression.findExpression(input5), "Ошибка с примером \"" + input5 + "\"");
     }
 }
