@@ -12,7 +12,7 @@ public class FindExpression {
     public static List<String> findComputableExpressions(String input) {
         List<String> expressions = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+");
+        Pattern pattern = Pattern.compile("([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|([()\\-+]*\\s*[()\\-+]{2,})+\\d+");
         Matcher matcher = pattern.matcher(input);
 
         while (matcher.find()) {

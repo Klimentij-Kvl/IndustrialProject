@@ -1,6 +1,5 @@
-package org.example.RegexProcessor;
+package org.example.DataProcessor.RegexProcessor;
 
-import org.example.DataProcessor.RegexProcessor.FindExpression;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

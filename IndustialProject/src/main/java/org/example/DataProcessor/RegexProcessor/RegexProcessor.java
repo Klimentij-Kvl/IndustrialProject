@@ -1,5 +1,6 @@
 package org.example.DataProcessor.RegexProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegexProcessor implements DataProcessor {
@@ -12,7 +13,7 @@ public class RegexProcessor implements DataProcessor {
     }
 
     List<String> extractExpressions(List<String> data) {
-        return data;
+        return new ArrayList<>(FindExpression.find(data));
     }
     List<String> calculateExpressions(List<String> expressions) {
         return expressions;
