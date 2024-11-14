@@ -7,9 +7,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RegexProcessorTest {
-
+    RegexProcessor regexProcessor = new RegexProcessor();
     @Test
-    void process() {
+
+    void testProcess() {
+        assertEquals(List.of("Разность -5+3 и -10"," 2 нас удивила."),regexProcessor.process(List.of("Разность -5 + 3 и -10"," - (-2) нас удивила.")));
     }
 
     @Test
