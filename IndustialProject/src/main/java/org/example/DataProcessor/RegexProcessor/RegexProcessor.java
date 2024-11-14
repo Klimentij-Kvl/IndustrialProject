@@ -16,9 +16,23 @@ public class RegexProcessor implements DataProcessor {
         return new ArrayList<>(FindExpression.find(data));
     }
     List<String> calculateExpressions(List<String> expressions) {
-        return expressions;
+        List<String> calculatedExpressions = new ArrayList<>();
+        for (String expression : expressions) {
+            calculatedExpressions.add(CalculateExpression.calculate(expression));
+        }
+        return calculatedExpressions;
     }
+
     List<String> replaceExpressionsInData(List<String> data, List<String> calculatedExpressions) {
-        return data;
+        int index = 0;
+        List<String> replacedExpressions = new ArrayList<>();
+        for(String line : data) {
+            replacedExpressions.add(
+                    line.replaceAll(
+                            "([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*",
+                            " " +calculatedExpressions.get(index)  + " "));
+            index++;
+        }
+        return replacedExpressions;
     }
 }
