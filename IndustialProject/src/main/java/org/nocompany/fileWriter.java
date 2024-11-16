@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class fileWriter{
+public class fileWriter{
     public String fileName;
     public String format;
 
@@ -30,7 +30,7 @@ class fileWriter{
             try {
                 FileWriter out = new FileWriter(fileName + "." + format);
                 for (String s : text) {
-                    out.write(s);
+                    out.write(s + "\n");
                 }
                 out.flush();
                 out.close();
