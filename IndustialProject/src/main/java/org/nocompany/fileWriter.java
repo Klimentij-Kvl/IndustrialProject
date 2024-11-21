@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class fileWriter{
     public String fileName;
@@ -62,6 +62,21 @@ public class fileWriter{
             try {
                 mapper.writeValue(outputFile, text);
             }catch (IOException e){ System.out.println(e.getMessage());}
+        }
+    }
+
+    void archieve(String archieveName){
+        try(ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(archieveName));
+            FileInputStream fis= new FileInputStream(fileName + "."  + format);)
+        {
+            zout.putNextEntry(new ZipEntry(fileName + "."  + format));
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            zout.write(buffer);
+            zout.closeEntry();
+        }
+        catch(Exception ex){
+            System.out.println(ex.getMessage());
         }
     }
 }
