@@ -79,4 +79,24 @@ public class fileWriter{
             System.out.println(ex.getMessage());
         }
     }
+
+    void CaesaerCipher(int code){
+        try{
+            File file = new File(fileName + "." + format);
+            FileInputStream fis = new FileInputStream(file);
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+            fis.close();
+            file.delete();
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            for(int symbol : buffer){
+                System.out.println(symbol);
+                symbol += 3;
+                fos.write(symbol);
+            }
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
 }
