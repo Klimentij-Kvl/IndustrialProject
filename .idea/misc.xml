@@ -7,11 +7,14 @@
         <option value="$PROJECT_DIR$/IndustialProject/pom.xml" />
       </list>
     </option>
+<<<<<<< HEAD
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/IndustialProject/pom.xml" />
       </set>
     </option>
+=======
+>>>>>>> 3f2c26837aa21c233624a4bc91c4c6bc639ffb8d
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_23" default="true" project-jdk-name="openjdk-23" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
