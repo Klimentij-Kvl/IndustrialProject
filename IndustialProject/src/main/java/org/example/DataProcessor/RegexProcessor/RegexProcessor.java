@@ -1,5 +1,7 @@
 package org.example.DataProcessor.RegexProcessor;
 
+import org.example.DataProcessor.DataProcessor;
+
 import java.util.ArrayList;
 import java.util.List;
 

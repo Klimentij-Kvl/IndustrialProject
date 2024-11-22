@@ -1,4 +1,4 @@
-package org.example.DataProcessor.RegexProcessor;
+package org.example.DataProcessor;
 
 import java.util.List;
 
