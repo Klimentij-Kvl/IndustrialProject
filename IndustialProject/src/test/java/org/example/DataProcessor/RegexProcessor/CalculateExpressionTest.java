@@ -1,16 +1,6 @@
 package org.example.DataProcessor.RegexProcessor;
-<<<<<<< HEAD
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-public class CalculateExpressionTest {
-    @Test
-    public void check(){
-        int kek =1;
-        int lol =1;
-        assertEquals(kek,lol);
-    }
-}
-=======
 
 import org.junit.jupiter.api.Test;
 import java.beans.Expression;
@@ -49,5 +39,5 @@ class CalculateExpressionTest {
         Mul twoandthree = new Mul("2*3");
         assertEquals(6,twoandthree.CalculateMul());
     }
+    
 }
->>>>>>> 3f2c26837aa21c233624a4bc91c4c6bc639ffb8d
