@@ -1,4 +1,4 @@
-package main.java.org.example.UIProcessor;
+package org.example.UIProcessor;
 
 public interface UIProcessor {
     void start();
