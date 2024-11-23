@@ -5,28 +5,62 @@ class CalculateExpression {
     public static String calculate(String expression) {
         return expression;
     }
-    public static int CreateNumber(String snumber){
-        if(snumber.charAt(0) == '+'){
-            int inumber = Integer.parseInt(snumber.substring(1));
-            return inumber;
+    public static int CreateNumber(String sNumber){
+        if(sNumber.charAt(0) == '+'){
+            return Integer.parseInt(sNumber.substring(1));
         }
-        if(snumber.charAt(0) == '-') {
-            int inumber = Integer.parseInt(snumber);
-            return inumber;
+        return Integer.parseInt(sNumber);
+    }
+
+}
+
+class CalculateSimpleExpression extends CalculateExpression{
+    String expression;
+    CalculateSimpleExpression(String expression){
+        this.expression = expression;
+    }
+    public int simpleCalculator() throws ArithmeticException{
+        String regex = "([+-]?\\d+)([+\\-*/])([+-]?\\d+)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(expression);
+        if(matcher.find()) {
+            String sOperand1 = matcher.group(1);
+            String operator = matcher.group(2);
+            String sOperand2 = matcher.group(3);
+            int operand1 = CalculateExpression.CreateNumber(sOperand1);
+            int operand2 = CalculateExpression.CreateNumber(sOperand2);
+            switch (operator) {
+                case "+":
+                    return operand1 + operand2;
+                case "-":
+                    return operand1 - operand2;
+                case "*":
+                    return operand1 * operand2;
+                case "/":
+                    if (operand2 == 0) {
+                        throw new ArithmeticException("[division by zero]");
+                    }
+                    return operand1 / operand2;
+                default:
+                    throw new IllegalArgumentException("Invalid expression format");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid expression format");
         }
-        int inumber = Integer.parseInt(snumber);
-        return inumber;
     }
 }
 
+
+//Waiting to be DELETED:
+/*
 class Number extends CalculateExpression{
-    String snumber;
-    Number(String snumber) {
-        this.snumber = snumber;
+    String sNumber;
+    Number(String sNumber) {
+        this.sNumber = sNumber;
     }
     int getNumber() {
         // Вызов метода из родительского класса
-        return CreateNumber(snumber);
+        return CreateNumber(sNumber);
     }
 }
 
@@ -60,7 +94,7 @@ class Mul extends CalculateExpression {
     }
 
     int CalculateMul(){
-        String regex = "(\\d+)(.)(\\d+)";
+        String regex = "([+-]?\\d+)(.)(\\d+)";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(multi);
         String smul1, smul2;
@@ -75,3 +109,27 @@ class Mul extends CalculateExpression {
         return (mul1 * mul2);
     }
 }
+
+class Div extends CalculateExpression {
+    String divi;
+    Div(String divi){
+        this.divi = divi;
+    }
+    int CalculateDiv() throws ArithmeticException{
+        String regex = "([+-]?\\d+)(.)(\\d+)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(divi);
+        String smul1, smul2;
+        int mul2=1,mul1=0;
+        if (matcher.find()) {
+            smul1 = matcher.group(1);
+            smul2 = matcher.group(3);
+            mul1 = CreateNumber(smul1);
+            mul2 = CreateNumber(smul2);
+        }
+        if (mul2 == 0) {
+            throw new ArithmeticException("[divizion by zero]");
+        }
+        return (mul1 / mul2);
+    }
+}*/
