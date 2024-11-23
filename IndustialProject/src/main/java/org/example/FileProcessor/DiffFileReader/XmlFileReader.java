@@ -1,4 +1,4 @@
-package org.example.FileProcessor.FileReader;
+package org.example.FileProcessor.DiffFileReader;
 
 import org.w3c.dom.*;
 import javax.xml.parsers.*;

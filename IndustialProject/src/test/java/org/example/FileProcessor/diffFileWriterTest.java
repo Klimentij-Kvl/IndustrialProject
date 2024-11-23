@@ -1,8 +1,9 @@
-package org.nocompany;
+package org.example.FileProcessor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import org.example.FileProcessor.DiffFileWriter.DiffFileWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -16,8 +17,8 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class fileWriterTest {
-    fileWriter writer;
+public class diffFileWriterTest {
+    DiffFileWriter writer;
 
     /*@Mock
     List mockList;*/
@@ -26,7 +27,7 @@ public class fileWriterTest {
 
     @BeforeEach
     void setWriter(){
-        writer = new fileWriter();
+        writer = new DiffFileWriter();
         mockList.add("one, kek, chebyrek");
         mockList.add("two, lol, pomerol");
     }

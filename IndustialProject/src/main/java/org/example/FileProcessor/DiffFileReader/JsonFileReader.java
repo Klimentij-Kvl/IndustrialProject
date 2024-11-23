@@ -1,4 +1,4 @@
-package org.example.FileProcessor.FileReader;
+package org.example.FileProcessor.DiffFileReader;
 
 import com.google.gson.*;
 import java.io.*;

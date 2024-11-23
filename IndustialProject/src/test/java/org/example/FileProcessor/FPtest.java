@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.util.*;
 
-class FileProcessorTest {
+class DiffFileProcessorTest {
 
     @Test
     void testReadFile() throws IOException {
-        List<String> data = FileProcessor.readFile("test.yaml", "yaml");
+        List<String> data = DiffFileProcessor.readFile("test.yaml", "yaml");
         assertNotNull(data);
         assertFalse(data.isEmpty());
         assertTrue(data.contains("10 + 5"));

@@ -1,6 +1,6 @@
 package org.example.FileProcessor;
 
-import org.example.FileProcessor.FileReader.*;
+import org.example.FileProcessor.DiffFileReader.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -9,7 +9,7 @@ import javax.crypto.*;
 import javax.crypto.spec.*;
 import java.security.GeneralSecurityException;
 
-public class FileProcessor {
+public class DiffFileProcessor {
 
     public static void main(String[] args) {
         if (args.length < 3) {

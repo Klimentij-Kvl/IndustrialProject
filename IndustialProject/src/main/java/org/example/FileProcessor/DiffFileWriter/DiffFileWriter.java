@@ -1,4 +1,4 @@
-package org.nocompany;
+package org.example.FileProcessor.DiffFileWriter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -6,12 +6,10 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,7 +17,7 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class fileWriter{
+public class DiffFileWriter {
     public String fileName;
     public String format;
 
@@ -32,7 +30,7 @@ public class fileWriter{
         return true;
     }
 
-    void write(List<String> text){
+    public void write(List<String> text){
         if(format.equals("txt")) {
             try {
                 FileWriter out = new FileWriter(fileName + "." + format);

@@ -11,7 +11,7 @@ class RegexProcessorTest {
     @Test
 
     void testProcess() {
-        assertEquals(List.of("Разность -5+3 и -10"," 2 нас удивила."),regexProcessor.process(List.of("Разность -5 + 3 и -10"," - (-2) нас удивила.")));
+        assertEquals(List.of("Разность -5+3 и -10"," 2 нас удивила."),regexProcessor.process(List.of("Разность -2 и -10"," - (-2) нас удивила.")));
     }
 
     @Test

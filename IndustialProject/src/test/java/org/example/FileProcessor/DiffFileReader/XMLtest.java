@@ -1,4 +1,4 @@
-package org.example.FileProcessor.FileReader;
+package org.example.FileProcessor.DiffFileReader;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,4 +1,4 @@
-package org.example.FileProcessor.FileReader;
+package org.example.FileProcessor.DiffFileReader;
 
 import java.io.*;
 import java.nio.file.*;

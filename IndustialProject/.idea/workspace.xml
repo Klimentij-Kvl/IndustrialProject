@@ -4,7 +4,30 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b33a5166-34c5-44f8-9400-d039e5ba08d8" name="Changes" comment="Refactoring packages" />
+    <list default="true" id="b33a5166-34c5-44f8-9400-d039e5ba08d8" name="Changes" comment="Refactoring packages">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/FileProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/FileReader/ArchieveReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileReader/ArchieveReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/FileReader/EncryptFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileReader/EncryptFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/FileReader/EncryptedFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileReader/EncryptedFileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/FileReader/JsonFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileReader/JsonFileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/FileReader/TextFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileReader/TextFileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/FileReader/XmlFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileReader/XmlFileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/FileReader/YamlFileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileReader/YamlFileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/nocompany/Main.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/nocompany/fileWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/FileProcessor/DiffFileWriter/DiffFileWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/DataProcessor/RegexProcessor/RegexProcessorTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/DataProcessor/RegexProcessor/RegexProcessorTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/FPtest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/FPtest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/FileReader/ARCHtest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/DiffFileReader/ARCHtest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/FileReader/ENCRYPTtest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/DiffFileReader/ENCRYPTtest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/FileReader/JSONtest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/DiffFileReader/JSONtest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/FileReader/TXTtest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/DiffFileReader/TXTtest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/FileReader/XMLtest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/DiffFileReader/XMLtest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/FileReader/YAMLtest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/DiffFileReader/YAMLtest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/nocompany/fileWriterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/org/example/FileProcessor/diffFileWriterTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -44,20 +67,27 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.EncryptFile.executor": "Run",
     "Application.FileProcessor.executor": "Run",
     "JUnit.AchieveReaderTest.executor": "Run",
+    "JUnit.All tests.executor": "Run",
     "JUnit.TextFileReaderTest.executor": "Run",
+    "JUnit.diffFileWriterTest.yamlWriterTest.executor": "Run",
     "JUnit.fileWriterTest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/GIGABYTE/Industrial-Programming/IndustrialProject/IndustialProject",
+    "last_opened_file_path": "F:/!!!!important/IndustrialProject/IndustialProject/src/test/java/org",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2413793",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -66,10 +96,62 @@
       <recent name="C:\Users\GIGABYTE\Industrial-Programming\IndustrialProject\IndustialProject\src\resources" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="org.example.FileProcessor.FileReader" />
       <recent name="org.example.FileProcessor" />
+      <recent name="org.example.FileProcessor.FileReader" />
       <recent name="org.example" />
     </key>
+  </component>
+  <component name="RunManager" selected="JUnit.All tests">
+    <configuration name="EncryptFile" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.FileProcessor.DiffFileReader.EncryptFile" />
+      <module name="skvoz" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.FileProcessor.DiffFileReader.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All tests" type="JUnit" factoryName="JUnit">
+      <module name="skvoz" />
+      <option name="MAIN_CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="directory" />
+      <dir value="$PROJECT_DIR$/src/test/java/org" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="diffFileWriterTest.yamlWriterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="skvoz" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.FileProcessor.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="org.example.FileProcessor" />
+      <option name="MAIN_CLASS_NAME" value="org.example.FileProcessor.diffFileWriterTest" />
+      <option name="METHOD_NAME" value="yamlWriterTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.EncryptFile" />
+      <item itemvalue="JUnit.All tests" />
+      <item itemvalue="JUnit.diffFileWriterTest.yamlWriterTest" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.diffFileWriterTest.yamlWriterTest" />
+        <item itemvalue="Application.EncryptFile" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -135,6 +217,6 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Remade Logic" />
     <MESSAGE value="Refactoring packages" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactoring packages" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>
