@@ -5,7 +5,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.security.Key;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -91,11 +98,29 @@ public class fileWriter{
             file.createNewFile();
             FileOutputStream fos = new FileOutputStream(file);
             for(int symbol : buffer){
-                System.out.println(symbol);
                 symbol += 3;
                 fos.write(symbol);
             }
         }catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    void encrypt(String keyString){
+        try{
+            FileOutputStream encFile = new FileOutputStream(fileName +".enc");
+            FileInputStream fis = new FileInputStream(fileName + "." + format);
+            byte[] buffer = new byte[fis.available()];
+            fis.read(buffer);
+
+            SecretKey key = new SecretKeySpec(Arrays.copyOf(keyString.getBytes(StandardCharsets.UTF_8),16), "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+
+            byte[] outBytes = cipher.doFinal(buffer);
+            encFile.write(outBytes);
+
+        }catch(Exception e){
             System.out.println(e.getMessage());
         }
     }
