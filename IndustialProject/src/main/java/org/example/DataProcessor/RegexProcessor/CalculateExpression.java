@@ -2,23 +2,29 @@ package org.example.DataProcessor.RegexProcessor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 class CalculateExpression {
+
+    protected String expression;
     public static String calculate(String expression) {
-        return expression;
+        {
+            CalculateSimpleExpression calc = new CalculateSimpleExpression(expression);
+            return String.valueOf(calc.simpleCalculator());
+        }
     }
-    public static int CreateNumber(String sNumber){
+
+}
+
+class CalculateSimpleExpression extends CalculateExpression{
+
+    CalculateSimpleExpression(String expression){
+        this.expression = expression;
+    }
+    static int CreateNumber(String sNumber){
         if(sNumber.charAt(0) == '+'){
             return Integer.parseInt(sNumber.substring(1));
         }
         return Integer.parseInt(sNumber);
     }
 
-}
-
-class CalculateSimpleExpression extends CalculateExpression{
-    String expression;
-    CalculateSimpleExpression(String expression){
-        this.expression = expression;
-    }
     public int simpleCalculator() throws ArithmeticException{
         String regex = "([+-]?\\d+)([+\\-*/])([+-]?\\d+)";
         Pattern pattern = Pattern.compile(regex);
@@ -27,8 +33,8 @@ class CalculateSimpleExpression extends CalculateExpression{
             String sOperand1 = matcher.group(1);
             String operator = matcher.group(2);
             String sOperand2 = matcher.group(3);
-            int operand1 = CalculateExpression.CreateNumber(sOperand1);
-            int operand2 = CalculateExpression.CreateNumber(sOperand2);
+            int operand1 = CreateNumber(sOperand1);
+            int operand2 = CreateNumber(sOperand2);
             switch (operator) {
                 case "+":
                     return operand1 + operand2;
@@ -48,6 +54,7 @@ class CalculateSimpleExpression extends CalculateExpression{
             throw new IllegalArgumentException("Invalid expression format");
         }
     }
+
 }
 
 

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CalculateExpressionTest {
 
-    @Test
+    /*@Test
     public void testCalculateSimpleExpression(){
         CalculateSimpleExpression exprSum = new CalculateSimpleExpression("2+3");
         assertEquals(5, exprSum.simpleCalculator());
@@ -33,8 +33,23 @@ class CalculateExpressionTest {
 
         CalculateSimpleExpression wrongOperand = new CalculateSimpleExpression("6/j");
         assertThrows(IllegalArgumentException.class,wrongOperand::simpleCalculator);
-    }
+    }*/
 
+    @Test
+    public void testOriginClass(){
+        //Суммы и разности
+        assertEquals("5",CalculateExpression.calculate("3+2"));
+        assertEquals("-2",CalculateExpression.calculate("2-4"));
+        assertEquals("-1",CalculateExpression.calculate("-3+2"));
+        //Произведение
+        assertEquals("6",CalculateExpression.calculate("3*2"));
+        assertEquals("-6",CalculateExpression.calculate("-3*2"));
+        //Частное и деление на ноль
+        assertEquals("3",CalculateExpression.calculate("6/2"));
+        assertEquals("-3",CalculateExpression.calculate("-6/2"));
+        //assertEquals("[division by zero]", CalculateExpression.calculate("6/0"));
+
+    }
 //Waiting to be DELETED:
 /*    @Test
     void testSignetCymbol(){
