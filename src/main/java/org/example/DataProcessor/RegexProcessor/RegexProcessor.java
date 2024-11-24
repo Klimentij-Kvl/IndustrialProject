@@ -29,11 +29,18 @@ public class RegexProcessor implements DataProcessor {
         int index = 0;
         List<String> replacedExpressions = new ArrayList<>();
         for(String line : data) {
-            replacedExpressions.add(
-                    line.replaceAll(
-                            "([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*",
-                            " " +calculatedExpressions.get(index)  + " "));
-            index++;
+            String modifiedLine = line.replaceAll(
+                    "([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*",
+                    " " + calculatedExpressions.get(index) + " "
+            );
+
+            if (!line.equals(modifiedLine)) {
+                index++;
+                replacedExpressions.add(modifiedLine);
+            } else {
+                replacedExpressions.add(line);
+            }
+
         }
         return replacedExpressions;
     }
