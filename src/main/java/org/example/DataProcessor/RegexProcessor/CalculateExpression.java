@@ -1,61 +1,89 @@
 package org.example.DataProcessor.RegexProcessor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-class CalculateExpression {
 
+
+class CalculateExpression {
     protected String expression;
-    public static String calculate(String expression) {
+
+    public static String calculate(String expression) throws ArithmeticException {
         {
+            Pattern pattern = Pattern.compile("\\(([^()]+)\\)");
+            Matcher matcher = pattern.matcher(expression);
+            while(matcher.find()){
+                String simpleExpression = matcher.group(1);
+                String simpleResult = calculate(simpleExpression);
+                expression = expression.replace("(" + simpleExpression + ")", simpleResult);
+                matcher = pattern.matcher(expression);
+            }
             CalculateSimpleExpression calc = new CalculateSimpleExpression(expression);
             return String.valueOf(calc.simpleCalculator());
         }
     }
-
 }
 
-class CalculateSimpleExpression extends CalculateExpression{
 
-    CalculateSimpleExpression(String expression){
+class CalculateSimpleExpression extends CalculateExpression {
+    CalculateSimpleExpression(String expression) {
         this.expression = expression;
     }
-    static int CreateNumber(String sNumber){
-        if(sNumber.charAt(0) == '+'){
-            return Integer.parseInt(sNumber.substring(1));
-        }
+
+    static int CreateNumber(String sNumber) {
         return Integer.parseInt(sNumber);
     }
 
-    public int simpleCalculator() throws ArithmeticException{
-        String regex = "([+-]?\\d+)([+\\-*/])([+-]?\\d+)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(expression);
-        if(matcher.find()) {
-            String sOperand1 = matcher.group(1);
-            String operator = matcher.group(2);
-            String sOperand2 = matcher.group(3);
-            int operand1 = CreateNumber(sOperand1);
-            int operand2 = CreateNumber(sOperand2);
-            switch (operator) {
-                case "+":
-                    return operand1 + operand2;
-                case "-":
-                    return operand1 - operand2;
-                case "*":
-                    return operand1 * operand2;
-                case "/":
-                    if (operand2 == 0) {
-                        throw new ArithmeticException("[division by zero]");
-                    }
-                    return operand1 / operand2;
-                default:
-                    throw new IllegalArgumentException("Invalid expression format");
-            }
-        } else {
-            throw new IllegalArgumentException("Invalid expression format");
-        }
-    }
+    public int simpleCalculator() throws ArithmeticException {
+        String regexMulDiv = "([+-]?\\d+)([*/])([+-]?\\d+)";
+        Pattern patternMulDiv = Pattern.compile(regexMulDiv);
+        Matcher matcherMulDiv = patternMulDiv.matcher(expression);
 
+        while (matcherMulDiv.find()) {
+            int operand1 = CreateNumber(matcherMulDiv.group(1));
+            int operand2 = CreateNumber(matcherMulDiv.group(3));
+            String operator = matcherMulDiv.group(2);
+
+            int result;
+            if (operator.equals("*")) {
+                result = operand1 * operand2;
+            } else if (operator.equals("/")) {
+                if (operand2 == 0) {
+                    throw new ArithmeticException("[division by zero]");
+                }
+                result = operand1 / operand2;
+            } else {
+                continue;
+            }
+
+            expression = expression.substring(0, matcherMulDiv.start()) + result + expression.substring(matcherMulDiv.end());
+            matcherMulDiv = patternMulDiv.matcher(expression);
+        }
+
+        String regexAddSub = "([+-]?\\d+)([+-])([+-]?\\d+)";
+        Pattern patternAddSub = Pattern.compile(regexAddSub);
+        Matcher matcherAddSub = patternAddSub.matcher(expression);
+
+        while (matcherAddSub.find()) {
+            int operand1 = CreateNumber(matcherAddSub.group(1));
+            int operand2 = CreateNumber(matcherAddSub.group(3));
+            String operator = matcherAddSub.group(2);
+
+            int result;
+            if (operator.equals("+")) {
+                result = operand1 + operand2;
+            } else if (operator.equals("-")) {
+                result = operand1 - operand2;
+            } else {
+                continue;
+            }
+
+            expression = expression.substring(0, matcherAddSub.start()) + result + expression.substring(matcherAddSub.end());
+            matcherAddSub = patternAddSub.matcher(expression);
+        }
+
+        return CreateNumber(expression);
+    }
 }
+
 
 
 //Waiting to be DELETED:
