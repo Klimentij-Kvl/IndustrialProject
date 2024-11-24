@@ -33,7 +33,7 @@ class CalculateSimpleExpression extends CalculateExpression {
     }
 
     public int simpleCalculator() throws ArithmeticException {
-        String regexMulDiv = "([+-]?\\d+)([*/])([+-]?\\d+)";
+        String regexMulDiv = "(\\d+)([*/])([+-]?\\d+)";
         Pattern patternMulDiv = Pattern.compile(regexMulDiv);
         Matcher matcherMulDiv = patternMulDiv.matcher(expression);
 
@@ -83,88 +83,3 @@ class CalculateSimpleExpression extends CalculateExpression {
         return CreateNumber(expression);
     }
 }
-
-
-
-//Waiting to be DELETED:
-/*
-class Number extends CalculateExpression{
-    String sNumber;
-    Number(String sNumber) {
-        this.sNumber = sNumber;
-    }
-    int getNumber() {
-        // Вызов метода из родительского класса
-        return CreateNumber(sNumber);
-    }
-}
-
-class Sum extends CalculateExpression{
-    String simpleSum;
-    Sum(String simpleSum){
-        this.simpleSum = simpleSum;
-    }
-
-    int CalculateSum(){
-        String regex = "([+-]?\\d+)([+-]\\d+)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(simpleSum);
-        String saugend, saddend;
-        int augend =0,addend=0;
-        if (matcher.find()) {
-            saugend = matcher.group(1);
-            saddend = matcher.group(2);
-            augend = CreateNumber(saugend);
-            addend = CreateNumber(saddend);
-
-        }
-        return (augend + addend);
-    }
-}
-
-class Mul extends CalculateExpression {
-    String multi;
-    Mul(String multi){
-        this.multi = multi;
-    }
-
-    int CalculateMul(){
-        String regex = "([+-]?\\d+)(.)(\\d+)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(multi);
-        String smul1, smul2;
-        int mul2=0,mul1=0;
-        if (matcher.find()) {
-            smul1 = matcher.group(1);
-            smul2 = matcher.group(3);
-            mul1 = CreateNumber(smul1);
-            mul2 = CreateNumber(smul2);
-
-        }
-        return (mul1 * mul2);
-    }
-}
-
-class Div extends CalculateExpression {
-    String divi;
-    Div(String divi){
-        this.divi = divi;
-    }
-    int CalculateDiv() throws ArithmeticException{
-        String regex = "([+-]?\\d+)(.)(\\d+)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(divi);
-        String smul1, smul2;
-        int mul2=1,mul1=0;
-        if (matcher.find()) {
-            smul1 = matcher.group(1);
-            smul2 = matcher.group(3);
-            mul1 = CreateNumber(smul1);
-            mul2 = CreateNumber(smul2);
-        }
-        if (mul2 == 0) {
-            throw new ArithmeticException("[divizion by zero]");
-        }
-        return (mul1 / mul2);
-    }
-}*/
