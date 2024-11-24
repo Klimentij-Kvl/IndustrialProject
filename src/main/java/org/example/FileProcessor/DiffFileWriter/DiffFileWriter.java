@@ -20,6 +20,7 @@ import java.util.zip.ZipOutputStream;
 public class DiffFileWriter {
     public String fileName;
     public String format;
+    private final String PATH_RES = "src/resources/";
 
     public Boolean setFileNameAndFormat(String file){
         Pattern pattern = Pattern.compile("^(\\w+)\\.(\\w+)$");
@@ -33,7 +34,7 @@ public class DiffFileWriter {
     public void write(List<String> text){
         if(format.equals("txt")) {
             try {
-                FileWriter out = new FileWriter(fileName + "." + format);
+                FileWriter out = new FileWriter(PATH_RES + fileName + "." + format);
                 for (String s : text) {
                     out.write(s + "\n");
                 }
@@ -44,7 +45,7 @@ public class DiffFileWriter {
             }
         }
         else if(format.equals("json")){
-            File outputFile = new File(fileName + "."  + format);
+            File outputFile = new File(PATH_RES+fileName + "."  + format);
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             try {
@@ -53,7 +54,7 @@ public class DiffFileWriter {
         }
         else if(format.equals("xml")){
 
-            File outputFile = new File(fileName + "."  + format);
+            File outputFile = new File(PATH_RES+fileName + "."  + format);
             ObjectMapper mapper = new XmlMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             try {
@@ -61,7 +62,7 @@ public class DiffFileWriter {
             }catch (IOException e){ System.out.println(e.getMessage());}
         }
         else if(format.equals("yaml")){
-            File outputFile = new File(fileName + "."  + format);
+            File outputFile = new File(PATH_RES+fileName + "."  + format);
             ObjectMapper mapper = new YAMLMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             try {
@@ -72,9 +73,9 @@ public class DiffFileWriter {
 
     void archieve(String archieveName){
         try(ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(archieveName));
-            FileInputStream fis= new FileInputStream(fileName + "."  + format);)
+            FileInputStream fis= new FileInputStream(PATH_RES+fileName + "."  + format);)
         {
-            zout.putNextEntry(new ZipEntry(fileName + "."  + format));
+            zout.putNextEntry(new ZipEntry(PATH_RES+fileName + "."  + format));
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
             zout.write(buffer);
@@ -87,7 +88,7 @@ public class DiffFileWriter {
 
     void CaesaerCipher(int code){
         try{
-            File file = new File(fileName + "." + format);
+            File file = new File(PATH_RES+fileName + "." + format);
             FileInputStream fis = new FileInputStream(file);
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
@@ -106,8 +107,8 @@ public class DiffFileWriter {
 
     void encrypt(String keyString){
         try{
-            FileOutputStream encFile = new FileOutputStream(fileName +".enc");
-            FileInputStream fis = new FileInputStream(fileName + "." + format);
+            FileOutputStream encFile = new FileOutputStream(PATH_RES+fileName +".enc");
+            FileInputStream fis = new FileInputStream(PATH_RES+fileName + "." + format);
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
 
