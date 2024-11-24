@@ -63,7 +63,7 @@ public class FindExpression {
 
     //Удаление + не влияющих на выражение
     public static String removeUselessPlus(String input) {
-        input = input.replaceAll("([*/÷][()]*)\\+(\\d*)", "$1$2");
+        input = input.replaceAll("([*/÷+-][()]*)\\+(\\d*)", "$1$2");
         input = input.replaceAll("^\\(*\\+(\\(*\\d+)", "$1");
         return input;
     }
