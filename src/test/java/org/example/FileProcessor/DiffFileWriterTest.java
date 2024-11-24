@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DiffFileWriterTest {
-    DiffFileWriter writer;
     TypeReference<ArrayList<String>> ArListStr = new TypeReference<ArrayList<String>>() {};
 
     ObjectMapper makeObjectMapper(String format){
@@ -32,7 +31,7 @@ public class DiffFileWriterTest {
     }
 
     List<String> makeFileAndReadListFromFile(String format) throws IOException {
-        writer.setFileNameAndFormat("writerTest." + format);
+        DiffFileWriter writer = DiffFileWriter.Instance("writerTest", format);
         writer.write(mockList);
         String PATH_RES = "src/resources/";
         File file = new File(PATH_RES +"writerTest." + format);
@@ -56,17 +55,8 @@ public class DiffFileWriterTest {
 
     @BeforeEach
     void setWriter(){
-        writer = new DiffFileWriter();
         mockList.add("one, kek, chebyrek");
         mockList.add("two, lol, pomerol");
-    }
-
-    @Test
-    void setNameAndFormatTest(){
-        Boolean b = writer.setFileNameAndFormat("output.txt");
-        assertTrue(b);
-        assertEquals("output", writer.fileName);
-        assertEquals("txt", writer.format);
     }
 
     @Test
