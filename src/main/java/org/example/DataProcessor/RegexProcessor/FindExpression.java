@@ -78,6 +78,9 @@ public class FindExpression {
         return input;
     }
 
+    public static String addMulBetweenBrackets(String input) {
+        return input.replaceAll("(\\)+)(\\(+)", "$1*$2");
+    }
     //Получение итоговых выражений
     public static List<String> find(List<String> input) {
         //Находим допустимые выражения
@@ -100,7 +103,8 @@ public class FindExpression {
                 .map(FindExpression::convertRedundantMinuses)              //Превращение избыточных минусов в плюсы
                 .map(FindExpression::removeRedundantPluses)                //Удаление избыточных плюсов
                 .map(FindExpression::chooseSign)                           //Выбор знака в случае -+
-                .map(FindExpression::removeUselessPlus)                     //Удаление остаточных ненужных плюсов
+                .map(FindExpression::removeUselessPlus)                    //Удаление остаточных ненужных плюсов
+                .map(FindExpression::addMulBetweenBrackets)                //Добавление умножения между скобками
                 .collect(Collectors.toList());
     }
 }

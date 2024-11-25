@@ -146,10 +146,21 @@ class FindExpressionTest {
         assertEquals(expectedOutput, FindExpression.chooseSign(input));
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "'10+5', '10+5'",
+            "'-(53)', '-(53)'",
+            "'(5+6)(7-10)', '(5+6)*(7-10)'",
+            "'(7-(5+6))(7-10)(8+3/2)', '(7-(5+6))*(7-10)*(8+3/2)'"
+    })
+    void testAddMulBetweenBrackets(String input, String expectedOutput) {
+        assertEquals(expectedOutput, FindExpression.addMulBetweenBrackets(input));
+    }
+
     @Test
     void testFind() {
-        List<String> input1 = asList("Бим б, 1 + 5 Бом","Парарам");
-        List<String> expected1 = List.of("1+5");
+        List<String> input1 = asList("Бим б,  (-3/5)(7+8) Бом","Парарам");
+        List<String> expected1 = List.of("(-3/5)*(7+8)");
         assertEquals(expected1, FindExpression.find(input1), "Ошибка с примером \"" + input1 + "\"");
 
         List<String> input2 = asList("Бара + 2 / 3 + бэмля-ля"," 8 / 6 + 1 Валера 22 + 2");
