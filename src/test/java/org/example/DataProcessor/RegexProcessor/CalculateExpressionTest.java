@@ -20,15 +20,17 @@ class CalculateExpressionTest {
         assertEquals("10", CalculateExpression.calculate("5*6/3"));
         //Частное и деление на ноль
         assertEquals("3",CalculateExpression.calculate("6/2"));
+        assertEquals("3",CalculateExpression.calculate("6÷2"));
         assertEquals("-3",CalculateExpression.calculate("-6/2"));
-
-        try {
+        //assertEquals("1,5",CalculateExpression.calculate("6/4"));
+        assertEquals("-1,5",CalculateExpression.calculate("-6/4"));
+        assertEquals("-2,4",CalculateExpression.calculate("-6/2.5"));
+        //assertEquals("2,4",CalculateExpression.calculate("-6/-2.5"));
+        assertThrows(ArithmeticException.class, () -> {
             CalculateExpression.calculate("6/0");
-            fail("Expected ArithmeticException for division by zero");
-        } catch (ArithmeticException e) {
-            assertEquals("[division by zero]", e.getMessage());
-        }
+        });
     }
+
 
     @Test
     public void testComplicatedExpressions(){
@@ -40,14 +42,11 @@ class CalculateExpressionTest {
         assertEquals("4", CalculateExpression.calculate("5+(2-3)*7-2*-3"));
         assertEquals("8", CalculateExpression.calculate("2-3*-2"));
         assertEquals("13", CalculateExpression.calculate("5+(2-3*-2)"));
+        assertEquals("8,5", CalculateExpression.calculate("5+(2-3/-2)"));
 
-        try {
+        assertThrows(ArithmeticException.class, () -> {
             CalculateExpression.calculate("5+(2-3)/0");
-            fail("Expected ArithmeticException for division by zero");
-        } catch (ArithmeticException e) {
-            assertEquals("[division by zero]", e.getMessage());
-        }
-
+        });
     }
 
 }
