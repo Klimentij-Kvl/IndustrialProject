@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-abstract class Menu {
+public abstract class Menu {
     protected Map<Integer, Command> options = new HashMap<>();
     protected Scanner scanner = new Scanner(System.in);
 
