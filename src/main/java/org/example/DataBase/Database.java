@@ -9,7 +9,8 @@ public class Database {
     private List<String> output;
     private String inputFileName;
     private String outputFileName;
-
+    private String inputFileFormat;
+    private String outputFileFormat;
     private Database() {
         input = new ArrayList<>();
         output = new ArrayList<>();
@@ -52,6 +53,19 @@ public class Database {
 
     public void setOutputFileName(String outputFileName) {
         this.outputFileName = outputFileName;
+    }
+
+    public String getInputFileFormat() {
+        return inputFileFormat;
+    }
+    public void setInputFileFormat(String inputFileFormat) {
+        this.inputFileFormat = inputFileFormat;
+    }
+    public String getOutputFileFormat() {
+        return outputFileFormat;
+    }
+    public void setOutputFileFormat(String outputFileFormat) {
+        this.outputFileFormat = outputFileFormat;
     }
 
 }
