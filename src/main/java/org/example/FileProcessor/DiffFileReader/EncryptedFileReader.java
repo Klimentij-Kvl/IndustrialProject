@@ -20,19 +20,9 @@ public class EncryptedFileReader {
             BufferedReader reader = new BufferedReader(new InputStreamReader(cis));
             String line;
             while ((line = reader.readLine()) != null) {
-                data.addAll(extractEquations(line));
+                data.add(line);
             }
         }
         return data;
-    }
-
-    private static List<String> extractEquations(String text) {
-        List<String> equations = new ArrayList<>();
-        Pattern pattern = Pattern.compile("[\\d\\s+\\-*/÷()]+");
-        Matcher matcher = pattern.matcher(text);
-        while (matcher.find()) {
-            equations.add(matcher.group().trim());
-        }
-        return equations;
     }
 }

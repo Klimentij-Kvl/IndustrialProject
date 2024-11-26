@@ -6,9 +6,9 @@ import java.util.*;
 import java.util.regex.*;
 import java.util.zip.*;
 
-public class ArchieveReader {
+public class ArchieveReader implements DiffFileReader {
 
-    public static List<String> read(String zipFilePath) throws IOException {
+    public List<String> read(String zipFilePath) throws IOException {
         List<String> data = new ArrayList<>();
 
         try (ZipInputStream zis = new ZipInputStream(Files.newInputStream(Paths.get(zipFilePath)))) {
@@ -18,22 +18,12 @@ public class ArchieveReader {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(zis));
                     String line;
                     while ((line = reader.readLine()) != null) {
-                        data.addAll(extractEquations(line));
+                        data.add(line);
                     }
                 }
                 zis.closeEntry();
             }
         }
         return data;
-    }
-
-    private static List<String> extractEquations(String text) {
-        List<String> equations = new ArrayList<>();
-        Pattern pattern = Pattern.compile("[\\d\\s+\\-*/÷()]+");
-        Matcher matcher = pattern.matcher(text);
-        while (matcher.find()) {
-            equations.add(matcher.group().trim());
-        }
-        return equations;
     }
 }
