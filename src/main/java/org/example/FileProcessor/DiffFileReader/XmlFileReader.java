@@ -6,9 +6,9 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-public class XmlFileReader {
+public class XmlFileReader implements DiffFileReader {
 
-    public static List<String> read(String filePath) {
+    public List<String> read(String filePath) {
         List<String> data = new ArrayList<>();
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -21,22 +21,12 @@ public class XmlFileReader {
                 Node node = nList.item(i);
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-                    data.addAll(extractEquations(element.getTextContent()));
+                    data.add(element.getTextContent().trim());
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return data;
-    }
-
-    public static List<String> extractEquations(String text) {
-        List<String> equations = new ArrayList<>();
-        Pattern pattern = Pattern.compile("[\\d\\s+\\-*/÷()]+");
-        Matcher matcher = pattern.matcher(text);
-        while (matcher.find()) {
-            equations.add(matcher.group().trim());
-        }
-        return equations;
     }
 }
