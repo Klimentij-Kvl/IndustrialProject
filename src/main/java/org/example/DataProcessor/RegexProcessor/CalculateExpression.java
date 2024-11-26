@@ -6,19 +6,33 @@ import java.util.regex.Pattern;
 class CalculateExpression {
     protected String expression;
 
-    public static String calculate(String expression) throws ArithmeticException {
+    public static String result(String expression)throws ArithmeticException{
+        String result = calculate(expression);
+        return sign(result);
+    }
+
+    public static String calculate(String expr) throws ArithmeticException {
         {
             Pattern pattern = Pattern.compile("\\(([^()]+)\\)");
-            Matcher matcher = pattern.matcher(expression);
+            Matcher matcher = pattern.matcher(expr);
             while(matcher.find()){
                 String simpleExpression = matcher.group(1);
                 String simpleResult = calculate(simpleExpression);
-                expression = expression.replace("(" + simpleExpression + ")", simpleResult);
-                matcher = pattern.matcher(expression);
+                expr = expr.replace("(" + simpleExpression + ")", simpleResult);
+                matcher = pattern.matcher(expr);
             }
-            CalculateSimpleExpression calc = new CalculateSimpleExpression(expression);
-            return calc.simpleCalculator();
+            CalculateSimpleExpression calc = new CalculateSimpleExpression(expr);
+            String result = calc.simpleCalculator();
+            return result;
         }
+    }
+
+    public static String sign(String toChange){
+        toChange = toChange.replaceAll("--", "+");
+        if (toChange.startsWith("+")) {
+            toChange = toChange.substring(1);
+        }
+        return toChange;
     }
 }
 
@@ -29,6 +43,7 @@ class CalculateSimpleExpression extends CalculateExpression {
     }
 
     static double CreateNumber(String sNumber) {
+        sNumber = sNumber.replace("--", "");
         sNumber = sNumber.replace(",", ".");
         return Double.parseDouble(sNumber);
     }
