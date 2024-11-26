@@ -8,7 +8,7 @@ import java.io.StringReader;
 
 public class ReadFileCommand implements Command {
     @Override
-    public void execute() throws IOException {
+    public void execute(){
         Database database = Database.getInstance();
 
         String inputFormat = database.getInputFileFormat();
