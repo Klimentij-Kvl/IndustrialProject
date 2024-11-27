@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import org.example.FileProcessor.DiffFileWriter.DiffFileWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -19,8 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DiffFileWriterTest {
-    DiffFileWriter writer;
-    TypeReference<ArrayList<String>> ArListStr = new TypeReference<ArrayList<String>>() {};
+    TypeReference<ArrayList<String>> ArListStr = new TypeReference<>() {};
 
     ObjectMapper makeObjectMapper(String format){
         return switch (format) {
@@ -32,7 +30,7 @@ public class DiffFileWriterTest {
     }
 
     List<String> makeFileAndReadListFromFile(String format) throws IOException {
-        writer.setFileNameAndFormat("writerTest." + format);
+        DiffFileWriter writer = DiffFileWriter.Instance("writerTest", format);
         writer.write(mockList);
         String PATH_RES = "src/resources/";
         File file = new File(PATH_RES +"writerTest." + format);
@@ -52,21 +50,12 @@ public class DiffFileWriterTest {
         return arr;
     }
     @Spy
-    List<String> mockList = new ArrayList<String>();
+    List<String> mockList = new ArrayList<>();
 
     @BeforeEach
     void setWriter(){
-        writer = new DiffFileWriter();
         mockList.add("one, kek, chebyrek");
         mockList.add("two, lol, pomerol");
-    }
-
-    @Test
-    void setNameAndFormatTest(){
-        Boolean b = writer.setFileNameAndFormat("output.txt");
-        assertTrue(b);
-        assertEquals("output", writer.fileName);
-        assertEquals("txt", writer.format);
     }
 
     @Test

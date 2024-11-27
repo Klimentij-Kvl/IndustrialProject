@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffFileWriter;
+package org.example.FileProcessor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -12,63 +12,48 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class DiffFileWriter {
     public String fileName;
     public String format;
+    private static DiffFileWriter _instance;
     private final String PATH_RES = "src/resources/";
 
-    public Boolean setFileNameAndFormat(String file){
-        Pattern pattern = Pattern.compile("^(\\w+)\\.(\\w+)$");
-        Matcher matcher = pattern.matcher(file);
-        if(!matcher.matches()) return false;
-        fileName = matcher.group(1);
-        format = matcher.group(2);
-        return true;
+    protected DiffFileWriter(String fileName, String format){
+        this.fileName = fileName;
+        this.format = format;
     }
 
-    public void write(List<String> text){
-        if(format.equals("txt")) {
-            try {
-                FileWriter out = new FileWriter(PATH_RES + fileName + "." + format);
-                for (String s : text) {
-                    out.write(s + "\n");
-                }
-                out.flush();
-                out.close();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        else if(format.equals("json")){
-            File outputFile = new File(PATH_RES+fileName + "."  + format);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            try {
-                mapper.writeValue(outputFile, text);
-            }catch (IOException e){ System.out.println(e.getMessage());}
-        }
-        else if(format.equals("xml")){
+    public static DiffFileWriter Instance(String fileName, String format){
+        if(_instance == null)  _instance = new DiffFileWriter(fileName, format);
+        _instance.fileName = fileName;
+        _instance.format = format;
+        return _instance;
+    }
 
-            File outputFile = new File(PATH_RES+fileName + "."  + format);
-            ObjectMapper mapper = new XmlMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            try {
-                mapper.writeValue(outputFile, text);
-            }catch (IOException e){ System.out.println(e.getMessage());}
+    private ObjectMapper makeObjectMapper(){
+        return switch (format){
+            case "json" -> new ObjectMapper();
+            case "xml" -> new XmlMapper();
+            case "yaml" -> new YAMLMapper();
+            default -> null;
+        };
+    }
+
+    public void write(List<String> text) throws IOException{
+        File outputFile = new File(PATH_RES + fileName + "."  + format);
+        if(format.equals("txt")){
+            FileWriter out = new FileWriter(outputFile);
+            for (String s : text) {
+                out.write(s + "\n");
+            }
+            out.flush();
+            out.close();
+            return;
         }
-        else if(format.equals("yaml")){
-            File outputFile = new File(PATH_RES+fileName + "."  + format);
-            ObjectMapper mapper = new YAMLMapper();
-            mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            try {
-                mapper.writeValue(outputFile, text);
-            }catch (IOException e){ System.out.println(e.getMessage());}
-        }
+        makeObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).writeValue(outputFile, text);
     }
 
     void archieve(String archieveName){
@@ -124,3 +109,4 @@ public class DiffFileWriter {
         }
     }
 }
+
