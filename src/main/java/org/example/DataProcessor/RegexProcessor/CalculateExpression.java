@@ -61,7 +61,7 @@ class CalculateSimpleExpression extends CalculateExpression {
     }
 
     public String simpleCalculator() throws ArithmeticException {
-        String regexMulDiv = "(\\d+\\.?\\d*)([*/÷])([+-]?\\d+\\.?\\d*)";
+        String regexMulDiv = "(\\d+[.,]?\\d*)([*/÷])([+-]?\\d+[.,]?\\d*)";
         Pattern patternMulDiv = Pattern.compile(regexMulDiv);
         Matcher matcherMulDiv = patternMulDiv.matcher(expression);
 
@@ -86,7 +86,7 @@ class CalculateSimpleExpression extends CalculateExpression {
             matcherMulDiv = patternMulDiv.matcher(expression);
         }
 
-        String regexAddSub = "([+-]?\\d+\\.?\\d*)([+-])([+-]?\\d+\\.?\\d*)";
+        String regexAddSub = "([+-]?\\d+[.,]?\\d*)([+-])([+-]?\\d+[.,]?\\d*)";
         Pattern patternAddSub = Pattern.compile(regexAddSub);
         Matcher matcherAddSub = patternAddSub.matcher(expression);
 
