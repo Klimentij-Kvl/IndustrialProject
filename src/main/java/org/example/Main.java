@@ -9,8 +9,8 @@ public class Main {
         Database database = Database.getInstance();
         database.setInputFileName("input");
         database.setOutputFileName("output");
-        database.setInputFileFormat("txt");
-        database.setOutputFileFormat("txt");
+        database.setInputFileFormat("yaml");
+        database.setOutputFileFormat("yaml");
         UIProcessor ui = new ConsoleUI();
         ui.start();
     }

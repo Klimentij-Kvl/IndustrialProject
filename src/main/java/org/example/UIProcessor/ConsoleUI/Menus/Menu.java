@@ -18,6 +18,7 @@ public abstract class Menu {
 
     public void handleInput() {
         while (true) {
+            System.out.println();
             displayMenu();
             System.out.print("Select an option: ");
             int choice = scanner.nextInt();

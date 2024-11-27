@@ -15,7 +15,7 @@ public class ReaderSettingsMenu extends Menu {
     }
     @Override
     protected String getMenuHeader() {
-        return "";
+        return "-----Reader Settings-----";
     }
 
     @Override
