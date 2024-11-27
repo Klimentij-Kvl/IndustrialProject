@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import org.example.FileProcessor.DiffFileWriter.DiffFileWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DiffFileWriterTest {
-    TypeReference<ArrayList<String>> ArListStr = new TypeReference<ArrayList<String>>() {};
+    TypeReference<ArrayList<String>> ArListStr = new TypeReference<>() {};
 
     ObjectMapper makeObjectMapper(String format){
         return switch (format) {
@@ -51,7 +50,7 @@ public class DiffFileWriterTest {
         return arr;
     }
     @Spy
-    List<String> mockList = new ArrayList<String>();
+    List<String> mockList = new ArrayList<>();
 
     @BeforeEach
     void setWriter(){

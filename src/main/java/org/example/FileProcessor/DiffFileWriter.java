@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffFileWriter;
+package org.example.FileProcessor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -12,8 +12,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -29,7 +27,7 @@ public class DiffFileWriter {
     }
 
     public static DiffFileWriter Instance(String fileName, String format){
-        if(_instance == null)  return new DiffFileWriter(fileName, format);
+        if(_instance == null)  _instance = new DiffFileWriter(fileName, format);
         _instance.fileName = fileName;
         _instance.format = format;
         return _instance;
@@ -47,7 +45,7 @@ public class DiffFileWriter {
     public void write(List<String> text) throws IOException{
         File outputFile = new File(PATH_RES + fileName + "."  + format);
         if(format.equals("txt")){
-            FileWriter out = new FileWriter(PATH_RES + fileName + "." + format);
+            FileWriter out = new FileWriter(outputFile);
             for (String s : text) {
                 out.write(s + "\n");
             }
