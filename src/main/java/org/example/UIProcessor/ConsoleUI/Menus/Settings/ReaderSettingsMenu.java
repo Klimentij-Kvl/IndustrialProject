@@ -1,5 +1,6 @@
 package org.example.UIProcessor.ConsoleUI.Menus.Settings;
 
+import org.example.DataBase.Database;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Reader.SetJSONReaderCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Reader.SetTXTReaderCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Reader.SetXMLReaderCommand;
@@ -7,6 +8,10 @@ import org.example.UIProcessor.ConsoleUI.Commands.Settings.Reader.SetYAMLReaderC
 import org.example.UIProcessor.ConsoleUI.Menus.Menu;
 
 public class ReaderSettingsMenu extends Menu {
+    private static final String COLOR_GREEN = "\u001B[32m";
+    private static final String COLOR_RED = "\u001B[31m";
+    private static final String COLOR_RESET = "\u001B[0m";
+
     public ReaderSettingsMenu() {
         options.put(1, new SetTXTReaderCommand());
         options.put(2, new SetJSONReaderCommand());
@@ -20,12 +25,19 @@ public class ReaderSettingsMenu extends Menu {
 
     @Override
     protected String getOptionName(int optionKey) {
-        return switch (optionKey) {
+        Database db = Database.getInstance();
+        String optionName = switch (optionKey) {
             case 1 -> "txt";
             case 2 -> "json";
             case 3 -> "yaml";
             case 4 -> "xml";
             default -> "Unknown Option";
         };
+
+        if (optionName.equalsIgnoreCase(db.getInputFileFormat())) {
+            return COLOR_GREEN + optionName + COLOR_RESET;
+        } else {
+            return COLOR_RED + optionName + COLOR_RESET;
+        }
     }
 }
