@@ -21,7 +21,7 @@ public class DiffFileWriter {
     private static DiffFileWriter _instance;
     private final String PATH_RES = "src/resources/";
 
-    protected DiffFileWriter(String fileName, String format){
+    public DiffFileWriter(String fileName, String format){
         this.fileName = fileName;
         this.format = format;
     }
@@ -58,7 +58,7 @@ public class DiffFileWriter {
 
     void archieve(String archieveName){
         try(ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(archieveName));
-            FileInputStream fis= new FileInputStream(PATH_RES+fileName + "."  + format);)
+            FileInputStream fis= new FileInputStream(PATH_RES+fileName + "."  + format))
         {
             zout.putNextEntry(new ZipEntry(PATH_RES+fileName + "."  + format));
             byte[] buffer = new byte[fis.available()];

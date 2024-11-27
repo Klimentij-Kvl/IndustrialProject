@@ -18,7 +18,7 @@ public class DiffFileReader{
     private static DiffFileReader _instance;
     private final String PATH_RES = "src/resources/";
 
-    protected DiffFileReader(String fileName, String fileFormat){
+    public DiffFileReader(String fileName, String fileFormat){
         this.fileFormat = fileFormat;
         this.fileName = fileName;
     }
