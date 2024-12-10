@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import org.example.FileProcessor.DiffFileWriter.DiffFileWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -19,8 +18,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DiffFileWriterTest {
-    DiffFileWriter writer;
-    TypeReference<ArrayList<String>> ArListStr = new TypeReference<ArrayList<String>>() {};
+    TypeReference<ArrayList<String>> ArListStr = new TypeReference<>() {};
+    private final String PATH_RES = "src/resources/";
+
+    @Spy
+    List<String> wrote = new ArrayList<>();
+
+    @BeforeEach
+    void setWriter(){
+        wrote.add("one, kek, chebyrek");
+        wrote.add("two, lol, pomerol");
+    }
 
     ObjectMapper makeObjectMapper(String format){
         return switch (format) {
@@ -31,14 +39,11 @@ public class DiffFileWriterTest {
         };
     }
 
-    List<String> makeFileAndReadListFromFile(String format) throws IOException {
-        writer.setFileNameAndFormat("writerTest." + format);
-        writer.write(mockList);
-        String PATH_RES = "src/resources/";
+    void SimpleFileWritingFunc(String format) throws IOException {
+        DiffFileWriter dfw = new DiffFileWriter("writerTest", format);
+        dfw.write(wrote);
         File file = new File(PATH_RES +"writerTest." + format);
-
         List<String> arr;
-
         if(format.equals("txt")){
             Scanner sc = new Scanner(file);
             arr = new ArrayList<>();
@@ -48,44 +53,27 @@ public class DiffFileWriterTest {
             sc.close();
         }
         else arr = makeObjectMapper(format).readValue(file, ArListStr);
-        if(!file.delete()) return null;
-        return arr;
-    }
-    @Spy
-    List<String> mockList = new ArrayList<String>();
-
-    @BeforeEach
-    void setWriter(){
-        writer = new DiffFileWriter();
-        mockList.add("one, kek, chebyrek");
-        mockList.add("two, lol, pomerol");
+        assertEquals(wrote, arr);
+        assertTrue(file.delete());
     }
 
     @Test
-    void setNameAndFormatTest(){
-        Boolean b = writer.setFileNameAndFormat("output.txt");
-        assertTrue(b);
-        assertEquals("output", writer.fileName);
-        assertEquals("txt", writer.format);
+    void TxtSimpleWriteTest() throws IOException{
+        SimpleFileWritingFunc("txt");
     }
 
     @Test
-    void plainTextWriterTest() throws IOException{
-        assertEquals(mockList, makeFileAndReadListFromFile("txt"));
+    void JsonSimpleWriteTest() throws IOException {
+        SimpleFileWritingFunc("json");
     }
 
     @Test
-    void jsonWriterTest() throws IOException {
-        assertEquals(mockList, makeFileAndReadListFromFile("json"));
+    void XmlSimpleWriteTest() throws IOException {
+        SimpleFileWritingFunc("xml");
     }
 
     @Test
-    void xmlWriterTest() throws IOException {
-        assertEquals(mockList, makeFileAndReadListFromFile("xml"));
-    }
-
-    @Test
-    void yamlWriterTest() throws IOException {
-        assertEquals(mockList, makeFileAndReadListFromFile("yaml"));
+    void YamlSimpleWriteTest() throws IOException {
+        SimpleFileWritingFunc("yaml");
     }
 }
