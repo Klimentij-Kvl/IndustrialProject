@@ -18,16 +18,16 @@ import java.util.zip.ZipOutputStream;
 
 public class DiffFileWriter {
     public String fileName;
-    public String format;
+    public String fileFormat;
     private final String PATH_RES = "src/resources/";
 
-    public DiffFileWriter(String fileName, String format){
+    public DiffFileWriter(String fileName, String fileFormat){
         this.fileName = fileName;
-        this.format = format;
+        this.fileFormat = fileFormat;
     }
 
     private ObjectMapper makeObjectMapper(){
-        return switch (format){
+        return switch (fileFormat){
             case "json" -> new JsonMapper();
             case "xml" -> new XmlMapper();
             case "yaml" -> new YAMLMapper();
@@ -36,8 +36,8 @@ public class DiffFileWriter {
     }
 
     public void write(List<String> text) throws IOException{
-        File outputFile = new File(PATH_RES + fileName + "."  + format);
-        if(format.equals("txt")){
+        File outputFile = new File(PATH_RES + fileName + "."  + fileFormat);
+        if(fileFormat.equals("txt")){
             FileWriter out = new FileWriter(outputFile);
             for (String s : text) {
                 out.write(s + "\n");
@@ -49,24 +49,24 @@ public class DiffFileWriter {
         makeObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).writeValue(outputFile, text);
     }
 
-    void archive(String archieveName){
-        try(ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(archieveName));
-            FileInputStream fis= new FileInputStream(PATH_RES+fileName + "."  + format))
-        {
-            zout.putNextEntry(new ZipEntry(PATH_RES+fileName + "."  + format));
-            byte[] buffer = new byte[fis.available()];
-            fis.read(buffer);
-            zout.write(buffer);
-            zout.closeEntry();
-        }
-        catch(Exception ex){
-            System.out.println(ex.getMessage());
-        }
+    void archive(String archiveName) throws IOException {
+        FileOutputStream fos = new FileOutputStream(PATH_RES + archiveName + ".zip");
+        ZipOutputStream zout = new ZipOutputStream(fos);
+        FileInputStream fis = new FileInputStream(PATH_RES + fileName + "." + fileFormat);
+
+        zout.putNextEntry(new ZipEntry(fileName + "." + fileFormat));
+        byte[] buffer = new byte[fis.available()];
+        fis.read(buffer);
+        zout.write(buffer);
+        zout.closeEntry();
+        zout.close();
+        fos.close();
+        fis.close();
     }
 
     void encrypt(String keyString){
         try(FileOutputStream encFile = new FileOutputStream(PATH_RES+fileName +".enc");
-            FileInputStream fis = new FileInputStream(PATH_RES+fileName + "." + format))
+            FileInputStream fis = new FileInputStream(PATH_RES+fileName + "." + fileFormat))
         {
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);

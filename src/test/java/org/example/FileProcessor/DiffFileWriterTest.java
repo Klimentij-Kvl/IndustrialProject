@@ -76,4 +76,9 @@ public class DiffFileWriterTest {
     void YamlSimpleWriteTest() throws IOException {
         SimpleFileWritingFunc("yaml");
     }
+
+    @Test
+    void ArchiveTxtWriteTest() throws IOException {
+
+    }
 }

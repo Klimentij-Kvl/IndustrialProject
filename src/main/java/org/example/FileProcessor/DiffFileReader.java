@@ -17,8 +17,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class DiffFileReader{
-    private String fileName;
-    private String fileFormat;
+    private final String fileName;
+    private final String fileFormat;
     private final String PATH_RES = "src/resources/";
 
     public DiffFileReader(String fileName, String fileFormat){
@@ -50,27 +50,21 @@ public class DiffFileReader{
         return makeObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).readValue(inputFile, new TypeReference<List<String>>() {});
     }
 
-    public boolean dearchive(){
-        try(ZipInputStream zin = new ZipInputStream
-                (new FileInputStream(PATH_RES + fileName  + "." + fileFormat))){
-            ZipEntry entry;
-            String name;
-            if((entry = zin.getNextEntry()) == null){
-                System.out.println("No file in archive");
-                return false;
-            }
-            name = entry.getName();
-            FileOutputStream fout = new FileOutputStream(name);
-            for (int c = zin.read(); c != -1; c = zin.read()) {
-                fout.write(c);
-            }
-            fout.flush();
-            zin.closeEntry();
-            fout.close();
-            return true;
-        }catch (IOException ex) {
-            System.out.println(ex.getMessage());
+    public boolean dearchive()throws IOException{
+        ZipInputStream zin = new ZipInputStream
+                (new FileInputStream(PATH_RES + fileName + ".zip"));
+        ZipEntry entry;
+        String name;
+        if ((entry = zin.getNextEntry()) == null) {
+            System.out.println("No file in archive");
             return false;
         }
+        FileOutputStream fout = new FileOutputStream(PATH_RES + entry.getName());
+        for (int c = zin.read(); c != -1; c = zin.read())
+            fout.write(c);
+        fout.flush();
+        zin.closeEntry();
+        fout.close();
+        return true;
     }
 }
