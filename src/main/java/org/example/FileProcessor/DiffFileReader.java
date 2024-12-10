@@ -7,27 +7,23 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class DiffFileReader{
-    public String fileName;
-    public String fileFormat;
-    private static DiffFileReader _instance;
+    private String fileName;
+    private String fileFormat;
     private final String PATH_RES = "src/resources/";
 
-    protected DiffFileReader(String fileName, String fileFormat){
+    public DiffFileReader(String fileName, String fileFormat){
         this.fileFormat = fileFormat;
         this.fileName = fileName;
-    }
-
-    public static DiffFileReader Instance(String fileName, String fileFormat){
-        if(_instance == null) _instance = new DiffFileReader(fileName, fileFormat);
-        _instance.fileName = fileName;
-        _instance.fileFormat = fileFormat;
-        return _instance;
     }
 
     private ObjectMapper makeObjectMapper(){
@@ -52,5 +48,29 @@ public class DiffFileReader{
         }
 
         return makeObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).readValue(inputFile, new TypeReference<List<String>>() {});
+    }
+
+    public boolean dearchive(){
+        try(ZipInputStream zin = new ZipInputStream
+                (new FileInputStream(PATH_RES + fileName  + "." + fileFormat))){
+            ZipEntry entry;
+            String name;
+            if((entry = zin.getNextEntry()) == null){
+                System.out.println("No file in archive");
+                return false;
+            }
+            name = entry.getName();
+            FileOutputStream fout = new FileOutputStream(name);
+            for (int c = zin.read(); c != -1; c = zin.read()) {
+                fout.write(c);
+            }
+            fout.flush();
+            zin.closeEntry();
+            fout.close();
+            return true;
+        }catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            return false;
+        }
     }
 }

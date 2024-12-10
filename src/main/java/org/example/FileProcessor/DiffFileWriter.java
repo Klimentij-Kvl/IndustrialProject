@@ -2,6 +2,7 @@ package org.example.FileProcessor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 
@@ -18,24 +19,16 @@ import java.util.zip.ZipOutputStream;
 public class DiffFileWriter {
     public String fileName;
     public String format;
-    private static DiffFileWriter _instance;
     private final String PATH_RES = "src/resources/";
 
-    protected DiffFileWriter(String fileName, String format){
+    public DiffFileWriter(String fileName, String format){
         this.fileName = fileName;
         this.format = format;
     }
 
-    public static DiffFileWriter Instance(String fileName, String format){
-        if(_instance == null)  _instance = new DiffFileWriter(fileName, format);
-        _instance.fileName = fileName;
-        _instance.format = format;
-        return _instance;
-    }
-
     private ObjectMapper makeObjectMapper(){
         return switch (format){
-            case "json" -> new ObjectMapper();
+            case "json" -> new JsonMapper();
             case "xml" -> new XmlMapper();
             case "yaml" -> new YAMLMapper();
             default -> null;
@@ -56,9 +49,9 @@ public class DiffFileWriter {
         makeObjectMapper().enable(SerializationFeature.INDENT_OUTPUT).writeValue(outputFile, text);
     }
 
-    void archieve(String archieveName){
+    void archive(String archieveName){
         try(ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(archieveName));
-            FileInputStream fis= new FileInputStream(PATH_RES+fileName + "."  + format);)
+            FileInputStream fis= new FileInputStream(PATH_RES+fileName + "."  + format))
         {
             zout.putNextEntry(new ZipEntry(PATH_RES+fileName + "."  + format));
             byte[] buffer = new byte[fis.available()];
@@ -71,29 +64,10 @@ public class DiffFileWriter {
         }
     }
 
-    void CaesaerCipher(int code){
-        try{
-            File file = new File(PATH_RES+fileName + "." + format);
-            FileInputStream fis = new FileInputStream(file);
-            byte[] buffer = new byte[fis.available()];
-            fis.read(buffer);
-            fis.close();
-            file.delete();
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            for(int symbol : buffer){
-                symbol += 3;
-                fos.write(symbol);
-            }
-        }catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
     void encrypt(String keyString){
-        try{
-            FileOutputStream encFile = new FileOutputStream(PATH_RES+fileName +".enc");
-            FileInputStream fis = new FileInputStream(PATH_RES+fileName + "." + format);
+        try(FileOutputStream encFile = new FileOutputStream(PATH_RES+fileName +".enc");
+            FileInputStream fis = new FileInputStream(PATH_RES+fileName + "." + format))
+        {
             byte[] buffer = new byte[fis.available()];
             fis.read(buffer);
 
