@@ -8,21 +8,25 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.example.DataBase.DataStorage;
 public class FindExpression {
-    static private String functions = "";
+    static private String functionsMul = "";
+    static private String functionsPlus = "";
     static void makeFunctionsString() {
         DataStorage dataStorage = DataStorage.getInstance();
         Map<String, String> mapFunc = dataStorage.getFunctions();
-        StringBuilder stringBuilder = new StringBuilder(functions);
+        StringBuilder stringBuilder = new StringBuilder(functionsMul);
+        StringBuilder stringBuilder1 = new StringBuilder(functionsPlus);
         for (String key : mapFunc.keySet()) {
-            stringBuilder.append("(?:").append(key).append(")*");
+            stringBuilder.append("(?:").append(key).append("\\(+\\d+\\)+)*");
+            stringBuilder1.append("(?:").append(key).append("\\(+\\d+\\)+)+");
         }
-        functions = stringBuilder.toString();
+        functionsMul = stringBuilder.toString();
+        functionsPlus = stringBuilder1.toString();
     }
     //Поиск выражения, возможного выражения для подсчёта
     public static List<String> findComputableExpressions(String input) {
         List<String> expressions = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/" + functions + "][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*");
+        Pattern pattern = Pattern.compile("([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*");
         Matcher matcher = pattern.matcher(input);
 
         while (matcher.find()) {
@@ -43,7 +47,7 @@ public class FindExpression {
 
     //Удаление () в строке  (Удаление бесполезных скобок)
     public static String deleteSingleObjectBrackets(String input) {
-        return normalizePattern(input,"\\(([-+*/\\÷]*?\\d*[-+]*)\\)", "$1");
+        return normalizePattern(input,"\\(([-+*/\\÷]*\\d*[-+]*)\\)", "$1");
     }
 
     //Замена [] на () в строке (Возвращение полезных скобок)
