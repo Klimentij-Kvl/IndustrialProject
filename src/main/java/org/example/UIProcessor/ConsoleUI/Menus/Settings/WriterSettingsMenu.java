@@ -1,6 +1,6 @@
 package org.example.UIProcessor.ConsoleUI.Menus.Settings;
 
-import org.example.DataBase.Database;
+import org.example.DataBase.DataStorage;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Writer.SetJSONWriterCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Writer.SetTXTWriterCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Writer.SetXMLWriterCommand;
@@ -24,7 +24,7 @@ public class WriterSettingsMenu extends Menu {
 
     @Override
     protected String getOptionName(int optionKey) {
-        Database db = Database.getInstance();
+        DataStorage db = DataStorage.getInstance();
         String optionName = switch (optionKey) {
             case 1 -> "txt";
             case 2 -> "json";

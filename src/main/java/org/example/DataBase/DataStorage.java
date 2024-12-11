@@ -2,8 +2,8 @@ package org.example.DataBase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Database {
-    private static Database instance;
+public class DataStorage {
+    private static DataStorage instance;
 
     private List<String> input;
     private List<String> output;
@@ -11,14 +11,16 @@ public class Database {
     private String outputFileName;
     private String inputFileFormat;
     private String outputFileFormat;
-    private Database() {
+    private List<String> Functions;
+    private DataStorage() {
         input = new ArrayList<>();
         output = new ArrayList<>();
+        Functions = new ArrayList<>();
     }
 
-    public static synchronized Database getInstance() {
+    public static synchronized DataStorage getInstance() {
         if (instance == null) {
-            instance = new Database();
+            instance = new DataStorage();
         }
         return instance;
     }
@@ -67,5 +69,10 @@ public class Database {
     public void setOutputFileFormat(String outputFileFormat) {
         this.outputFileFormat = outputFileFormat;
     }
-
+    public List<String> getFunctions() {
+        return Functions;
+    }
+    public void setFunctions(List<String> functions) {
+        Functions = functions;
+    }
 }
