@@ -16,8 +16,8 @@ public class FindExpression {
         StringBuilder stringBuilder = new StringBuilder(functionsMul);
         StringBuilder stringBuilder1 = new StringBuilder(functionsPlus);
         for (String key : mapFunc.keySet()) {
-            stringBuilder.append("(?:").append(key).append("\\(+\\d+\\)+)*");
-            stringBuilder1.append("(?:").append(key).append("\\(+\\d+\\)+)+");
+            stringBuilder.append("|(?:").append(key).append("\\(+\\d+\\)+)*");
+            stringBuilder1.append("|(?:").append(key).append("\\(+\\d+\\)+)+");
         }
         functionsMul = stringBuilder.toString();
         functionsPlus = stringBuilder1.toString();
@@ -26,7 +26,7 @@ public class FindExpression {
     public static List<String> findComputableExpressions(String input) {
         List<String> expressions = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*");
+        Pattern pattern = Pattern.compile("([\\s()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*([+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*");
         Matcher matcher = pattern.matcher(input);
 
         while (matcher.find()) {
@@ -47,7 +47,7 @@ public class FindExpression {
 
     //Удаление () в строке  (Удаление бесполезных скобок)
     public static String deleteSingleObjectBrackets(String input) {
-        return normalizePattern(input,"\\(([-+*/\\÷]*\\d*[-+]*)\\)", "$1");
+        return normalizePattern(input,"\\(([-+*/\\÷]*(?:\\d*" + functionsMul + ")[-+]*)\\)", "$1");
     }
 
     //Замена [] на () в строке (Возвращение полезных скобок)
@@ -77,8 +77,8 @@ public class FindExpression {
 
     //Удаление + не влияющих на выражение
     public static String removeUselessPlus(String input) {
-        input = input.replaceAll("([*/÷+-][()]*)\\+(\\d*)", "$1$2");
-        input = input.replaceAll("^\\(*\\+(\\(*\\d+)", "$1");
+        input = input.replaceAll("([*/÷+-][()]*)\\+(\\d*" + functionsMul + ")", "$1$2");
+        input = input.replaceAll("^\\(*\\+(\\(*(?:\\d+" + functionsPlus + "))", "$1");
         return input;
     }
 
@@ -92,7 +92,7 @@ public class FindExpression {
         return input;
     }
 
-    public static String notEmpty(String input) {String other = input.replaceFirst("(.*)\\d+(.*)", "$1$2");
+    public static String notEmpty(String input) {String other = input.replaceFirst("(.*)(?:\\d+" + functionsPlus + ")(.*)", "$1$2");
         if(other.length() == 0) {
             return input + "+0";
         }

@@ -78,4 +78,7 @@ public class DataStorage {
     public void setFunctions(Map<String, String> functions) {
         this.functions = functions;
     }
+    public void addFunction(String functionName, String functionValue) {
+        functions.put(functionName, functionValue);
+    }
 }

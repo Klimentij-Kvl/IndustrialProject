@@ -1,5 +1,6 @@
 package org.example.DataProcessor.RegexProcessor;
 
+import org.example.DataBase.DataStorage;
 import org.example.DataProcessor.DataProcessor;
 
 import java.util.ArrayList;
@@ -16,7 +17,9 @@ public class RegexProcessor implements DataProcessor {
 
     @Override
     public boolean CreateFunction(String functionName, String formula) {
-        return false;
+        DataStorage dataStorage = DataStorage.getInstance();
+        dataStorage.addFunction(functionName, formula);
+        return true;
     }
 
     List<String> extractExpressions(List<String> data) {
