@@ -1,6 +1,8 @@
 package org.example.DataBase;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataStorage {
     private static DataStorage instance;
@@ -11,11 +13,11 @@ public class DataStorage {
     private String outputFileName;
     private String inputFileFormat;
     private String outputFileFormat;
-    private List<String> Functions;
+    private Map<String, String> functions;
     private DataStorage() {
         input = new ArrayList<>();
         output = new ArrayList<>();
-        Functions = new ArrayList<>();
+        functions = new HashMap<>();
     }
 
     public static synchronized DataStorage getInstance() {
@@ -69,10 +71,11 @@ public class DataStorage {
     public void setOutputFileFormat(String outputFileFormat) {
         this.outputFileFormat = outputFileFormat;
     }
-    public List<String> getFunctions() {
-        return Functions;
+    public Map<String, String> getFunctions() {
+        return functions;
     }
-    public void setFunctions(List<String> functions) {
-        Functions = functions;
+
+    public void setFunctions(Map<String, String> functions) {
+        this.functions = functions;
     }
 }
