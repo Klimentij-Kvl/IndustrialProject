@@ -23,12 +23,12 @@ class RegexProcessorTest {
                 new TestCase(List.of("Чтобы найти общий результат,"," нужно было вычислить )((7 + 8) * 2."), List.of("(7+8)*2")),
                 new TestCase(List.of("Выражение 5 * (3 + 2) - 7 ÷ (1 + 1) оказалось сложным."), List.of("5*(3+2)-7÷(1+1)")),
                 new TestCase(List.of("Для точного результата 22/7 использовалось как приближение числа π."), List.of("22/7")),
-                new TestCase(List.of("Разность -5 + 3 и -10"," - (-2) нас удивила."), List.of("-5+3","2")),
+                new TestCase(List.of("Разность -5 + 3 и -10"," - (-2) нас удивила."), List.of("-5+3","2+0")),
                 new TestCase(List.of("Рассчитайте ((2 + 3) * (5 - 3)) / 4."), List.of("((2+3)*(5-3))/4")),
                 new TestCase(List.of("Сегодня мы говорили о математике, но не решали никаких уравнений."), List.of()),
                 new TestCase(List.of("Сложное вычисление 12 - 5 + (3 * 2) / 4 - 1."), List.of("12-5+(3*2)/4-1")),
                 new TestCase(List.of("Рассчитайте    10   +    2    *   (  5 -  1 )"), List.of("10+2*(5-1)")),
-                new TestCase(List.of("Разность -2 и -10"," - (-2) нас удивила."),List.of("2"))
+                new TestCase(List.of("Разность -2 и -10"," - (-2) нас удивила."),List.of("2+0"))
         );
 
         for (TestCase testCase : testCases) {

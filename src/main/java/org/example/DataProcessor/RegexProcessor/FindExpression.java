@@ -2,17 +2,27 @@ package org.example.DataProcessor.RegexProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+import org.example.DataBase.DataStorage;
 public class FindExpression {
-
+    static private String functions = "";
+    static void makeFunctionsString() {
+        DataStorage dataStorage = DataStorage.getInstance();
+        Map<String, String> mapFunc = dataStorage.getFunctions();
+        StringBuilder stringBuilder = new StringBuilder(functions);
+        for (String key : mapFunc.keySet()) {
+            stringBuilder.append("(?:").append(key).append(")*");
+        }
+        functions = stringBuilder.toString();
+    }
     //Поиск выражения, возможного выражения для подсчёта
     public static List<String> findComputableExpressions(String input) {
         List<String> expressions = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*");
+        Pattern pattern = Pattern.compile("([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/" + functions + "][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*");
         Matcher matcher = pattern.matcher(input);
 
         while (matcher.find()) {
@@ -78,11 +88,18 @@ public class FindExpression {
         return input;
     }
 
+    public static String notEmpty(String input) {String other = input.replaceFirst("(.*)\\d+(.*)", "$1$2");
+        if(other.length() == 0) {
+            return input + "+0";
+        }
+        return input;
+    }
     public static String addMulBetweenBrackets(String input) {
         return input.replaceAll("(\\)+)(\\(+)", "$1*$2");
     }
     //Получение итоговых выражений
     public static List<String> find(List<String> input) {
+        makeFunctionsString();
         //Находим допустимые выражения
         //Удаляем пробелы
         //Удаляем бесполезные скобки
@@ -105,6 +122,7 @@ public class FindExpression {
                 .map(FindExpression::chooseSign)                           //Выбор знака в случае -+
                 .map(FindExpression::removeUselessPlus)                    //Удаление остаточных ненужных плюсов
                 .map(FindExpression::addMulBetweenBrackets)                //Добавление умножения между скобками
+                .map(FindExpression::notEmpty)
                 .collect(Collectors.toList());
     }
 }

@@ -48,12 +48,12 @@ public class RegexProcessor implements DataProcessor {
                 index++;
                 line = modifiedLine;
             }
-            if (index == calculatedExpressions.size() - 1) {
+            if (index == calculatedExpressions.size()) {
                 replacedExpressions.add(line);
                 break;
             }
             } while (true);
-            if (index == calculatedExpressions.size() - 1) {
+            if (index == calculatedExpressions.size()) {
                 index = 0;
             }
         }
