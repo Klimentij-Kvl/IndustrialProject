@@ -14,6 +14,11 @@ public class RegexProcessor implements DataProcessor {
         return replaceExpressionsInData(data, calculatedExpressions);           // Заменяем выражения в данных
     }
 
+    @Override
+    public boolean CreateFunction(String functionName, String formula) {
+        return false;
+    }
+
     List<String> extractExpressions(List<String> data) {
         return new ArrayList<>(FindExpression.find(data));
     }
