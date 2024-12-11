@@ -59,12 +59,13 @@ public class DiffFileReader{
             System.out.println("No file in archive");
             return false;
         }
-        FileOutputStream fout = new FileOutputStream(PATH_RES + entry.getName());
+        FileOutputStream fos = new FileOutputStream(PATH_RES + entry.getName());
         for (int c = zin.read(); c != -1; c = zin.read())
-            fout.write(c);
-        fout.flush();
+            fos.write(c);
+        fos.flush();
         zin.closeEntry();
-        fout.close();
+        zin.close();
+        fos.close();
         return true;
     }
 }

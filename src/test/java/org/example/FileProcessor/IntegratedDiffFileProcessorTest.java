@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipFile;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,6 +55,7 @@ public class IntegratedDiffFileProcessorTest {
 
     void ArchiveFileWritingAndReadingFunc(String format) throws IOException{
         File file = new File(PATH_RES + ARCHIVE_FILE_NAME + "." + format);
+        File zFile = new File(PATH_RES + ARCHIVE_FILE_NAME + ".zip");
         DiffFileWriter dfw = new DiffFileWriter(ARCHIVE_FILE_NAME, format);
         DiffFileReader dfr = new DiffFileReader(ARCHIVE_FILE_NAME, format);
         dfw.write(writeList);
@@ -66,8 +66,7 @@ public class IntegratedDiffFileProcessorTest {
         List<String> readList = dfr.read();
         assertEquals(writeList, readList);
         assertTrue(file.delete());
-        File zFile = new File("src/resources/archiveIntegratedTest.zip");
-        zFile.deleteOnExit();
+        assertTrue(zFile.delete());
     }
 
     @Test

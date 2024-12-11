@@ -20,14 +20,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DiffFileWriterTest {
     TypeReference<ArrayList<String>> ArListStr = new TypeReference<>() {};
     private final String PATH_RES = "src/resources/";
+    private final String FILE_NAME = "writerTest";
 
     @Spy
-    List<String> wrote = new ArrayList<>();
+    List<String> writeList = new ArrayList<>();
 
     @BeforeEach
     void setWriter(){
-        wrote.add("one, kek, chebyrek");
-        wrote.add("two, lol, pomerol");
+        writeList.add("one, kek, chebyrek");
+        writeList.add("two, lol, pomerol");
     }
 
     ObjectMapper makeObjectMapper(String format){
@@ -40,9 +41,9 @@ public class DiffFileWriterTest {
     }
 
     void SimpleFileWritingFunc(String format) throws IOException {
-        DiffFileWriter dfw = new DiffFileWriter("writerTest", format);
-        dfw.write(wrote);
-        File file = new File(PATH_RES +"writerTest." + format);
+        DiffFileWriter dfw = new DiffFileWriter(FILE_NAME, format);
+        dfw.write(writeList);
+        File file = new File(PATH_RES + FILE_NAME +"." + format);
         List<String> arr;
         if(format.equals("txt")){
             Scanner sc = new Scanner(file);
@@ -53,7 +54,7 @@ public class DiffFileWriterTest {
             sc.close();
         }
         else arr = makeObjectMapper(format).readValue(file, ArListStr);
-        assertEquals(wrote, arr);
+        assertEquals(writeList, arr);
         assertTrue(file.delete());
     }
 
@@ -75,10 +76,5 @@ public class DiffFileWriterTest {
     @Test
     void YamlSimpleWriteTest() throws IOException {
         SimpleFileWritingFunc("yaml");
-    }
-
-    @Test
-    void ArchiveTxtWriteTest() throws IOException {
-
     }
 }
