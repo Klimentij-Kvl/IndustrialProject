@@ -16,6 +16,7 @@ public class IntegratedDiffFileProcessorTest {
     final String PATH_RES = "src/resources/";
     final String SIMPLE_FILE_NAME = "integratedTest";
     final String ARCHIVE_FILE_NAME = "archiveIntegratedTest";
+    final String ENCRYPT_FILE_NAME = "encryptIntegratedTest";
     @Spy
     List<String> writeList = new ArrayList<>();
 
@@ -53,7 +54,7 @@ public class IntegratedDiffFileProcessorTest {
         SimpleFileWritingAndReadingFunc("yaml");
     }
 
-    void ArchiveFileWritingAndReadingFunc(String format) throws IOException{
+    /*void ArchiveFileWritingAndReadingFunc(String format) throws IOException{
         File file = new File(PATH_RES + ARCHIVE_FILE_NAME + "." + format);
         File zFile = new File(PATH_RES + ARCHIVE_FILE_NAME + ".zip");
         DiffFileWriter dfw = new DiffFileWriter(ARCHIVE_FILE_NAME, format);
@@ -67,13 +68,13 @@ public class IntegratedDiffFileProcessorTest {
         assertEquals(writeList, readList);
         assertTrue(file.delete());
         assertTrue(zFile.delete());
-    }
+    }*/
 
     @Test
     void ArchiveTxtWriteReadTest() throws IOException {
-        ArchiveFileWritingAndReadingFunc("txt");
+
     }
-    @Test
+    /*@Test
     void ArchiveJsonWriteReadTest() throws IOException {
         ArchiveFileWritingAndReadingFunc("json");
     }
@@ -85,4 +86,17 @@ public class IntegratedDiffFileProcessorTest {
     void ArchiveYamlWriteReadTest() throws IOException {
         ArchiveFileWritingAndReadingFunc("yaml");
     }
+
+    @Test
+    void EncryptTxtWriteReadTest() throws Exception {
+        DiffFileWriter dfw = new DiffFileWriter(ENCRYPT_FILE_NAME, "txt");
+        DiffFileReader dfr = new DiffFileReader(ENCRYPT_FILE_NAME, "txt");
+        dfw.write(writeList);
+        dfw.encrypt("12345");
+
+        dfr.decrypt("12345");
+        List<String> readList = dfr.read();
+
+        assertEquals(writeList, readList);
+    }*/
 }

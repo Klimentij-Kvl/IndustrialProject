@@ -16,7 +16,7 @@ public class EncryptionDecorator extends StreamChooserDecorator{
     Cipher cipher;
     IvParameterSpec ivParameterSpec;
 
-    public EncryptionDecorator(String stringSecretKey, StreamChooser chooser){
+    public EncryptionDecorator(String stringSecretKey, StreamChooserOld chooser){
         super(chooser);
         secretKey = new SecretKeySpec
                 (Arrays.copyOf(stringSecretKey.getBytes(StandardCharsets.UTF_8),16), "AES");

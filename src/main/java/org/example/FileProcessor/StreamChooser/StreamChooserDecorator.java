@@ -3,10 +3,10 @@ package org.example.FileProcessor.StreamChooser;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public abstract class StreamChooserDecorator implements StreamChooser{
-    final private StreamChooser next;
+public abstract class StreamChooserDecorator implements StreamChooserOld {
+    final private StreamChooserOld next;
 
-    StreamChooserDecorator(StreamChooser next){
+    StreamChooserDecorator(StreamChooserOld next){
         this.next = next;
     }
 
