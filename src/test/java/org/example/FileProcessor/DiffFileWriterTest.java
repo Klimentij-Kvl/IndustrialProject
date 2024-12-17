@@ -1,5 +1,8 @@
 package org.example.FileProcessor;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -10,6 +13,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 class DiffFileWriterTest {
+    private final TypeReference<List<String>> listStr = new TypeReference<List<String>>() {};
+
     @Spy
     List<String> toWrite;
     List<String> toRead;
@@ -47,7 +52,13 @@ class DiffFileWriterTest {
     @Test
     void JsonWriteTest() throws IOException{
         File file = new File("src/resources/txtDfwTest.json");
-        DiffFileWriter dfw = new JsonDiffFileWriter(new FileOutputStream(file));
-        
+        try(DiffFileWriter dfw = new JsonDiffFileWriter(new FileOutputStream(file))){
+            dfw.write(toWrite);
+
+            ObjectMapper mapper = new ObjectMapper();
+            toRead = mapper.readValue(file, listStr);
+        }
+        assertEquals(toWrite, toRead);
+        assertTrue(file.delete());
     }
 }

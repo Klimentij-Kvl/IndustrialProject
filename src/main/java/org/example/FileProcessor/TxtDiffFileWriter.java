@@ -5,10 +5,9 @@ import java.io.OutputStream;
 import java.util.List;
 
 public class TxtDiffFileWriter extends DiffFileWriter{
-    private final OutputStream output;
 
-    TxtDiffFileWriter(OutputStream os){
-        output = os;
+    public TxtDiffFileWriter(OutputStream os){
+        super(os);
     }
 
     @Override
