@@ -1,4 +1,4 @@
-package org.example.FileProcessor;
+package org.example.FileProcessor.DiffFileWriter;
 
 import java.io.Closeable;
 import java.io.Flushable;
@@ -13,6 +13,7 @@ public abstract class DiffFileWriter implements Closeable, Flushable {
         output = os;
     }
 
+    public abstract void write(String s) throws IOException;
     public abstract void write(List<String> list) throws IOException;
 
     @Override

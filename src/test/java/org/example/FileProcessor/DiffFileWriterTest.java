@@ -2,7 +2,10 @@ package org.example.FileProcessor;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import org.example.FileProcessor.DiffFileWriter.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -13,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 class DiffFileWriterTest {
-    private final TypeReference<List<String>> listStr = new TypeReference<List<String>>() {};
+    private final TypeReference<List<String>> listStr = new TypeReference<>() {};
 
     @Spy
     List<String> toWrite;
@@ -49,16 +52,34 @@ class DiffFileWriterTest {
         assertTrue(file.delete());
     }
 
-    @Test
-    void JsonWriteTest() throws IOException{
-        File file = new File("src/resources/txtDfwTest.json");
-        try(DiffFileWriter dfw = new JsonDiffFileWriter(new FileOutputStream(file))){
-            dfw.write(toWrite);
+    void SerializationWriteRead(File file, ObjectMapper mapper, DiffFileWriter dfw) throws IOException{
+        dfw.write(toWrite);
+        dfw.close();
 
-            ObjectMapper mapper = new ObjectMapper();
-            toRead = mapper.readValue(file, listStr);
-        }
+        toRead = mapper.readValue(file, listStr);
+
         assertEquals(toWrite, toRead);
         assertTrue(file.delete());
+    }
+
+    @Test
+    void JsonWriteTest() throws IOException{
+        File file = new File("src/resources/jsonDfwTest.json");
+        DiffFileWriter jsonDfw = new JsonDiffFileWriter(new FileOutputStream(file));
+        SerializationWriteRead(file, new JsonMapper(), jsonDfw);
+    }
+
+    @Test
+    void XmlWriteTest() throws IOException{
+        File file = new File("src/resources/xmlDfwTest.xml");
+        DiffFileWriter xmlDfw = new XmlDiffFileWriter(new FileOutputStream(file));
+        SerializationWriteRead(file, new XmlMapper(), xmlDfw);
+    }
+
+    @Test
+    void YamlWriteTest() throws IOException{
+        File file = new File("src/resources/yamlDfwTest.yaml");
+        DiffFileWriter yamlDfw = new YamlDiffFileWriter(new FileOutputStream(file));
+        SerializationWriteRead(file, new YAMLMapper(), yamlDfw);
     }
 }
