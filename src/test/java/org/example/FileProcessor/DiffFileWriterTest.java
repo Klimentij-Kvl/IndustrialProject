@@ -17,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 class DiffFileWriterTest {
     private final TypeReference<List<String>> listStr = new TypeReference<>() {};
+    private final String PATH_RES = "src/resources/";
 
     @Spy
     List<String> toWrite;
@@ -32,8 +33,8 @@ class DiffFileWriterTest {
     }
 
     @Test
-    void TxtWriteTest() throws IOException {
-        File file = new File("src/resources/txtDfwTest.txt");
+    void TxtDiffFileWriteTest() throws IOException {
+        File file = new File(PATH_RES + "txtDfwTest.txt");
         try(DiffFileWriter dfw = new TxtDiffFileWriter(new FileOutputStream(file))) {
             dfw.write(toWrite);
 
@@ -63,22 +64,22 @@ class DiffFileWriterTest {
     }
 
     @Test
-    void JsonWriteTest() throws IOException{
-        File file = new File("src/resources/jsonDfwTest.json");
+    void JsonDiffFileWriteTest() throws IOException{
+        File file = new File(PATH_RES + "jsonDfwTest.json");
         DiffFileWriter jsonDfw = new JsonDiffFileWriter(new FileOutputStream(file));
         SerializationWriteRead(file, new JsonMapper(), jsonDfw);
     }
 
     @Test
-    void XmlWriteTest() throws IOException{
-        File file = new File("src/resources/xmlDfwTest.xml");
+    void XmlDiffFileWriteTest() throws IOException{
+        File file = new File(PATH_RES + "xmlDfwTest.xml");
         DiffFileWriter xmlDfw = new XmlDiffFileWriter(new FileOutputStream(file));
         SerializationWriteRead(file, new XmlMapper(), xmlDfw);
     }
 
     @Test
-    void YamlWriteTest() throws IOException{
-        File file = new File("src/resources/yamlDfwTest.yaml");
+    void YamlDiffFileWriteTest() throws IOException{
+        File file = new File(PATH_RES + "yamlDfwTest.yaml");
         DiffFileWriter yamlDfw = new YamlDiffFileWriter(new FileOutputStream(file));
         SerializationWriteRead(file, new YAMLMapper(), yamlDfw);
     }

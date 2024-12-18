@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import java.io.OutputStream;
 
 public class XmlDiffFileWriter extends SerializationDiffFileWriter{
-   public XmlDiffFileWriter(OutputStream os){
+    public XmlDiffFileWriter(OutputStream os){
         super(os, new XmlMapper());
     }
 }

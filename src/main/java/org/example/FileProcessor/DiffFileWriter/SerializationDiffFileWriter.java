@@ -1,18 +1,19 @@
 package org.example.FileProcessor.DiffFileWriter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-public class SerializationDiffFileWriter extends DiffFileWriter{
+public abstract class SerializationDiffFileWriter extends DiffFileWriter{
 
     private final ObjectMapper mapper;
 
-    SerializationDiffFileWriter(OutputStream os, ObjectMapper mapper){
+    protected SerializationDiffFileWriter(OutputStream os, ObjectMapper mapper){
         super(os);
-        this.mapper = mapper;
+        this.mapper = mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     @Override
