@@ -47,4 +47,29 @@ class OutputStreamBuilderTest {
         fis.close();
         assertTrue(file.delete());
     }
+
+    @Test
+    void ArchiveOutput() throws IOException{
+        File file = new File(PATH_RES + "ArchOutStrBuilderTest.txt");
+        String toWrite = "roflokek lol kek chebyrek";
+
+        OutputStreamBuilder osb = new OutputStreamBuilder(file);
+        osb.BuildArchive(PATH_RES + "archTest");
+        OutputStream os = osb.getResult();
+        os.write(toWrite.getBytes());
+        os.close();
+    }
+
+    @Test
+    void ArchiveEncOutput() throws IOException{
+        File file = new File(PATH_RES + "ArchEncOutStrBuilderTest.txt");
+        String toWrite = "roflokek lol kek chebyrek";
+
+        OutputStreamBuilder osb = new OutputStreamBuilder(file);
+        osb.BuildArchive(PATH_RES + "archEncTest");
+        osb.BuildEncryption("12345");
+        OutputStream os = osb.getResult();
+        os.write(toWrite.getBytes());
+        os.close();
+    }
 }

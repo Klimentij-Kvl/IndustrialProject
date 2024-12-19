@@ -7,16 +7,16 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class OutputStreamBuilder {
-    private final File path;
+    private final String path;
     private OutputStream output;
 
     public OutputStreamBuilder(File file) throws IOException {
-        path = file;
+        path = file.getName();
         output = new FileOutputStream(file);
     }
 
     public OutputStreamBuilder(String fileName) throws IOException {
-        path = new File(fileName);
+        path = fileName;
         output = new FileOutputStream(fileName);
     }
 
@@ -25,8 +25,9 @@ public class OutputStreamBuilder {
         output = new CipherOutputStream(output, fed.encCipher());
     }
 
-    public void BuildArchive(){
-
+    public void BuildArchive(String archName) throws IOException{
+        ArchiveOutputStream aos = new ZipArchiveOutputStream();
+        output = aos.makeOutputStream(output, path, archName);
     }
 
     public OutputStream getResult(){
