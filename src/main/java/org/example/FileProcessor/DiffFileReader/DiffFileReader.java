@@ -1,8 +1,6 @@
 package org.example.FileProcessor.DiffFileReader;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 public abstract class DiffFileReader implements Closeable {
@@ -10,6 +8,14 @@ public abstract class DiffFileReader implements Closeable {
 
     public DiffFileReader(InputStream is){
         input = is;
+    }
+
+    public DiffFileReader(File file) throws IOException{
+        input = new FileInputStream(file);
+    }
+
+    public DiffFileReader(String fileName) throws IOException{
+        input = new FileInputStream(fileName);
     }
 
     public abstract List<String> read() throws IOException;

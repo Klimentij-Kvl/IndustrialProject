@@ -1,9 +1,6 @@
 package org.example.FileProcessor.DiffFileWriter;
 
-import java.io.Closeable;
-import java.io.Flushable;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 
 public abstract class DiffFileWriter implements Closeable, Flushable {
@@ -11,6 +8,14 @@ public abstract class DiffFileWriter implements Closeable, Flushable {
 
     public DiffFileWriter(OutputStream os){
         output = os;
+    }
+
+    public DiffFileWriter(File file) throws IOException{
+        output = new FileOutputStream(file);
+    }
+
+    public DiffFileWriter(String fileName) throws IOException{
+        output = new FileOutputStream(fileName);
     }
 
     public abstract void write(String s) throws IOException;

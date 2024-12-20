@@ -11,6 +11,14 @@ public class TxtDiffFileReader extends DiffFileReader{
         super(is);
     }
 
+    public TxtDiffFileReader(File file) throws IOException{
+        super(file);
+    }
+
+    public TxtDiffFileReader(String fileName) throws IOException{
+        super(fileName);
+    }
+
     @Override
     public List<String> read() throws IOException {
         List<String> toRead = new ArrayList<>();
