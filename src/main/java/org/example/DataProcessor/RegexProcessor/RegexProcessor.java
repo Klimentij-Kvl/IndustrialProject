@@ -23,7 +23,8 @@ public class RegexProcessor implements DataProcessor {
     }
 
     List<String> extractExpressions(List<String> data) {
-        return new ArrayList<>(FindExpression.find(data));
+        FindExpression findExpression = new FindExpression();
+        return new ArrayList<>(findExpression.find(data));
     }
     List<String> calculateExpressions(List<String> expressions) {
         List<String> calculatedExpressions = new ArrayList<>();
