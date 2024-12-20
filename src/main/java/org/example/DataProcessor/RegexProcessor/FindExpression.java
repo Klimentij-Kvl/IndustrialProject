@@ -1,8 +1,6 @@
 package org.example.DataProcessor.RegexProcessor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -10,14 +8,39 @@ import org.example.DataBase.DataStorage;
 public class FindExpression {
     static private String functionsMul = "";
     static private String functionsPlus = "";
+
+    public static int countUniqueLettersExcludingFunctions(String text) {
+        text = text.toLowerCase();
+
+        text = text.replaceAll("(\\d+" + functionsPlus + ")", "");
+
+        Pattern pattern = Pattern.compile("[a-zа-яё]");
+        Matcher matcher = pattern.matcher(text);
+
+        Set<Character> uniqueLetters = new HashSet<>();
+
+        while (matcher.find()) {
+            uniqueLetters.add(matcher.group().charAt(0));
+        }
+
+        return uniqueLetters.size();
+    }
+
     static void makeFunctionsString() {
         DataStorage dataStorage = DataStorage.getInstance();
         Map<String, String> mapFunc = dataStorage.getFunctions();
         StringBuilder stringBuilder = new StringBuilder(functionsMul);
         StringBuilder stringBuilder1 = new StringBuilder(functionsPlus);
         for (String key : mapFunc.keySet()) {
-            stringBuilder.append("|(?:").append(key).append("\\(+\\d+\\)+)*");
-            stringBuilder1.append("|(?:").append(key).append("\\(+\\d+\\)+)+");
+            stringBuilder.append("|(?:").append(key).append("\\(+\\d+");
+            stringBuilder1.append("|(?:").append(key).append("\\(+\\d+");
+            int count = countUniqueLettersExcludingFunctions(mapFunc.get(key));
+            for (int i = 1; i < count; i++) {
+                stringBuilder.append(",\\d+");
+                stringBuilder1.append(",\\d+");
+            }
+            stringBuilder.append("\\)+)*");
+            stringBuilder1.append("\\)+)+");
         }
         functionsMul = stringBuilder.toString();
         functionsPlus = stringBuilder1.toString();
@@ -26,11 +49,17 @@ public class FindExpression {
     public static List<String> findComputableExpressions(String input) {
         List<String> expressions = new ArrayList<>();
 
-        Pattern pattern = Pattern.compile("([\\s()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*([+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*");
+        Pattern pattern = Pattern.compile("(?:\\((?:[ -'*-0Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*([\\s()\\-+]*\\d+" + functionsPlus + "[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+" + functionsPlus + "[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+" + functionsPlus + "[()\\s]*|((-*\\s*)*" + functionsPlus.substring(1) + ")");
         Matcher matcher = pattern.matcher(input);
 
         while (matcher.find()) {
-            expressions.add(matcher.group());
+            StringBuilder expression = new StringBuilder();
+            for (int i = 1; i <= matcher.groupCount(); i++) {
+                if (matcher.group(i) != null) {
+                    expression.append(matcher.group(i));
+                }
+            }
+            expressions.add(expression.toString());
         }
         return expressions;
     }
@@ -78,7 +107,7 @@ public class FindExpression {
     //Удаление + не влияющих на выражение
     public static String removeUselessPlus(String input) {
         input = input.replaceAll("([*/÷+-][()]*)\\+(\\d*" + functionsMul + ")", "$1$2");
-        input = input.replaceAll("^\\(*\\+(\\(*(?:\\d+" + functionsPlus + "))", "$1");
+        input = input.replaceAll("^\\(*\\+(\\(*\\d+" + functionsPlus + ")", "$1");
         return input;
     }
 
@@ -92,8 +121,8 @@ public class FindExpression {
         return input;
     }
 
-    public static String notEmpty(String input) {String other = input.replaceFirst("(.*)(?:\\d+" + functionsPlus + ")(.*)", "$1$2");
-        if(other.length() == 0) {
+    public static String notEmpty(String input) {String other = input.replaceFirst("(.*)\\d+" + functionsPlus + "(.*)", "$1$2");
+        if(other.isEmpty()) {
             return input + "+0";
         }
         return input;
