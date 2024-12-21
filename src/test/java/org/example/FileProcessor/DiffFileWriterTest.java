@@ -35,7 +35,7 @@ class DiffFileWriterTest {
     @Test
     void TxtDiffFileWriteTest() throws IOException {
         File file = new File(PATH_RES + "txtDfwTest.txt");
-        try(DiffFileWriter dfw = new TxtDiffFileWriter(new FileOutputStream(file))) {
+        try(DiffFileWriter dfw = new TxtDiffFileWriter(file)){
             dfw.write(toWrite);
 
             try (
@@ -66,21 +66,21 @@ class DiffFileWriterTest {
     @Test
     void JsonDiffFileWriteTest() throws IOException{
         File file = new File(PATH_RES + "jsonDfwTest.json");
-        DiffFileWriter jsonDfw = new JsonDiffFileWriter(new FileOutputStream(file));
+        DiffFileWriter jsonDfw = new JsonDiffFileWriter(file);
         SerializationWriteRead(file, new JsonMapper(), jsonDfw);
     }
 
     @Test
     void XmlDiffFileWriteTest() throws IOException{
         File file = new File(PATH_RES + "xmlDfwTest.xml");
-        DiffFileWriter xmlDfw = new XmlDiffFileWriter(new FileOutputStream(file));
+        DiffFileWriter xmlDfw = new XmlDiffFileWriter(file);
         SerializationWriteRead(file, new XmlMapper(), xmlDfw);
     }
 
     @Test
     void YamlDiffFileWriteTest() throws IOException{
         File file = new File(PATH_RES + "yamlDfwTest.yaml");
-        DiffFileWriter yamlDfw = new YamlDiffFileWriter(new FileOutputStream(file));
+        DiffFileWriter yamlDfw = new YamlDiffFileWriter(file);
         SerializationWriteRead(file, new YAMLMapper(), yamlDfw);
     }
 }

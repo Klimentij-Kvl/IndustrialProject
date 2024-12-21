@@ -4,13 +4,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 
-public class XmlDiffFileWriter extends SerializationDiffFileWriter{
-    public XmlDiffFileWriter(OutputStream os){
-        super(os, new XmlMapper());
-    }
-
+public class XmlDiffFileWriter extends SerializationAdapterDiffFileWriter {
     public XmlDiffFileWriter(File file) throws IOException {
         super(file, new XmlMapper());
     }
