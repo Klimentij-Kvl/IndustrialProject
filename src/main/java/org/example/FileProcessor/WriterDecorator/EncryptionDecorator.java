@@ -15,6 +15,7 @@ import java.util.List;
 
 public class EncryptionDecorator extends WriterDecorator{
     private Cipher cipher;
+    //private String path;
 
     public EncryptionDecorator(String key, DiffWriter dw){
         super(dw);
@@ -52,4 +53,9 @@ public class EncryptionDecorator extends WriterDecorator{
         super.write(list);
         encrypt();
     }
+
+    //@Override
+   // public String getPath(){
+    //    return path;
+    //}
 }

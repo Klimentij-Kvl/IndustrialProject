@@ -2,8 +2,8 @@ package org.example.FileProcessor;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import org.example.FileProcessor.DiffFileWriter.TxtDiffFileWriter;
-import org.example.FileProcessor.WriterDecorator.ArchivingDecorator;
 import org.example.FileProcessor.WriterDecorator.EncryptionDecorator;
+import org.example.FileProcessor.WriterDecorator.ZipArchivingDecorator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -62,10 +62,41 @@ public class DiffFileWriterDecoratorTest {
     }
 
     @Test
-    void ArchTxtWriteTest() throws IOException{
-        File file = new File(PATH_RES + "ArchTextWriteTest.txt");
-        DiffWriter dw = new ArchivingDecorator(new TxtDiffFileWriter(file));
+    void ZipTxtWriteTest() throws IOException{
+        File file = new File(PATH_RES + "ZipTextWriteTest.txt");
+        DiffWriter dw = new ZipArchivingDecorator(new TxtDiffFileWriter(file));
         dw.write(toWrite);
         dw.close();
+    }
+
+    @Test
+    void ZipEncTxtWriteTest() throws IOException{
+        File file = new File(PATH_RES + "ZipEncWriteTest.txt");
+        DiffWriter dw = new ZipArchivingDecorator(new EncryptionDecorator("12345", new TxtDiffFileWriter(file)));
+        dw.write(toWrite);
+        dw.close();
+    }
+
+    @Test
+    void EncZipTxtWriteTest() throws Exception{
+        File file = new File(PATH_RES + "EncZipWriteTest.txt");
+        DiffWriter dw = new EncryptionDecorator("12345",
+                                new ZipArchivingDecorator(
+                                new TxtDiffFileWriter(file)));
+        dw.write(toWrite);
+        dw.close();
+
+        SecretKey secretKey = new SecretKeySpec(Arrays.copyOf("12345".getBytes(), 16), "AES");
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+        try(FileInputStream fis = new FileInputStream(PATH_RES + "EncZipWriteTest.zip");
+            CipherInputStream cis = new CipherInputStream(fis, cipher);
+            FileOutputStream fos = new FileOutputStream(PATH_RES + "EncZipWriteTest2.zip")
+        ){
+            byte[] b = new byte[4096];
+            while(cis.read(b) != -1)
+                fos.write(b);
+        }
     }
 }

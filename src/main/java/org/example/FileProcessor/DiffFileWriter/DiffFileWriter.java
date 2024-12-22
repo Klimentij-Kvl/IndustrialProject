@@ -5,7 +5,7 @@ import org.example.FileProcessor.DiffWriter;
 import java.io.*;
 import java.util.List;
 
-public abstract class DiffFileWriter implements DiffWriter, Closeable, Flushable {
+public abstract class DiffFileWriter implements DiffWriter, Flushable {
     protected final FileOutputStream output;
     private final String path;
 
