@@ -66,7 +66,7 @@ public class DiffFileWriterDecoratorTest {
         }
     }
 
-    void Dearchive(File inFile, File outFile) throws IOException{
+    void DeZip(File inFile, File outFile) throws IOException{
         try(ZipInputStream zis = new ZipInputStream(new FileInputStream(inFile));
             FileOutputStream fos = new FileOutputStream(outFile)){
             zis.getNextEntry();
@@ -104,7 +104,7 @@ public class DiffFileWriterDecoratorTest {
 
         File zipFile = new File(PATH_RES + "ZipTxtWriteTest.zip");
 
-        Dearchive(zipFile, txtFile);
+        DeZip(zipFile, txtFile);
         toRead = TxtRead(txtFile);
 
         assertTrue(txtFile.delete());
@@ -122,7 +122,7 @@ public class DiffFileWriterDecoratorTest {
         File zipEncFile = new File(PATH_RES + "ZipEncWriteTest.zip");
         File encFile = new File(PATH_RES + "ZipEncWriteTest2.txt");
 
-        Dearchive(zipEncFile, encFile);
+        DeZip(zipEncFile, encFile);
         Decrypt(encFile, txtFile);
         toRead = TxtRead(txtFile);
 
@@ -144,7 +144,7 @@ public class DiffFileWriterDecoratorTest {
         File zipFile = new File(PATH_RES + "EncZipWriteTest2.zip");
 
         Decrypt(encZipFile, zipFile);
-        Dearchive(zipFile, txtFile);
+        DeZip(zipFile, txtFile);
         toRead = TxtRead(txtFile);
 
         assertEquals(toWrite, toRead);

@@ -7,10 +7,6 @@ import java.util.List;
 
 public class TxtDiffFileReader extends DiffFileReader{
 
-    public TxtDiffFileReader(InputStream is){
-        super(is);
-    }
-
     public TxtDiffFileReader(File file) throws IOException{
         super(file);
     }

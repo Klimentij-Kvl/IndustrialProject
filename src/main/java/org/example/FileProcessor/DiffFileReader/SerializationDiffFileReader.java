@@ -6,16 +6,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 public abstract class SerializationDiffFileReader extends DiffFileReader{
     private final ObjectMapper mapper;
-
-    protected SerializationDiffFileReader(InputStream os, ObjectMapper mapper){
-        super(os);
-        this.mapper = mapper.enable(SerializationFeature.INDENT_OUTPUT);
-    }
 
     protected SerializationDiffFileReader(File file, ObjectMapper mapper) throws IOException{
         super(file);

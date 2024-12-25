@@ -2,10 +2,7 @@ package org.example.FileProcessor.WriterDecorator;
 
 import org.example.FileProcessor.DiffWriter;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -22,21 +19,23 @@ public class ZipArchivingDecorator extends ArchivingDecorator{
         File file = new File(path);
         Pattern pattern = Pattern.compile("^(.+\\\\)(.+)(\\..+)$");
         Matcher matcher = pattern.matcher(path);
-        matcher.matches();
-        String pathZip = matcher.group(1) + matcher.group(2) + ".zip";
-        String fileName = matcher.group(2) + matcher.group(3);
+        if(matcher.matches()) {
+            String pathZip = matcher.group(1) + matcher.group(2) + ".zip";
+            String fileName = matcher.group(2) + matcher.group(3);
 
-        try(ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(pathZip));
-            FileInputStream fis = new FileInputStream(path)
-        ){
-            zos.putNextEntry(new ZipEntry(fileName));
-            byte[] b = fis.readAllBytes();
-            zos.write(b);
-            zos.closeEntry();
+            try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(pathZip));
+                 FileInputStream fis = new FileInputStream(path)
+            ) {
+                zos.putNextEntry(new ZipEntry(fileName));
+                byte[] b = fis.readAllBytes();
+                zos.write(b);
+                zos.closeEntry();
+            }
+
+            super.close();
+            super.path = pathZip;
+            file.delete();
         }
-
-        super.close();
-        super.path = pathZip;
-        file.delete();
+        else throw new FileNotFoundException();
     }
 }

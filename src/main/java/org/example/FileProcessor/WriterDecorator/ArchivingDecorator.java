@@ -21,6 +21,12 @@ public abstract class ArchivingDecorator extends WriterDecorator{
     }
 
     @Override
+    public void write(String s) throws IOException{
+        super.write(s);
+        archive();
+    }
+
+    @Override
     public void write(List<String> list) throws IOException {
         super.write(list);
         archive();
