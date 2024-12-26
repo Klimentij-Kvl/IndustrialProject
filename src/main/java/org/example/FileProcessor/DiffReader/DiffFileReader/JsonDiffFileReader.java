@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffFileReader;
+package org.example.FileProcessor.DiffReader.DiffFileReader;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 

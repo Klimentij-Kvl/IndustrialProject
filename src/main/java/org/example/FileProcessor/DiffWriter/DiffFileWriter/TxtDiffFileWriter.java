@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffFileWriter;
+package org.example.FileProcessor.DiffWriter.DiffFileWriter;
 
 import java.io.File;
 import java.io.IOException;

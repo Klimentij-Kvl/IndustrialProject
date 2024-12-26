@@ -1,6 +1,6 @@
-package org.example.FileProcessor.ReaderDecorator;
+package org.example.FileProcessor.DiffReader.ReaderDecorator;
 
-import org.example.FileProcessor.DiffReader;
+import org.example.FileProcessor.DiffReader.DiffReader;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;

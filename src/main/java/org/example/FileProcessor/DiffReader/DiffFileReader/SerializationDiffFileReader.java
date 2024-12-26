@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffFileReader;
+package org.example.FileProcessor.DiffReader.DiffFileReader;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +23,6 @@ public abstract class SerializationDiffFileReader extends DiffFileReader{
 
     @Override
     public List<String> read() throws IOException {
-        return mapper.readValue(input, new TypeReference<>() {});
+        return mapper.readValue(new File(super.getPath()), new TypeReference<>() {});
     }
 }

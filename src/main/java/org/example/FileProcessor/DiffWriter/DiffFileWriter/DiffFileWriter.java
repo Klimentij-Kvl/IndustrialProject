@@ -1,6 +1,6 @@
-package org.example.FileProcessor.DiffFileWriter;
+package org.example.FileProcessor.DiffWriter.DiffFileWriter;
 
-import org.example.FileProcessor.DiffWriter;
+import org.example.FileProcessor.DiffWriter.DiffWriter;
 
 import java.io.*;
 import java.util.List;

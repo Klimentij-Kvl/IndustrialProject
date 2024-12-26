@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffFileWriter;
+package org.example.FileProcessor.DiffWriter.DiffFileWriter;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 

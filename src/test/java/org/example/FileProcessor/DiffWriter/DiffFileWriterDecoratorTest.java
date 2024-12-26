@@ -1,9 +1,9 @@
-package org.example.FileProcessor;
+package org.example.FileProcessor.DiffWriter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import org.example.FileProcessor.DiffFileWriter.TxtDiffFileWriter;
-import org.example.FileProcessor.WriterDecorator.EncryptionDecorator;
-import org.example.FileProcessor.WriterDecorator.ZipArchivingDecorator;
+import org.example.FileProcessor.DiffWriter.DiffFileWriter.TxtDiffFileWriter;
+import org.example.FileProcessor.DiffWriter.WriterDecorator.EncryptionDecorator;
+import org.example.FileProcessor.DiffWriter.WriterDecorator.ZipArchivingDecorator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;

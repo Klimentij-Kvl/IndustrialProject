@@ -1,11 +1,11 @@
-package org.example.FileProcessor;
+package org.example.FileProcessor.DiffWriter;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import org.example.FileProcessor.DiffFileWriter.*;
+import org.example.FileProcessor.DiffWriter.DiffFileWriter.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;

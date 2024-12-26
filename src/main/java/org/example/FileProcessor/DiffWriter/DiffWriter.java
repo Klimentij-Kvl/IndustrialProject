@@ -1,4 +1,4 @@
-package org.example.FileProcessor;
+package org.example.FileProcessor.DiffWriter;
 
 import java.io.Closeable;
 import java.io.IOException;

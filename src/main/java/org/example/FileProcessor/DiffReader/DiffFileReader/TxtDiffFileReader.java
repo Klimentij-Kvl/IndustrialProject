@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffFileReader;
+package org.example.FileProcessor.DiffReader.DiffFileReader;
 
 
 import java.io.*;
@@ -19,13 +19,14 @@ public class TxtDiffFileReader extends DiffFileReader{
     public List<String> read() throws IOException {
         List<String> toRead = new ArrayList<>();
 
-        try(InputStreamReader isr = new InputStreamReader(input);
+        try (FileInputStream fis = new FileInputStream(super.getPath());
+            InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr)) {
+                String line;
+                while ((line = br.readLine()) != null)
+                    toRead.add(line);
+            }
 
-            String line;
-            while((line = br.readLine()) != null)
-                toRead.add(line);
-        }
         return toRead;
     }
 }

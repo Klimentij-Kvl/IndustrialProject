@@ -1,6 +1,6 @@
-package org.example.FileProcessor.WriterDecorator;
+package org.example.FileProcessor.DiffWriter.WriterDecorator;
 
-import org.example.FileProcessor.DiffWriter;
+import org.example.FileProcessor.DiffWriter.DiffWriter;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;

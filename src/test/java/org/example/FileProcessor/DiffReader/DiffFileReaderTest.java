@@ -1,10 +1,10 @@
-package org.example.FileProcessor;
+package org.example.FileProcessor.DiffReader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import org.example.FileProcessor.DiffFileReader.*;
+import org.example.FileProcessor.DiffReader.DiffFileReader.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -41,9 +41,9 @@ public class DiffFileReaderTest {
             }
         }
 
-        try(DiffFileReader dfr = new TxtDiffFileReader(file)){
+        DiffFileReader dfr = new TxtDiffFileReader(file);
             toRead = dfr.read();
-        }
+
 
         assertEquals(toWrite, toRead);
         assertTrue(file.delete());
@@ -53,7 +53,6 @@ public class DiffFileReaderTest {
         mapper.writeValue(file, toWrite);
 
         toRead = dfr.read();
-        dfr.close();
 
         assertEquals(toWrite, toRead);
         assertTrue(file.delete());
