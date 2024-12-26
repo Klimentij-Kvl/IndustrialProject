@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,8 +41,7 @@ public class DiffFileReaderTest {
             }
         }
 
-        try(FileInputStream fis = new FileInputStream(file);
-            DiffFileReader dfr = new TxtDiffFileReader(fis)){
+        try(DiffFileReader dfr = new TxtDiffFileReader(file)){
             toRead = dfr.read();
         }
 
@@ -66,7 +64,7 @@ public class DiffFileReaderTest {
         File file = new File(PATH_RES + "jsonReadTest.json");
         assertTrue(file.createNewFile());
         SerializationWriteRead(file, new JsonMapper(),
-                new JsonDiffFileReader(new FileInputStream(file)));
+                new JsonDiffFileReader(file));
     }
 
     @Test
@@ -74,7 +72,7 @@ public class DiffFileReaderTest {
         File file = new File(PATH_RES + "xmlReadTest.xml");
         assertTrue(file.createNewFile());
         SerializationWriteRead(file,new XmlMapper(),
-                new XmlDiffFileReader(new FileInputStream(file)));
+                new XmlDiffFileReader(file));
     }
 
     @Test
@@ -82,7 +80,7 @@ public class DiffFileReaderTest {
         File file = new File(PATH_RES + "yamlReadTest.yaml");
         assertTrue(file.createNewFile());
         SerializationWriteRead(file, new YAMLMapper(),
-                new YamlDiffFileReader(new FileInputStream(file)));
+                new YamlDiffFileReader(file));
     }
 
 }

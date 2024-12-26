@@ -15,7 +15,7 @@ import java.util.List;
 public class DecryptionReaderDecorator extends ReaderDecorator{
     private Cipher cipher;
 
-    DecryptionReaderDecorator(String key, DiffReader dr){
+    public DecryptionReaderDecorator(String key, DiffReader dr){
         super(dr);
         SecretKey secretKey = new SecretKeySpec
                 (Arrays.copyOf(key.getBytes(), 16), "AES");
