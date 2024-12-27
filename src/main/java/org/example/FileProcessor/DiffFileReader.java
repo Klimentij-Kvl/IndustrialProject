@@ -17,7 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class DiffFileReader{
-    private String fileName;
+    private final String fileName;
     private String fileFormat;
     private final String PATH_RES = "src/resources/";
 

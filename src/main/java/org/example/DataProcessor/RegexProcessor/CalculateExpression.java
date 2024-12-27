@@ -37,6 +37,7 @@ class CalculateExpression {
 }
 
 
+
 class CalculateSimpleExpression extends CalculateExpression {
     CalculateSimpleExpression(String expression) {
         this.expression = expression;
@@ -52,6 +53,7 @@ class CalculateSimpleExpression extends CalculateExpression {
         if (result % 1 == 0) {
             return String.valueOf((int) result);
         } else {
+
 
             String formatted = String.format("%.3f", result);
             formatted = formatted.replaceAll("\\.?0+$", "");
