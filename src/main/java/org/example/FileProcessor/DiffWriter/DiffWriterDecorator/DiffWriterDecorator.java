@@ -1,15 +1,15 @@
-package org.example.FileProcessor.DiffWriter.WriterDecorator;
+package org.example.FileProcessor.DiffWriter.DiffWriterDecorator;
 
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
 import java.io.IOException;
 import java.util.List;
 
-public class WriterDecorator implements DiffWriter {
+public class DiffWriterDecorator implements DiffWriter {
 
     private final DiffWriter _dw;
 
-    public WriterDecorator(DiffWriter dw){
+    public DiffWriterDecorator(DiffWriter dw){
         _dw = dw;
     }
 

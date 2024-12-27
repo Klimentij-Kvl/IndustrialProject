@@ -1,14 +1,14 @@
-package org.example.FileProcessor.DiffWriter.WriterDecorator;
+package org.example.FileProcessor.DiffWriter.DiffWriterDecorator;
 
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
 import java.io.IOException;
 import java.util.List;
 
-public abstract class ArchivingDecorator extends WriterDecorator{
+public abstract class ArchivingDiffWriterDecorator extends DiffWriterDecorator {
     protected String path;
 
-    public ArchivingDecorator(DiffWriter dw){
+    public ArchivingDiffWriterDecorator(DiffWriter dw){
         super(dw);
         path = super.getPath();
     }

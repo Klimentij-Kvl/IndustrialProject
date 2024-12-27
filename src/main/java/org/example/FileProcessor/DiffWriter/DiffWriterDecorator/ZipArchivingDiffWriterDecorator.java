@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffWriter.WriterDecorator;
+package org.example.FileProcessor.DiffWriter.DiffWriterDecorator;
 
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-public class ZipArchivingDecorator extends ArchivingDecorator{
-    public ZipArchivingDecorator(DiffWriter dw){
+public class ZipArchivingDiffWriterDecorator extends ArchivingDiffWriterDecorator {
+    public ZipArchivingDiffWriterDecorator(DiffWriter dw){
         super(dw);
     }
 

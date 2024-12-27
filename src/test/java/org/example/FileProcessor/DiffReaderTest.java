@@ -1,10 +1,13 @@
-package org.example.FileProcessor.DiffReader;
+package org.example.FileProcessor;
 
-import org.example.FileProcessor.DiffReader.DiffFileReader.TxtDiffFileReader;
-import org.example.FileProcessor.DiffReader.ReaderDecorator.DearchivingReaderDecorator;
-import org.example.FileProcessor.DiffReader.ReaderDecorator.DecryptionReaderDecorator;
-import org.example.FileProcessor.DiffReader.ReaderDecorator.ZipReaderDecorator;
-import org.example.FileProcessor.DiffWriter.DiffWriter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import org.example.FileProcessor.DiffReader.DiffFileReader.*;
+import org.example.FileProcessor.DiffReader.DiffReader;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.DecryptionDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipDiffReaderDecorator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -21,19 +24,72 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
-public class DiffFIleReaderDecoratorTest {
-    private final String PATH_RES  = "src/resources/";
+public class DiffReaderTest {
+    private final String PATH_RES = "src/resources/";
 
     @Spy
-    List<String> toWrite = new ArrayList<>();
-    List<String> toRead = new ArrayList<>();
+    List<String> toWrite;
+    List<String> toRead;
 
     @BeforeEach
     void init(){
+        toWrite = new ArrayList<>();
+        toRead = new ArrayList<>();
         toWrite.add("one two three");
         toWrite.add("four five six");
         toWrite.add("seven eight nine");
     }
+
+    @Test
+    void TxtDiffFileReader() throws IOException {
+        File file = new File(PATH_RES + "txtReaderTest.txt");
+        try(FileOutputStream fos = new FileOutputStream(file)){
+            for(String s : toWrite){
+                fos.write((s+"\n").getBytes());
+            }
+        }
+
+        try(DiffFileReader dfr = new TxtDiffFileReader(file)) {
+            toRead = dfr.read();
+        }
+
+        assertEquals(toWrite, toRead);
+        assertTrue(file.delete());
+    }
+
+    void SerializationWriteRead(File file, ObjectMapper mapper, DiffFileReader dfr) throws IOException{
+        mapper.writeValue(file, toWrite);
+
+        toRead = dfr.read();
+
+        assertEquals(toWrite, toRead);
+        assertTrue(file.delete());
+    }
+
+    @Test
+    void JsonDiffFileReaderTest() throws IOException{
+        File file = new File(PATH_RES + "jsonReadTest.json");
+        assertTrue(file.createNewFile());
+        SerializationWriteRead(file, new JsonMapper(),
+                new JsonDiffFileReader(file));
+    }
+
+    @Test
+    void XmlDiffFileReaderTest() throws IOException{
+        File file = new File(PATH_RES + "xmlReadTest.xml");
+        assertTrue(file.createNewFile());
+        SerializationWriteRead(file,new XmlMapper(),
+                new XmlDiffFileReader(file));
+    }
+
+    @Test
+    void YamlDiffFileReaderTest() throws IOException{
+        File file = new File(PATH_RES + "yamlReadTest.yaml");
+        assertTrue(file.createNewFile());
+        SerializationWriteRead(file, new YAMLMapper(),
+                new YamlDiffFileReader(file));
+    }
+
 
     void WriteTxt(File writeFile) throws IOException {
         try(FileOutputStream fos = new FileOutputStream(writeFile);
@@ -51,7 +107,7 @@ public class DiffFIleReaderDecoratorTest {
                 (Arrays.copyOf("12345".getBytes(), 16), "AES");
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-        try(CipherOutputStream  cis = new CipherOutputStream
+        try(CipherOutputStream cis = new CipherOutputStream
                 (new FileOutputStream(writeFile), cipher);
             FileInputStream fis = new FileInputStream(readFile)
         ){
@@ -78,7 +134,7 @@ public class DiffFIleReaderDecoratorTest {
         WriteTxt(txtFile);
         Encrypt(txtFile, encFile);
 
-        DiffReader dr = new DecryptionReaderDecorator("12345", new TxtDiffFileReader(encFile));
+        DiffReader dr = new DecryptionDiffReaderDecorator("12345", new TxtDiffFileReader(encFile));
         toRead = dr.read();
 
         assertEquals(toWrite, toRead);
@@ -93,7 +149,7 @@ public class DiffFIleReaderDecoratorTest {
         WriteTxt(txtFile);
         Zip(txtFile, zipFile);
 
-        DiffReader dr = new ZipReaderDecorator(new TxtDiffFileReader(zipFile));
+        DiffReader dr = new ZipDiffReaderDecorator(new TxtDiffFileReader(zipFile));
         toRead = dr.read();
 
         assertEquals(toWrite, toRead);
@@ -112,8 +168,8 @@ public class DiffFIleReaderDecoratorTest {
         Zip(encFile, zipFile);
 
         DiffReader dr =
-                new ZipReaderDecorator(
-                        new DecryptionReaderDecorator(
+                new ZipDiffReaderDecorator(
+                        new DecryptionDiffReaderDecorator(
                                 "12345",  new TxtDiffFileReader(zipFile)));
         toRead = dr.read();
 
@@ -133,9 +189,9 @@ public class DiffFIleReaderDecoratorTest {
         Zip(txtFile, zipFile);
         Encrypt(zipFile, encFile);
 
-        DiffReader dr = new DecryptionReaderDecorator("12345",
-                                new ZipReaderDecorator(
-                                    new TxtDiffFileReader(encFile)));
+        DiffReader dr = new DecryptionDiffReaderDecorator("12345",
+                new ZipDiffReaderDecorator(
+                        new TxtDiffFileReader(encFile)));
         toRead = dr.read();
         dr.close();
         assertEquals(toWrite, toRead);

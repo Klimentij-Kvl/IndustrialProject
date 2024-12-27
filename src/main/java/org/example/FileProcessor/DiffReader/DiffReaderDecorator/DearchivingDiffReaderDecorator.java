@@ -1,14 +1,14 @@
-package org.example.FileProcessor.DiffReader.ReaderDecorator;
+package org.example.FileProcessor.DiffReader.DiffReaderDecorator;
 
 import org.example.FileProcessor.DiffReader.DiffReader;
 
 import java.io.IOException;
 import java.util.List;
 
-public abstract class DearchivingReaderDecorator extends ReaderDecorator {
+public abstract class DearchivingDiffReaderDecorator extends DiffReaderDecorator {
    // private final DiffReader _dr;
 
-    public DearchivingReaderDecorator(DiffReader dr){
+    public DearchivingDiffReaderDecorator(DiffReader dr){
         super(dr);
     }
 

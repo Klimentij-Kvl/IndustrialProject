@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffReader.ReaderDecorator;
+package org.example.FileProcessor.DiffReader.DiffReaderDecorator;
 
 
 import org.example.FileProcessor.DiffReader.DiffReader;
@@ -7,11 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class ReaderDecorator implements DiffReader {
+public abstract class DiffReaderDecorator implements DiffReader {
     private final DiffReader _dr;
     private String path;
 
-    ReaderDecorator(DiffReader dr){
+    DiffReaderDecorator(DiffReader dr){
         _dr = dr;
         path = "";
     }

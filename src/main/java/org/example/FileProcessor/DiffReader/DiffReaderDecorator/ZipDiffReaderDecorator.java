@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffReader.ReaderDecorator;
+package org.example.FileProcessor.DiffReader.DiffReaderDecorator;
 
 import org.example.FileProcessor.DiffReader.DiffReader;
 
@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipInputStream;
 
-public class ZipReaderDecorator extends DearchivingReaderDecorator{
-    public ZipReaderDecorator(DiffReader dr){
+public class ZipDiffReaderDecorator extends DearchivingDiffReaderDecorator {
+    public ZipDiffReaderDecorator(DiffReader dr){
         super(dr);
     }
 

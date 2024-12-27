@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffWriter.WriterDecorator;
+package org.example.FileProcessor.DiffWriter.DiffWriterDecorator;
 
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
@@ -13,11 +13,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class EncryptionDecorator extends WriterDecorator{
+public class EncryptionDiffWriterDecorator extends DiffWriterDecorator {
     private Cipher cipher;
     //private String path;
 
-    public EncryptionDecorator(String key, DiffWriter dw){
+    public EncryptionDiffWriterDecorator(String key, DiffWriter dw){
         super(dw);
         SecretKey secretKey = new SecretKeySpec(Arrays.copyOf(key.getBytes(), 16), "AES");
         try{

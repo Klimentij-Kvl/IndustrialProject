@@ -1,4 +1,4 @@
-package org.example.FileProcessor.DiffReader.ReaderDecorator;
+package org.example.FileProcessor.DiffReader.DiffReaderDecorator;
 
 import org.example.FileProcessor.DiffReader.DiffReader;
 
@@ -12,10 +12,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class DecryptionReaderDecorator extends ReaderDecorator{
+public class DecryptionDiffReaderDecorator extends DiffReaderDecorator {
     private Cipher cipher;
 
-    public DecryptionReaderDecorator(String key, DiffReader dr){
+    public DecryptionDiffReaderDecorator(String key, DiffReader dr){
         super(dr);
         SecretKey secretKey = new SecretKeySpec
                 (Arrays.copyOf(key.getBytes(), 16), "AES");
