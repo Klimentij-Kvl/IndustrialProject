@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.example.FileProcessor.DiffWriter.DiffFileWriter.*;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 import org.example.FileProcessor.DiffWriter.DiffWriterDecorator.EncryptionDiffWriterDecorator;
+import org.example.FileProcessor.DiffWriter.DiffWriterDecorator.TarArchivingDiffWriterDecorator;
 import org.example.FileProcessor.DiffWriter.DiffWriterDecorator.ZipArchivingDiffWriterDecorator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -136,6 +138,18 @@ class DiffWriterTest {
         }
     }
 
+    void DeTar(File inFile, File outFile) throws IOException{
+        try(TarArchiveInputStream tis = new TarArchiveInputStream(new FileInputStream(inFile));
+            FileOutputStream fos = new FileOutputStream(outFile)
+        ){
+            tis.getNextEntry();
+            for(int c = tis.read(); c != -1; c = tis.read()){
+                fos.write(c);
+            }
+            fos.flush();
+        }
+    }
+
     @Test
     void EncTxtWriteTest() throws Exception {
         File encFile = new File(PATH_RES + "EncTxtWriteTest.txt");
@@ -165,9 +179,25 @@ class DiffWriterTest {
         DeZip(zipFile, txtFile);
         toRead = TxtRead(txtFile);
 
+        assertEquals(toWrite, toRead);
         assertTrue(txtFile.delete());
         assertTrue(zipFile.delete());
+    }
+
+    @Test
+    void TarTxtWriteTest() throws IOException{
+        File txtFile = new File(PATH_RES + "TarTxtWriteTest.txt");
+        File tarFile = new File(PATH_RES + "TarTxtWriteTest.tar");
+        try(DiffWriter dw = new TarArchivingDiffWriterDecorator(new TxtDiffFileWriter(txtFile))){
+            dw.write(toWrite);
+        }
+
+        DeTar(tarFile, txtFile);
+        toRead = TxtRead(txtFile);
+
         assertEquals(toWrite, toRead);
+        assertTrue(txtFile.delete());
+        assertTrue(tarFile.delete());
     }
 
     @Test

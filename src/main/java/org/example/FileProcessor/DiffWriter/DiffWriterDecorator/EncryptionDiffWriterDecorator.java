@@ -53,9 +53,4 @@ public class EncryptionDiffWriterDecorator extends DiffWriterDecorator {
         super.write(list);
         encrypt();
     }
-
-    //@Override
-   // public String getPath(){
-    //    return path;
-    //}
 }

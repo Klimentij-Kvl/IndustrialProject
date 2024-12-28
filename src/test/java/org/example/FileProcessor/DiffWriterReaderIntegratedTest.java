@@ -1,12 +1,14 @@
 package org.example.FileProcessor;
 
 import org.example.FileProcessor.DiffReader.DiffFileReader.TxtDiffFileReader;
-import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.TarDearchivingDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipDearchivingDiffReaderDecorator;
 import org.example.FileProcessor.DiffWriter.DiffFileWriter.TxtDiffFileWriter;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffReader.DiffReaderDecorator.DecryptionDiffReaderDecorator;
 import org.example.FileProcessor.DiffWriter.DiffWriterDecorator.EncryptionDiffWriterDecorator;
+import org.example.FileProcessor.DiffWriter.DiffWriterDecorator.TarArchivingDiffWriterDecorator;
 import org.example.FileProcessor.DiffWriter.DiffWriterDecorator.ZipArchivingDiffWriterDecorator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +59,7 @@ public class DiffWriterReaderIntegratedTest {
         dw.write(toWrite);
         dw.close();
 
-        DiffReader dr = new ZipDiffReaderDecorator(new TxtDiffFileReader(zipFile));
+        DiffReader dr = new ZipDearchivingDiffReaderDecorator(new TxtDiffFileReader(zipFile));
         toRead = dr.read();
         dr.close();
 
@@ -66,6 +68,21 @@ public class DiffWriterReaderIntegratedTest {
         assertTrue(zipFile.delete());
     }
 
+    @Test
+    void TarTxtWriteReadTest() throws IOException{
+        File file = new File(PATH_RES + "TarTxtWriteReadTest.txt");
+        File tarFile = new File(PATH_RES + "TarTxtWriteReadTest.tar");
+        try(DiffWriter dw =  new TarArchivingDiffWriterDecorator(new TxtDiffFileWriter(file))){
+            dw.write(toWrite);
+        }
+        try(DiffReader dr = new TarDearchivingDiffReaderDecorator(new TxtDiffFileReader(tarFile))){
+            toRead = dr.read();
+        }
+
+        assertEquals(toWrite, toRead);
+        assertFalse(file.delete());
+        assertTrue(tarFile.delete());
+    }
 
     @Test
     void ZipEncTxtWriteReadTest() throws IOException{
@@ -77,7 +94,7 @@ public class DiffWriterReaderIntegratedTest {
         dw.write(toWrite);
         dw.close();
 
-        DiffReader dr = new ZipDiffReaderDecorator(
+        DiffReader dr = new ZipDearchivingDiffReaderDecorator(
                         new DecryptionDiffReaderDecorator("12345",
                         new TxtDiffFileReader(zipEncFile)));
         toRead = dr.read();
@@ -92,15 +109,13 @@ public class DiffWriterReaderIntegratedTest {
     void EncZipTxtWriteReadTest() throws IOException{
         File file = new File(PATH_RES + "EncZipTxtWriteReadTest.txt");
         File encZipFile = new File(PATH_RES + "EncZipTxtWriteReadTest.zip");
-
         try(DiffWriter dw = new EncryptionDiffWriterDecorator("12345",
                         new ZipArchivingDiffWriterDecorator(
                         new TxtDiffFileWriter(file)))) {
             dw.write(toWrite);
         }
-
         try(DiffReader dr = new DecryptionDiffReaderDecorator("12345",
-                        new ZipDiffReaderDecorator(
+                        new ZipDearchivingDiffReaderDecorator(
                         new TxtDiffFileReader(encZipFile)))) {
             toRead = dr.read();
         }
