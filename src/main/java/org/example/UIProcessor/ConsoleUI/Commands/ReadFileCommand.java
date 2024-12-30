@@ -9,12 +9,12 @@ import java.io.IOException;
 public class ReadFileCommand implements Command {
     @Override
     public void execute(){
-        DataStorage database = DataStorage.getInstance();
+        DataStorage dataStorage = DataStorage.getInstance();
 
-        if (database.getInputFileFormat() != null) {
-            try(DiffReader dr = new TxtDiffFileReader(database.getInputFileName() + database.getInputFileFormat());) {
+        if (dataStorage.getInputFileFormat() != null) {
+            try(DiffReader dr = new TxtDiffFileReader(dataStorage.getInputFileName() + dataStorage.getInputFileFormat());) {
 
-                database.setInput(dr.read());
+                dataStorage.setInput(dr.read());
                 System.out.println("\nFile successfully read");
             } catch (IOException e) {
                 throw new RuntimeException(e);

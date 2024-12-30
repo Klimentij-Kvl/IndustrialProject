@@ -1,7 +1,8 @@
 package org.example.UIProcessor.ConsoleUI.Commands;
 
 import org.example.DataBase.DataStorage;
-import org.example.FileProcessor.DiffFileWriter;
+import org.example.FileProcessor.DiffWriter.DiffFileWriter.TxtDiffFileWriter;
+import org.example.FileProcessor.DiffWriter.DiffWriter;
 
 import java.io.IOException;
 
@@ -10,7 +11,7 @@ public class WriteFIleCommand implements Command {
     public void execute() {
         DataStorage dataStorage = DataStorage.getInstance();
 
-        if (database.getOutputFileFormat() != null) {
+        if (dataStorage.getOutputFileFormat() != null) {
 
             try (DiffWriter dw = new TxtDiffFileWriter(dataStorage.getOutputFileName() + dataStorage.getOutputFileFormat())){
                 dw.write(dataStorage.getOutput());
