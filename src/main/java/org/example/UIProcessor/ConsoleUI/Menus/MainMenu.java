@@ -4,12 +4,12 @@ import org.example.UIProcessor.ConsoleUI.Commands.CalculateCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.ReadFileCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.SetSettingsMenuCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.ShowCurrentConfigurationCommand;
-import org.example.UIProcessor.ConsoleUI.Commands.WriteFIleCommand;
+import org.example.UIProcessor.ConsoleUI.Commands.WriteFileCommand;
 
 public class MainMenu extends Menu {
     public MainMenu() {
         options.put(1, new ReadFileCommand());
-        options.put(2, new WriteFIleCommand());
+        options.put(2, new WriteFileCommand());
         options.put(3, new CalculateCommand());
         options.put(4, new SetSettingsMenuCommand());
         options.put(5, new ShowCurrentConfigurationCommand());
