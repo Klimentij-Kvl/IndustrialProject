@@ -1,17 +1,21 @@
 package org.example;
 
-import org.example.DataBase.DataStorage;
-import org.example.UIProcessor.ConsoleUI.ConsoleUI;
-import org.example.UIProcessor.UIProcessor;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class Main {
+public class Main extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        primaryStage.setTitle("Hello World");
+        Parent root = FXMLLoader.load(getClass().getResource("Main.fxml"));
+        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.show();
+    }
     public static void main(String[] args) {
-        DataStorage dataStorage = DataStorage.getInstance();
-        dataStorage.setInputFileName("input");
-        dataStorage.setOutputFileName("output");
-        dataStorage.setInputFileFormat("yaml");
-        dataStorage.setOutputFileFormat("yaml");
-        UIProcessor ui = new ConsoleUI();
-        ui.start();
+        launch(args);
     }
 }

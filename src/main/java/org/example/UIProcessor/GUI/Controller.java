@@ -1,0 +1,4 @@
+package org.example.UIProcessor.GUI;
+
+public class Controller {
+}
