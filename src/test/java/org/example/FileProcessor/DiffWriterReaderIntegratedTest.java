@@ -114,8 +114,8 @@ public class DiffWriterReaderIntegratedTest {
         File file = new File(PATH_RES + "ZipEncYamlWriteReadTest.yaml");
         File zipEncFile = new File(PATH_RES + "ZipEncYamlWriteReadTest.zip");
         try(DiffWriter dw = new ZipArchivingDiffWriterDecorator(
-                new EncryptionDiffWriterDecorator("12345",
-                        new YamlDiffFileWriter(file)))) {
+                            new EncryptionDiffWriterDecorator("12345",
+                            new YamlDiffFileWriter(file)))) {
             dw.write(toWrite);
         }
         try(DiffReader dr = new ZipDearchivingDiffReaderDecorator(
@@ -153,13 +153,13 @@ public class DiffWriterReaderIntegratedTest {
         File file = new File(PATH_RES + "EncZipJsonWriteReadTest.json");
         File encZipFile = new File(PATH_RES + "EncZipJsonWriteReadTest.zip");
         try(DiffWriter dw = new EncryptionDiffWriterDecorator("12345",
-                new ZipArchivingDiffWriterDecorator(
-                        new JsonDiffFileWriter(file)))) {
+                            new ZipArchivingDiffWriterDecorator(
+                            new JsonDiffFileWriter(file)))) {
             dw.write(toWrite);
         }
         try(DiffReader dr = new DecryptionDiffReaderDecorator("12345",
-                new ZipDearchivingDiffReaderDecorator(
-                        new JsonDiffFileReader(encZipFile)))) {
+                            new ZipDearchivingDiffReaderDecorator(
+                            new JsonDiffFileReader(encZipFile)))) {
             toRead = dr.read();
         }
 
