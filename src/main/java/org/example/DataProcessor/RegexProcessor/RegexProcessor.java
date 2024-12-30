@@ -10,7 +10,8 @@ public class RegexProcessor implements DataProcessor {
 
     @Override
     public List<String> process(List<String> data) {
-        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();                               // Создаём выражения для функции
+        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
+        makeFuncExpression.makeFunctionsString();                               // Создаём выражения для функции
         List<String> expressions = extractExpressions(data);                    // Извлекаем выражения
         List<String> calculatedExpressions = calculateExpressions(expressions); // Вычисляем выражения
         return replaceExpressionsInData(data, calculatedExpressions);           // Заменяем выражения в данных
