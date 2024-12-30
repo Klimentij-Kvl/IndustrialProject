@@ -7,6 +7,7 @@ import org.example.FileProcessor.DiffWriter.DiffFileWriter.XmlDiffFileWriter;
 import org.example.FileProcessor.DiffWriter.DiffFileWriter.YamlDiffFileWriter;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
+import java.io.File;
 import java.io.IOException;
 
 public class WriteFileCommand implements Command {
@@ -17,7 +18,7 @@ public class WriteFileCommand implements Command {
         DataStorage dataStorage = DataStorage.getInstance();
 
         if (dataStorage.getInputFileFormat() != null) {
-            try (DiffWriter dr = createWriter(dataStorage.getInputFileFormat(), dataStorage.getInputFileName())) {
+            try (DiffWriter dr = createWriter(dataStorage.getInputFileFormat(), dataStorage.getOutputFileName())) {
                 dr.write(dataStorage.getOutput());
                 System.out.println("\nFile successfully write");
             } catch (IOException e) {
