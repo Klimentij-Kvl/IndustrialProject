@@ -8,57 +8,19 @@ import org.example.DataBase.DataStorage;
 
 public class FindExpression {
 
-    private static final Pattern LETTERS_PATTERN = Pattern.compile("[a-zа-яё]", Pattern.CASE_INSENSITIVE);
+    private static final DataStorage dataStorage = DataStorage.getInstance();
+    private static final String functionsMul = dataStorage.getFunctionsMul();
+    private static final String functionsPlus = dataStorage.getFunctionsPlus();
+
     private static final Pattern REDUNDANT_MINUS_PATTERN = Pattern.compile("-([+]*?)-");
     private static final Pattern REDUNDANT_PLUS_PATTERN = Pattern.compile("\\+\\++");
     private static final Pattern CHOOSE_SIGN_PATTERN = Pattern.compile("(-\\+)|(\\+-)");
-    private static final Pattern USELESS_PLUS_PATTERN_1 = Pattern.compile("([*/\\\\÷+-][()]*)\\+(\\d*%s)");
-    private static final Pattern USELESS_PLUS_PATTERN_2 = Pattern.compile("^\\(*\\+(\\(*\\d+%s)");
+    private static final Pattern USELESS_PLUS_PATTERN_1 = Pattern.compile("([*/÷][()]*)\\+((?:\\d*" + functionsMul + "))");
+    private static final Pattern USELESS_PLUS_PATTERN_2 = Pattern.compile("^\\(*\\+(\\(*(?:\\d+" + functionsPlus +"))");
     private static final Pattern ADD_MUL_BETWEEN_BRACKETS_PATTERN = Pattern.compile("(\\)+)(\\(+)");
     private static final Pattern NORMALIZE_BRACKETS_PATTERN = Pattern.compile("\\(([^()]*)\\)");
-    private static final Pattern DELETE_SINGLE_OBJECT_BRACKETS_PATTERN = Pattern.compile("\\(([-+*/\\\\÷]*\\d*%s[-+]*)\\)");
+    private static final Pattern DELETE_SINGLE_OBJECT_BRACKETS_PATTERN = Pattern.compile("\\(([-+*/\\\\÷]*(?:\\d*" + functionsMul + ")[-+]*)\\)");
     private static final Pattern RETURN_USEFUL_BRACKETS_PATTERN = Pattern.compile("\\[([^\\[\\]]*)]");
-
-    private String functionsMul = "";
-    private String functionsPlus = "";
-
-    public int countUniqueLettersExcludingFunctions(String text) {
-        text = text.toLowerCase();
-        text = text.replaceAll("(\\d+" + functionsPlus + ")", "");
-
-        Matcher matcher = LETTERS_PATTERN.matcher(text);
-        Set<Character> uniqueLetters = new HashSet<>();
-
-        while (matcher.find()) {
-            uniqueLetters.add(matcher.group().charAt(0));
-        }
-        return uniqueLetters.size();
-    }
-
-    public void makeFunctionsString() {
-        DataStorage dataStorage = DataStorage.getInstance();
-        Map<String, String> mapFunc = dataStorage.getFunctions();
-
-        StringBuilder mulBuilder = new StringBuilder();
-        StringBuilder plusBuilder = new StringBuilder();
-
-        for (String key : mapFunc.keySet()) {
-            mulBuilder.append("|(?:").append(key).append("\\(+\\d+");
-            plusBuilder.append("|(?:").append(key).append("\\(+\\d+");
-
-            int count = countUniqueLettersExcludingFunctions(mapFunc.get(key));
-            for (int i = 1; i < count; i++) {
-                mulBuilder.append(",\\d+");
-                plusBuilder.append(",\\d+");
-            }
-
-            mulBuilder.append("\\)+)*");
-            plusBuilder.append("\\)+)+");
-        }
-
-        functionsMul = mulBuilder.toString();
-        functionsPlus = plusBuilder.toString();
-    }
 
     public List<String> findComputableExpressions(String input) {
         String regex;
@@ -104,7 +66,8 @@ public class FindExpression {
     }
 
     public String deleteSingleObjectBrackets(String input) {
-        return normalizePattern(input, Pattern.compile(String.format(DELETE_SINGLE_OBJECT_BRACKETS_PATTERN.pattern(), functionsMul)), "$1");
+
+        return normalizePattern(input, DELETE_SINGLE_OBJECT_BRACKETS_PATTERN, "$1");
     }
 
     public String returnUsefulBrackets(String input) {
@@ -128,8 +91,9 @@ public class FindExpression {
     }
 
     public String removeUselessPlus(String input) {
-        input = normalizePattern(input, Pattern.compile(String.format(USELESS_PLUS_PATTERN_1.pattern(), functionsMul)), "$1$2");
-        return normalizePattern(input, Pattern.compile(String.format(USELESS_PLUS_PATTERN_2.pattern(), functionsPlus)), "$1");
+        input = input.replaceAll(USELESS_PLUS_PATTERN_1.toString(), "$1$2");
+        input = input.replaceAll(USELESS_PLUS_PATTERN_2.toString(), "$1");
+        return input;
     }
 
     public String addMulBetweenBrackets(String input) {
@@ -145,7 +109,6 @@ public class FindExpression {
     }
 
     public List<String> find(List<String> input) {
-        makeFunctionsString();
 
         return input.stream()
                 .flatMap(line -> findComputableExpressions(line).stream())
