@@ -1,5 +1,6 @@
 package org.example.DataProcessor.RegexProcessor;
 
+import org.example.DataBase.DataStorage;
 import org.example.DataProcessor.DataProcessor;
 
 import java.util.ArrayList;
@@ -9,13 +10,23 @@ public class RegexProcessor implements DataProcessor {
 
     @Override
     public List<String> process(List<String> data) {
+        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
+        makeFuncExpression.makeFunctionsString();                               // Создаём выражения для функции
         List<String> expressions = extractExpressions(data);                    // Извлекаем выражения
         List<String> calculatedExpressions = calculateExpressions(expressions); // Вычисляем выражения
         return replaceExpressionsInData(data, calculatedExpressions);           // Заменяем выражения в данных
     }
 
+    @Override
+    public boolean CreateFunction(String functionName, String formula) {
+        DataStorage dataStorage = DataStorage.getInstance();
+        dataStorage.addFunction(functionName, formula);
+        return true;
+    }
+
     List<String> extractExpressions(List<String> data) {
-        return new ArrayList<>(FindExpression.find(data));
+        FindExpression findExpression = new FindExpression();
+        return new ArrayList<>(findExpression.find(data));
     }
     List<String> calculateExpressions(List<String> expressions) {
         List<String> calculatedExpressions = new ArrayList<>();
@@ -43,12 +54,12 @@ public class RegexProcessor implements DataProcessor {
                 index++;
                 line = modifiedLine;
             }
-            if (index == calculatedExpressions.size() - 1) {
+            if (index == calculatedExpressions.size()) {
                 replacedExpressions.add(line);
                 break;
             }
             } while (true);
-            if (index == calculatedExpressions.size() - 1) {
+            if (index == calculatedExpressions.size()) {
                 index = 0;
             }
         }

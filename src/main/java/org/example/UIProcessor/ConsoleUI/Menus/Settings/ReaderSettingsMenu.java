@@ -1,6 +1,6 @@
 package org.example.UIProcessor.ConsoleUI.Menus.Settings;
 
-import org.example.DataBase.Database;
+import org.example.DataBase.DataStorage;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Reader.SetJSONReaderCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Reader.SetTXTReaderCommand;
 import org.example.UIProcessor.ConsoleUI.Commands.Settings.Reader.SetXMLReaderCommand;
@@ -25,7 +25,7 @@ public class ReaderSettingsMenu extends Menu {
 
     @Override
     protected String getOptionName(int optionKey) {
-        Database db = Database.getInstance();
+        DataStorage db = DataStorage.getInstance();
         String optionName = switch (optionKey) {
             case 1 -> "txt";
             case 2 -> "json";
