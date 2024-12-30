@@ -1,116 +1,55 @@
 package org.example.DataProcessor.RegexProcessor;
 
-import java.util.*;
+import org.example.DataBase.DataStorage;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.example.DataBase.DataStorage;
 
 public class FindExpression {
 
-    private static final DataStorage dataStorage = DataStorage.getInstance();
-    private static final String functionsMul = dataStorage.getFunctionsMul();
-    private static final String functionsPlus = dataStorage.getFunctionsPlus();
+    private final DataStorage dataStorage;
+    private final String functionsMul;
+    private final String functionsPlus;
 
-    private static final Pattern REDUNDANT_MINUS_PATTERN = Pattern.compile("-([+]*?)-");
-    private static final Pattern REDUNDANT_PLUS_PATTERN = Pattern.compile("\\+\\++");
-    private static final Pattern CHOOSE_SIGN_PATTERN = Pattern.compile("(-\\+)|(\\+-)");
-    private static final Pattern USELESS_PLUS_PATTERN_1 = Pattern.compile("([*/÷][()]*)\\+((?:\\d*" + functionsMul + "))");
-    private static final Pattern USELESS_PLUS_PATTERN_2 = Pattern.compile("^\\(*\\+(\\(*(?:\\d+" + functionsPlus +"))");
-    private static final Pattern ADD_MUL_BETWEEN_BRACKETS_PATTERN = Pattern.compile("(\\)+)(\\(+)");
-    private static final Pattern NORMALIZE_BRACKETS_PATTERN = Pattern.compile("\\(([^()]*)\\)");
-    private static final Pattern DELETE_SINGLE_OBJECT_BRACKETS_PATTERN = Pattern.compile("\\(([-+*/\\\\÷]*(?:\\d*" + functionsMul + ")[-+]*)\\)");
-    private static final Pattern RETURN_USEFUL_BRACKETS_PATTERN = Pattern.compile("\\[([^\\[\\]]*)]");
+    private final Pattern REDUNDANT_MINUS_PATTERN;
+    private final Pattern REDUNDANT_PLUS_PATTERN;
+    private final Pattern CHOOSE_SIGN_PATTERN;
+    private final Pattern USELESS_PLUS_PATTERN_1;
+    private final Pattern USELESS_PLUS_PATTERN_2;
+    private final Pattern ADD_MUL_BETWEEN_BRACKETS_PATTERN;
+    private final Pattern NORMALIZE_BRACKETS_PATTERN;
+    private final Pattern DELETE_SINGLE_OBJECT_BRACKETS_PATTERN;
+    private final Pattern RETURN_USEFUL_BRACKETS_PATTERN;
 
-    public List<String> findComputableExpressions(String input) {
-        String regex;
-        if (functionsPlus.isEmpty()) {
-            regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*((?:[\\s()\\-+]*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+)|((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*)";
-        }
-        else
-        {
-            regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*((?:[\\s()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*(?:[+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+)|((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*|((-*\\s*)*)" + functionsPlus.substring(1) + ")";
-        }
-        Pattern pattern = Pattern.compile(regex);
 
-        Matcher matcher = pattern.matcher(input);
-        List<String> expressions = new ArrayList<>();
+    public FindExpression(DataStorage dataStorage) {
+        this.dataStorage = Objects.requireNonNull(dataStorage, "dataStorage must not be null");
 
-        while (matcher.find()) {
-            StringBuilder expression = new StringBuilder();
-            for (int i = 1; i <= matcher.groupCount(); i++) {
-                if (matcher.group(i) != null) {
-                    expression.append(matcher.group(i));
-                }
-            }
-            expressions.add(expression.toString());
-        }
-        return expressions;
+        this.functionsMul = Optional.ofNullable(dataStorage.getFunctionsMul()).orElse("");
+        this.functionsPlus = Optional.ofNullable(dataStorage.getFunctionsPlus()).orElse("");
+
+        this.REDUNDANT_MINUS_PATTERN = Pattern.compile("-([+]*?)-");
+        this.REDUNDANT_PLUS_PATTERN = Pattern.compile("\\+\\++");
+        this.CHOOSE_SIGN_PATTERN = Pattern.compile("(-\\+)|(\\+-)");
+        this.USELESS_PLUS_PATTERN_1 = Pattern.compile("([*/÷][()]*)\\+((?:\\d*" + this.functionsMul + "))");
+        this.USELESS_PLUS_PATTERN_2 = Pattern.compile("^\\(*\\+(\\(*(?:\\d+" + this.functionsPlus + "))");
+        this.ADD_MUL_BETWEEN_BRACKETS_PATTERN = Pattern.compile("(\\)+)(\\(+)");
+        this.NORMALIZE_BRACKETS_PATTERN = Pattern.compile("\\(([^()]*)\\)");
+        this.DELETE_SINGLE_OBJECT_BRACKETS_PATTERN = Pattern.compile("\\(([-+*/\\\\÷]*(?:\\d*" + this.functionsMul + ")[-+]*)\\)");
+        this.RETURN_USEFUL_BRACKETS_PATTERN = Pattern.compile("\\[([^\\[\\]]*)]");
     }
 
-    private String normalizePattern(String input, Pattern pattern, String replacement) {
-        String modified;
-        do {
-            modified = input;
-            input = pattern.matcher(input).replaceAll(replacement);
-        } while (!input.equals(modified));
-        return input;
+    public FindExpression() {
+        this(DataStorage.getInstance());
     }
 
-    public String deleteSpaces(String input) {
-        return input.replaceAll("\\s+", "");
-    }
-
-    public String saveUsefulBrackets(String input) {
-        return normalizePattern(input, NORMALIZE_BRACKETS_PATTERN, "[$1]");
-    }
-
-    public String deleteSingleObjectBrackets(String input) {
-
-        return normalizePattern(input, DELETE_SINGLE_OBJECT_BRACKETS_PATTERN, "$1");
-    }
-
-    public String returnUsefulBrackets(String input) {
-        return normalizePattern(input, RETURN_USEFUL_BRACKETS_PATTERN, "($1)");
-    }
-
-    public String deleteAllBrackets(String input) {
-        return input.replaceAll("[()]", "");
-    }
-
-    public String convertRedundantMinuses(String input) {
-        return normalizePattern(input, REDUNDANT_MINUS_PATTERN, "$1+");
-    }
-
-    public String removeRedundantPluses(String input) {
-        return normalizePattern(input, REDUNDANT_PLUS_PATTERN, "+");
-    }
-
-    public String chooseSign(String input) {
-        return normalizePattern(input, CHOOSE_SIGN_PATTERN, "-");
-    }
-
-    public String removeUselessPlus(String input) {
-        input = input.replaceAll(USELESS_PLUS_PATTERN_1.toString(), "$1$2");
-        input = input.replaceAll(USELESS_PLUS_PATTERN_2.toString(), "$1");
-        return input;
-    }
-
-    public String addMulBetweenBrackets(String input) {
-        return normalizePattern(input, ADD_MUL_BETWEEN_BRACKETS_PATTERN, "$1*$2");
-    }
-
-    public String notEmpty(String input) {
-        String other = input.replaceFirst("(.*)\\d+" + functionsPlus + "(.*)", "$1$2");
-        if (other.isEmpty()) {
-            return input + "+0";
-        }
-        return input;
-    }
-
-    public List<String> find(List<String> input) {
-
-        return input.stream()
+    public List<String> find(List<String> lines) {
+        return lines.stream()
                 .flatMap(line -> findComputableExpressions(line).stream())
                 .map(this::deleteSpaces)
                 .map(this::deleteSingleObjectBrackets)
@@ -124,5 +63,137 @@ public class FindExpression {
                 .map(this::addMulBetweenBrackets)
                 .map(this::notEmpty)
                 .collect(Collectors.toList());
+    }
+
+    public List<String> findComputableExpressions(String input) {
+        String regex;
+        if (functionsPlus.isEmpty()) {
+            regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
+                    + "((?:[\\s()\\-+]*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+)"
+                    + "|"
+                    + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*)";
+        } else {
+            // Если functionsPlus не пустой, используем расширенный шаблон
+            regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
+                    + "((?:[\\s()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*"
+                    + "(?:[+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+)"
+                    + "|"
+                    + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*"
+                    + "|((-*\\s*)*)" + functionsPlus.substring(1) + ")";
+        }
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+
+        List<String> expressions = new ArrayList<>();
+        while (matcher.find()) {
+            StringBuilder expression = new StringBuilder();
+            for (int i = 1; i <= matcher.groupCount(); i++) {
+                String group = matcher.group(i);
+                if (group != null) {
+                    expression.append(group);
+                }
+            }
+            expressions.add(expression.toString());
+        }
+        return expressions;
+    }
+
+
+
+    public String deleteSpaces(String input) {
+        return input.replaceAll("\\s+", "");
+    }
+
+    /**
+     * Удаляет "одиночные" скобки вокруг объектов (определяется шаблоном
+     * DELETE_SINGLE_OBJECT_BRACKETS_PATTERN).
+     */
+    public String deleteSingleObjectBrackets(String input) {
+        return normalizePattern(input, DELETE_SINGLE_OBJECT_BRACKETS_PATTERN, "$1");
+    }
+
+    /**
+     * Меняет (...) на [...] для сохранения "полезных" скобок и дальнейшего возврата.
+     */
+    public String saveUsefulBrackets(String input) {
+        return normalizePattern(input, NORMALIZE_BRACKETS_PATTERN, "[$1]");
+    }
+
+    /**
+     * Удаляет вообще все круглые скобки.
+     */
+    public String deleteAllBrackets(String input) {
+        return input.replaceAll("[()]", "");
+    }
+
+    /**
+     * Возвращает полезные скобки (заменяет [...] обратно на (...)).
+     */
+    public String returnUsefulBrackets(String input) {
+        return normalizePattern(input, RETURN_USEFUL_BRACKETS_PATTERN, "($1)");
+    }
+
+    /**
+     * Преобразует лишние минусы вида -(-) или -+- в + и т.д.
+     */
+    public String convertRedundantMinuses(String input) {
+        return normalizePattern(input, REDUNDANT_MINUS_PATTERN, "$1+");
+    }
+
+    /**
+     * Убирает повторяющиеся плюсы (+++ -> +).
+     */
+    public String removeRedundantPluses(String input) {
+        return normalizePattern(input, REDUNDANT_PLUS_PATTERN, "+");
+    }
+
+    /**
+     * Если встречается -+ или +- подряд, выбираем знак "-".
+     */
+    public String chooseSign(String input) {
+        return normalizePattern(input, CHOOSE_SIGN_PATTERN, "-");
+    }
+
+    /**
+     * Убирает бесполезный плюс (например, перед числами или выражениями).
+     */
+    public String removeUselessPlus(String input) {
+        // Здесь применяем replaceAll с уже готовыми паттернами
+        input = input.replaceAll(USELESS_PLUS_PATTERN_1.pattern(), "$1$2");
+        input = input.replaceAll(USELESS_PLUS_PATTERN_2.pattern(), "$1");
+        return input;
+    }
+
+    /**
+     * Вставляет знак умножения между закрывающими и открывающимися скобками, где нужно.
+     */
+    public String addMulBetweenBrackets(String input) {
+        return normalizePattern(input, ADD_MUL_BETWEEN_BRACKETS_PATTERN, "$1*$2");
+    }
+
+    /**
+     * Делает выражение "не пустым": если в итоге убирается вся часть до \d+functionsPlus,
+     * добавляем "+0".
+     */
+    public String notEmpty(String input) {
+        String other = input.replaceFirst("(.*)\\d+" + functionsPlus + "(.*)", "$1$2");
+        if (other.isEmpty()) {
+            return input + "+0";
+        }
+        return input;
+    }
+
+    /**
+     * Универсальный метод для повторяющейся замены паттерна в цикле:
+     * пока есть что заменить, заменяем.
+     */
+    private String normalizePattern(String input, Pattern pattern, String replacement) {
+        String modified;
+        do {
+            modified = input;
+            input = pattern.matcher(input).replaceAll(replacement);
+        } while (!input.equals(modified));
+        return input;
     }
 }
