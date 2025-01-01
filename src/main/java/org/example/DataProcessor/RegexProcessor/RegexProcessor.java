@@ -42,20 +42,21 @@ public class RegexProcessor implements DataProcessor {
         DataStorage dataStorage = DataStorage.getInstance();
         String functionsPlus = dataStorage.getFunctionsPlus();
         String regex;
+
         if (functionsPlus.isEmpty()) {
             regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
-                    + "((?:[\\s()\\-+]*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+)"
+                    + "((?:(?:[()\\-+]+\\s*)*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+)"
                     + "|"
                     + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*)";
         } else {
-            // Если functionsPlus не пустой, используем расширенный шаблон
             regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
-                    + "((?:[\\s()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*"
+                    + "((?:(?:[()\\-+]+\\s*)*(?:\\d+" + functionsPlus + ")[ ()]*"
                     + "(?:[+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+)"
                     + "|"
                     + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*"
                     + "|((-*\\s*)*)" + functionsPlus.substring(1) + ")";
         }
+
         for (String line : data) {
             String modifiedLine;
             do {
@@ -64,11 +65,8 @@ public class RegexProcessor implements DataProcessor {
                     break;
                 }
 
-                modifiedLine = line.replaceFirst(
-                        regex,
-                        " " + calculatedExpressions.get(index) + " "
-                );
-
+                modifiedLine = line.replaceFirst(regex, calculatedExpressions.get(index) + " ");
+                modifiedLine = modifiedLine.replaceFirst("(\\d+) ,(\\d+)", "$1, $2");
                 if (modifiedLine.equals(line)) {
                     replacedExpressions.add(line);
                     break;
