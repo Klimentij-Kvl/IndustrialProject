@@ -42,4 +42,7 @@ public class DecryptionDiffReaderDecorator extends DiffReaderDecorator {
         decrypt();
         return super.read();
     }
+
+    @Override
+    public String getType(){return super.getNextType();}
 }

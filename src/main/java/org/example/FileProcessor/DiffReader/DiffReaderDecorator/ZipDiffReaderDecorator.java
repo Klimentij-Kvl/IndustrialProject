@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipInputStream;
 
-public class ZipDearchivingDiffReaderDecorator extends DearchivingDiffReaderDecorator {
-    public ZipDearchivingDiffReaderDecorator(DiffReader dr){
+public class ZipDiffReaderDecorator extends DearchivingDiffReaderDecorator {
+    public ZipDiffReaderDecorator(DiffReader dr){
         super(dr);
     }
 
@@ -19,11 +19,11 @@ public class ZipDearchivingDiffReaderDecorator extends DearchivingDiffReaderDeco
         Pattern pattern = Pattern.compile("^(.+\\\\)(.+)(\\..+)$");
         Matcher matcher = pattern.matcher(path);
         if(matcher.matches()) {
-            String pathTxt = matcher.group(1) + matcher.group(2) + ".txt";
+            String pathRet = matcher.group(1) + "new" + matcher.group(2) + "." + super.getNextType();
             //String fileName = matcher.group(2) + matcher.group(3);
 
             try (ZipInputStream zis = new ZipInputStream(new FileInputStream(path));
-                 FileOutputStream fos = new FileOutputStream(pathTxt)
+                 FileOutputStream fos = new FileOutputStream(pathRet)
             ) {
 
                     zis.getNextEntry();
@@ -34,9 +34,12 @@ public class ZipDearchivingDiffReaderDecorator extends DearchivingDiffReaderDeco
                     zis.closeEntry();
 
             }
-            super.setPath(pathTxt);
-            super.setPath(pathTxt);
+            super.setPath(pathRet);
+            super.setPath(pathRet);
         }
         else throw new FileNotFoundException();
     }
+
+    @Override
+    public String getType(){return "zip";}
 }

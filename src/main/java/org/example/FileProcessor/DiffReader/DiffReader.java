@@ -8,4 +8,5 @@ public interface DiffReader extends Closeable {
     List<String> read() throws IOException;
     String getPath();
     void setPath(String path);
+    String getType();
 }

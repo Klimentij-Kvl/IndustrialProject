@@ -9,10 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipInputStream;
 
-public class TarDearchivingDiffReaderDecorator extends DearchivingDiffReaderDecorator{
-    public TarDearchivingDiffReaderDecorator(DiffReader dr){
+public class TarDiffReaderDecorator extends DearchivingDiffReaderDecorator{
+    public TarDiffReaderDecorator(DiffReader dr){
        super(dr);
     }
 
@@ -23,7 +22,7 @@ public class TarDearchivingDiffReaderDecorator extends DearchivingDiffReaderDeco
         Pattern pattern = Pattern.compile("^(.+\\\\)(.+)(\\..+)$");
         Matcher matcher = pattern.matcher(path);
         if (matcher.matches()) {
-            String pathTxt = matcher.group(1) + matcher.group(2) + ".txt";
+            String pathTxt = matcher.group(1) + "new" + matcher.group(2) + "." + super.getNextType();
             //String fileName = matcher.group(2) + matcher.group(3);
 
             try (TarArchiveInputStream tis = new TarArchiveInputStream(new FileInputStream(path));
@@ -39,4 +38,7 @@ public class TarDearchivingDiffReaderDecorator extends DearchivingDiffReaderDeco
             super.setPath(pathTxt);
         } else throw new FileNotFoundException();
     }
+
+    @Override
+    public String getType(){return "tar";}
 }

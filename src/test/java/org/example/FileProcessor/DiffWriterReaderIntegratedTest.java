@@ -3,8 +3,8 @@ package org.example.FileProcessor;
 import org.example.FileProcessor.DiffReader.DiffFileReader.JsonDiffFileReader;
 import org.example.FileProcessor.DiffReader.DiffFileReader.TxtDiffFileReader;
 import org.example.FileProcessor.DiffReader.DiffFileReader.YamlDiffFileReader;
-import org.example.FileProcessor.DiffReader.DiffReaderDecorator.TarDearchivingDiffReaderDecorator;
-import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipDearchivingDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.TarDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipDiffReaderDecorator;
 import org.example.FileProcessor.DiffWriter.DiffFileWriter.JsonDiffFileWriter;
 import org.example.FileProcessor.DiffWriter.DiffFileWriter.TxtDiffFileWriter;
 import org.example.FileProcessor.DiffWriter.DiffFileWriter.YamlDiffFileWriter;
@@ -63,7 +63,7 @@ public class DiffWriterReaderIntegratedTest {
         dw.write(toWrite);
         dw.close();
 
-        DiffReader dr = new ZipDearchivingDiffReaderDecorator(new TxtDiffFileReader(zipFile));
+        DiffReader dr = new ZipDiffReaderDecorator(new TxtDiffFileReader(zipFile));
         toRead = dr.read();
         dr.close();
 
@@ -79,7 +79,7 @@ public class DiffWriterReaderIntegratedTest {
         try(DiffWriter dw =  new TarArchivingDiffWriterDecorator(new TxtDiffFileWriter(file))){
             dw.write(toWrite);
         }
-        try(DiffReader dr = new TarDearchivingDiffReaderDecorator(new TxtDiffFileReader(tarFile))){
+        try(DiffReader dr = new TarDiffReaderDecorator(new TxtDiffFileReader(tarFile))){
             toRead = dr.read();
         }
 
@@ -98,7 +98,7 @@ public class DiffWriterReaderIntegratedTest {
         dw.write(toWrite);
         dw.close();
 
-        DiffReader dr = new ZipDearchivingDiffReaderDecorator(
+        DiffReader dr = new ZipDiffReaderDecorator(
                         new DecryptionDiffReaderDecorator("12345",
                         new TxtDiffFileReader(zipEncFile)));
         toRead = dr.read();
@@ -118,7 +118,7 @@ public class DiffWriterReaderIntegratedTest {
                             new YamlDiffFileWriter(file)))) {
             dw.write(toWrite);
         }
-        try(DiffReader dr = new ZipDearchivingDiffReaderDecorator(
+        try(DiffReader dr = new ZipDiffReaderDecorator(
                 new DecryptionDiffReaderDecorator("12345",
                         new YamlDiffFileReader(zipEncFile)))) {
             toRead = dr.read();
@@ -138,7 +138,7 @@ public class DiffWriterReaderIntegratedTest {
             dw.write(toWrite);
         }
         try(DiffReader dr = new DecryptionDiffReaderDecorator("12345",
-                        new ZipDearchivingDiffReaderDecorator(
+                        new ZipDiffReaderDecorator(
                         new TxtDiffFileReader(encZipFile)))) {
             toRead = dr.read();
         }
@@ -158,7 +158,7 @@ public class DiffWriterReaderIntegratedTest {
             dw.write(toWrite);
         }
         try(DiffReader dr = new DecryptionDiffReaderDecorator("12345",
-                            new ZipDearchivingDiffReaderDecorator(
+                            new ZipDiffReaderDecorator(
                             new JsonDiffFileReader(encZipFile)))) {
             toRead = dr.read();
         }

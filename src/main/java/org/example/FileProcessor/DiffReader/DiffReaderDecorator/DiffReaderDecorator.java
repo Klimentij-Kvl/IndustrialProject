@@ -38,4 +38,7 @@ public abstract class DiffReaderDecorator implements DiffReader {
         new File(path).delete();
         _dr.close();
     }
+
+    public String getNextType(){return _dr.getType();}
+
 }

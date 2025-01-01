@@ -13,4 +13,7 @@ public class JsonDiffFileReader extends SerializationDiffFileReader{
     public JsonDiffFileReader(String fileName) throws IOException {
         super(fileName, new JsonMapper());
     }
+
+    @Override
+    public String getType(){return "json";}
 }

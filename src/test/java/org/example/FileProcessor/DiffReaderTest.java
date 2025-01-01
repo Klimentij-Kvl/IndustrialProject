@@ -9,8 +9,8 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.example.FileProcessor.DiffReader.DiffFileReader.*;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffReader.DiffReaderDecorator.DecryptionDiffReaderDecorator;
-import org.example.FileProcessor.DiffReader.DiffReaderDecorator.TarDearchivingDiffReaderDecorator;
-import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipDearchivingDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.TarDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipDiffReaderDecorator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -159,12 +159,12 @@ public class DiffReaderTest {
 
     @Test
     void ZipTxtReaderTest() throws IOException{
-        File txtFile = new File(PATH_RES + "ZipTxtReaderTest.txt");
+        File txtFile = new File(PATH_RES + "newZipTxtReaderTest.txt");
         File zipFile = new File(PATH_RES + "ZipTxtReaderTest.zip");
         TxtWrite(txtFile);
         Zip(txtFile, zipFile);
 
-        try(DiffReader dr = new ZipDearchivingDiffReaderDecorator(new TxtDiffFileReader(zipFile))) {
+        try(DiffReader dr = new ZipDiffReaderDecorator(new TxtDiffFileReader(zipFile))) {
             toRead = dr.read();
         }
         assertEquals(toWrite, toRead);
@@ -174,11 +174,11 @@ public class DiffReaderTest {
 
     @Test
     void TarTxtReaderTest() throws IOException{
-        File txtFile = new File(PATH_RES + "TarTxtReaderTest.txt");
+        File txtFile = new File(PATH_RES + "newTarTxtReaderTest.txt");
         File tarFile = new File(PATH_RES + "TarTxtReaderTest.tar");
         TxtWrite(txtFile);
         Tar(txtFile, tarFile);
-        try(DiffReader dr = new TarDearchivingDiffReaderDecorator(new TxtDiffFileReader(tarFile))){
+        try(DiffReader dr = new TarDiffReaderDecorator(new TxtDiffFileReader(tarFile))){
             toRead = dr.read();
         }
         assertEquals(toWrite, toRead);
@@ -188,8 +188,8 @@ public class DiffReaderTest {
 
     @Test
     void DecryptZipReaderTest() throws Exception{
-        File txtFile = new File(PATH_RES + "DecryptZipReaderTest.txt");
-        File encFile = new File(PATH_RES + "2DecryptZipReaderTest.txt");
+        File txtFile = new File(PATH_RES + "newDecryptZipReaderTest.txt");
+        File encFile = new File(PATH_RES + "2newDecryptZipReaderTest.txt");
         File zipFile = new File(PATH_RES + "DecryptZipReaderTest.zip");
 
         TxtWrite(txtFile);
@@ -197,7 +197,7 @@ public class DiffReaderTest {
         Zip(encFile, zipFile);
 
         DiffReader dr =
-                new ZipDearchivingDiffReaderDecorator(
+                new ZipDiffReaderDecorator(
                         new DecryptionDiffReaderDecorator(
                                 "12345",  new TxtDiffFileReader(zipFile)));
         toRead = dr.read();
@@ -219,7 +219,7 @@ public class DiffReaderTest {
         Encrypt(zipFile, encFile);
 
         DiffReader dr = new DecryptionDiffReaderDecorator("12345",
-                new ZipDearchivingDiffReaderDecorator(
+                new ZipDiffReaderDecorator(
                         new TxtDiffFileReader(encFile)));
         toRead = dr.read();
         dr.close();
