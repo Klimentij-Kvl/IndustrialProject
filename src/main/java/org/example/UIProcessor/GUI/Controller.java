@@ -3,8 +3,7 @@ package org.example.UIProcessor.GUI;
 import com.google.common.reflect.ClassPath;
 import javafx.fxml.FXML;
 
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.example.DataProcessor.RegexProcessor.RegexProcessor;
 import org.example.FileProcessor.DiffReader.DiffFileReader.TxtDiffFileReader;
 import org.example.FileProcessor.DiffReader.DiffReader;
@@ -16,14 +15,16 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Controller {
     private List<String> list = new ArrayList<>();
     @FXML
-    private TextField inputPath;
+    private TextField inputPath, outputPath;
     @FXML
-    private TextField outputPath;
+    private ChoiceBox<String> inputType;
     @FXML
     private TextArea fileArea;
 
@@ -38,17 +39,35 @@ public class Controller {
                 .collect(Collectors.toSet());
     }
 
+
+    @FXML
+    public void initialize() throws IOException{
+        Set<Class<?>> DiffFileWriterClasses = getConcreteClassesInPackage("org.example.FileProcessor.DiffReader.DiffFileReader");
+        Pattern pattern = Pattern.compile("^(.*)DiffFileReader$");
+        for(Class<?> clazz : DiffFileWriterClasses){
+            Matcher matcher = pattern.matcher(clazz.getSimpleName());
+            if(matcher.matches())
+                inputType.getItems().add(matcher.group(1));
+        }
+    }
+
     @FXML
     public void ClickRead(){
-        try(DiffReader dr = new TxtDiffFileReader(inputPath.getText())){
-            list = dr.read();
-            StringBuilder sb = new StringBuilder();
-            for(String s : list)
-                sb.append(s).append("\n");
-            fileArea.setText(sb.toString());
-        }catch (IOException e){
+        try{
+            Class<?> clazz = Class.forName("org.example.FileProcessor.DiffReader.DiffFileReader."
+                    + inputType.getValue() +  "DiffFileReader");
+            try(DiffReader dr = (DiffReader)clazz.
+                    getConstructor(String.class).newInstance(inputPath.getText())){
+                list = dr.read();
+                StringBuilder sb = new StringBuilder();
+                for(String s : list)
+                    sb.append(s).append("\n");
+                fileArea.setText(sb.toString());
+            }
+        }catch (Exception e){
             System.out.println(e.getMessage());
         }
+
     }
 
     @FXML
