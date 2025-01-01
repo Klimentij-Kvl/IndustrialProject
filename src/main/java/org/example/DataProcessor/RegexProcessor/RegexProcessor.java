@@ -39,6 +39,23 @@ public class RegexProcessor implements DataProcessor {
     List<String> replaceExpressionsInData(List<String> data, List<String> calculatedExpressions) {
         int index = 0;
         List<String> replacedExpressions = new ArrayList<>();
+        DataStorage dataStorage = DataStorage.getInstance();
+        String functionsPlus = dataStorage.getFunctionsPlus();
+        String regex;
+        if (functionsPlus.isEmpty()) {
+            regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
+                    + "((?:[\\s()\\-+]*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+)"
+                    + "|"
+                    + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*)";
+        } else {
+            // Если functionsPlus не пустой, используем расширенный шаблон
+            regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
+                    + "((?:[\\s()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*"
+                    + "(?:[+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+)"
+                    + "|"
+                    + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*"
+                    + "|((-*\\s*)*)" + functionsPlus.substring(1) + ")";
+        }
         for (String line : data) {
             String modifiedLine;
             do {
@@ -48,7 +65,7 @@ public class RegexProcessor implements DataProcessor {
                 }
 
                 modifiedLine = line.replaceFirst(
-                        "([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*",
+                        regex,
                         " " + calculatedExpressions.get(index) + " "
                 );
 
