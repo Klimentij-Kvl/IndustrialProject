@@ -1,8 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="647.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.UIProcessor.GUI.Controller">
-
+   <children>
+      <Label fx:id="lab" layoutX="36.0" layoutY="57.0" text="Type an asbsolute path to input file:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="inputPath" layoutX="36.0" layoutY="82.0" prefHeight="25.0" prefWidth="253.0">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <Label layoutX="36.0" layoutY="426.0" text="Type an asbsolute path to output file:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="outputPath" layoutX="36.0" layoutY="451.0" prefHeight="25.0" prefWidth="264.0">
+         <font>
+            <Font size="16.0" />
+         </font></TextField>
+      <Button onAction="#ClickRead" layoutX="300.0" layoutY="82.0" mnemonicParsing="false" text="Read">
+         <font>
+            <Font size="16.0" />
+         </font></Button>
+      <Button onAction="#ClickWrite" layoutX="309.0" layoutY="451.0" mnemonicParsing="false" text="Write">
+         <font>
+            <Font size="16.0" />
+         </font></Button>
+      <TextArea fx:id="fileArea" layoutX="495.0" layoutY="97.0" prefHeight="456.0" prefWidth="416.0" />
+      <Button onAction="#ClickEdit" layoutX="431.0" layoutY="308.0" mnemonicParsing="false" text="Edit">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+   </children>
 </AnchorPane>
