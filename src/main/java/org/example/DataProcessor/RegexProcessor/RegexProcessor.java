@@ -39,29 +39,27 @@ public class RegexProcessor implements DataProcessor {
     List<String> replaceExpressionsInData(List<String> data, List<String> calculatedExpressions) {
         int index = 0;
         List<String> replacedExpressions = new ArrayList<>();
-        for(String line : data) {
+        for (String line : data) {
             String modifiedLine;
             do {
-            modifiedLine = line.replaceFirst(
-                    "([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*",
-                    " " + calculatedExpressions.get(index) + " "
-            );
-            if (modifiedLine.equals(line)) {
-                replacedExpressions.add(line);
-                break;
-            }
-            else {
-                index++;
-                line = modifiedLine;
-            }
-            if (index == calculatedExpressions.size()) {
-                replacedExpressions.add(line);
-                break;
-            }
+                if (index >= calculatedExpressions.size()) {
+                    replacedExpressions.add(line);
+                    break;
+                }
+
+                modifiedLine = line.replaceFirst(
+                        "([\\s()\\-+]*\\d+[ ()]*([+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+|(\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*",
+                        " " + calculatedExpressions.get(index) + " "
+                );
+
+                if (modifiedLine.equals(line)) {
+                    replacedExpressions.add(line);
+                    break;
+                } else {
+                    index++;
+                    line = modifiedLine;
+                }
             } while (true);
-            if (index == calculatedExpressions.size()) {
-                index = 0;
-            }
         }
         return replacedExpressions;
     }
