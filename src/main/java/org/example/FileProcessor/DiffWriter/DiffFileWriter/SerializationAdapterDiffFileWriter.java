@@ -18,7 +18,7 @@ public abstract class SerializationAdapterDiffFileWriter extends DiffFileWriter{
 
     protected SerializationAdapterDiffFileWriter(String name, ObjectMapper mapper) throws IOException{
         super(name);
-        this.mapper = mapper;
+        this.mapper = mapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     @Override

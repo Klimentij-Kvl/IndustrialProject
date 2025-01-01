@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
 import org.example.DataProcessor.RegexProcessor.RegexProcessor;
-import org.example.FileProcessor.DiffReader.DiffFileReader.TxtDiffFileReader;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffFileWriter.TxtDiffFileWriter;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
@@ -24,7 +23,7 @@ public class Controller {
     @FXML
     private TextField inputPath, outputPath;
     @FXML
-    private ChoiceBox<String> inputType;
+    private ChoiceBox<String> inputType, outputType;
     @FXML
     private TextArea fileArea;
 
@@ -42,12 +41,22 @@ public class Controller {
 
     @FXML
     public void initialize() throws IOException{
-        Set<Class<?>> DiffFileWriterClasses = getConcreteClassesInPackage("org.example.FileProcessor.DiffReader.DiffFileReader");
-        Pattern pattern = Pattern.compile("^(.*)DiffFileReader$");
+        Set<Class<?>> DiffFileWriterClasses =
+                getConcreteClassesInPackage("org.example.FileProcessor.DiffReader.DiffFileReader");
+        Pattern patternWriter = Pattern.compile("^(.*)DiffFileReader$");
         for(Class<?> clazz : DiffFileWriterClasses){
-            Matcher matcher = pattern.matcher(clazz.getSimpleName());
+            Matcher matcher = patternWriter.matcher(clazz.getSimpleName());
             if(matcher.matches())
                 inputType.getItems().add(matcher.group(1));
+        }
+
+        Set<Class<?>> DiffFileReaderClasses =
+                getConcreteClassesInPackage("org.example.FileProcessor.DiffWriter.DiffFileWriter");
+        Pattern patternReader = Pattern.compile("^(.*)DiffFileWriter$");
+        for(Class<?> clazz : DiffFileReaderClasses){
+            Matcher matcher = patternReader.matcher(clazz.getSimpleName());
+            if(matcher.matches())
+                outputType.getItems().add(matcher.group(1));
         }
     }
 
@@ -56,8 +65,8 @@ public class Controller {
         try{
             Class<?> clazz = Class.forName("org.example.FileProcessor.DiffReader.DiffFileReader."
                     + inputType.getValue() +  "DiffFileReader");
-            try(DiffReader dr = (DiffReader)clazz.
-                    getConstructor(String.class).newInstance(inputPath.getText())){
+            try(DiffReader dr = (DiffReader)clazz
+                    .getConstructor(String.class).newInstance(inputPath.getText())){
                 list = dr.read();
                 StringBuilder sb = new StringBuilder();
                 for(String s : list)
@@ -67,14 +76,18 @@ public class Controller {
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
-
     }
 
     @FXML
     public void ClickWrite(){
-        try(DiffWriter dw = new TxtDiffFileWriter(outputPath.getText())){
-            dw.write(list);
-        }catch (IOException e){
+        try{
+            Class<?> clazz = Class.forName("org.example.FileProcessor.DiffWriter.DiffFileWriter."
+                    + outputType.getValue() +  "DiffFileWriter");
+            try(DiffWriter dw = (DiffWriter)clazz
+                    .getConstructor(String.class).newInstance(outputPath.getText())){
+                dw.write(list);
+            }
+        }catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }

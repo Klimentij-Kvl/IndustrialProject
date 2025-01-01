@@ -48,5 +48,11 @@
          </font>
       </Label>
       <ChoiceBox fx:id="inputType" layoutX="36.0" layoutY="159.0" prefHeight="25.0" prefWidth="82.0" />
+      <Label layoutX="36.0" layoutY="497.0" text="Type of output file:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="outputType" layoutX="36.0" layoutY="528.0" prefHeight="25.0" prefWidth="93.0" />
    </children>
 </AnchorPane>
