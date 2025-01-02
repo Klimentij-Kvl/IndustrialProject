@@ -143,7 +143,7 @@ public class DiffReaderTest {
     }
 
     @Test
-    void DecryptTxtReaderTest() throws Exception{
+    void DecryptTxtReaderTest() throws Exception {
         File txtFile = new File(PATH_RES + "DecryptTxtReaderTest.txt");
         File encFile = new File(PATH_RES + "2DecryptTxtReaderTest.txt");
         TxtWrite(txtFile);
@@ -196,14 +196,15 @@ public class DiffReaderTest {
         Encrypt(txtFile, encFile);
         Zip(encFile, zipFile);
 
-        DiffReader dr =
+        try(DiffReader dr =
                 new ZipDiffReaderDecorator(
                         new DecryptionDiffReaderDecorator(
-                                "12345",  new TxtDiffFileReader(zipFile)));
-        toRead = dr.read();
+                                "12345",  new TxtDiffFileReader(zipFile)))){
+            toRead = dr.read();
+        }
 
         assertEquals(toWrite, toRead);
-        assertTrue(txtFile.delete());
+        //assertTrue(txtFile.delete());
         assertTrue(zipFile.delete());
         assertTrue(encFile.delete());
     }

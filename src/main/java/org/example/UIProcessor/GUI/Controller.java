@@ -4,6 +4,7 @@ import com.google.common.reflect.ClassPath;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
+import org.apache.commons.lang3.builder.Diff;
 import org.example.DataProcessor.RegexProcessor.RegexProcessor;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 public class Controller {
     private List<String> list = new ArrayList<>();
     @FXML
-    private TextField inputPath, outputPath;
+    private TextField inputPath, outputPath, paramInput1, paramInput2;
     @FXML
     private ChoiceBox<String> inputType, outputType, decInput1, decInput2;
     @FXML
@@ -37,7 +38,6 @@ public class Controller {
                 .collect(Collectors.toSet());
     }
 
-
     private void remakeChoiceBoxWithClasses(ChoiceBox<String> toModify, String packageName, String pattern) throws IOException{
         toModify.getItems().add(null);
         Set<Class<?>> DiffFileWriterClasses =
@@ -46,15 +46,15 @@ public class Controller {
             Matcher matcher = Pattern.compile(pattern).matcher(clazz.getSimpleName());
             if(matcher.matches())
                 toModify.getItems().add(matcher.group(1));
-
         }
     }
     @FXML
     public void initialize() throws IOException{
         remakeChoiceBoxWithClasses(inputType, "DiffReader.DiffFileReader", "^(.+)DiffFileReader$");
-        remakeChoiceBoxWithClasses(outputType, "DiffWriter.DiffFileWriter", "^(.+)DiffFileWriter$");
         remakeChoiceBoxWithClasses(decInput1, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
         remakeChoiceBoxWithClasses(decInput2, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
+
+        remakeChoiceBoxWithClasses(outputType, "DiffWriter.DiffFileWriter", "^(.+)DiffFileWriter$");
     }
 
     @FXML
@@ -70,13 +70,25 @@ public class Controller {
                 if (decInput1.getValue() != null) {
                     clazz = Class.forName("org.example.FileProcessor.DiffReader.DiffReaderDecorator."
                             + decInput1.getValue() + "DiffReaderDecorator");
-                    dr = (DiffReader) clazz.getConstructor(DiffReader.class).newInstance(dr);
+                    try {
+                        dr = (DiffReader) clazz.getConstructor(DiffReader.class)
+                                .newInstance(dr);
+                    }catch (NoSuchMethodException e){
+                        dr = (DiffReader) clazz.getConstructor(String.class, DiffReader.class)
+                                .newInstance(paramInput1.getText(),dr);
+                    }
                 }
 
                 if (decInput2.getValue() != null) {
                     clazz = Class.forName("org.example.FileProcessor.DiffReader.DiffReaderDecorator."
                             + decInput2.getValue() + "DiffReaderDecorator");
-                    dr = (DiffReader) clazz.getConstructor(DiffReader.class).newInstance(dr);
+                    try {
+                        dr = (DiffReader) clazz.getConstructor(DiffReader.class)
+                                .newInstance(dr);
+                    }catch (NoSuchMethodException e){
+                        dr = (DiffReader) clazz.getConstructor(String.class, DiffReader.class)
+                                .newInstance(paramInput2.getText(), dr);
+                    }
                 }
 
                 list = dr.read();
@@ -84,7 +96,7 @@ public class Controller {
                 for (String s : list)
                     sb.append(s).append("\n");
                 fileArea.setText(sb.toString());
-
+                dr.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }

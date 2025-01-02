@@ -62,5 +62,17 @@
             <Font size="14.0" />
          </font>
       </Label>
+      <Label layoutX="168.0" layoutY="196.0" text="Add param 1:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="paramInput1" layoutX="168.0" layoutY="225.0" prefHeight="25.0" prefWidth="84.0" />
+      <Label layoutX="286.0" layoutY="198.0" text="Add param 2:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="paramInput2" layoutX="284.0" layoutY="225.0" prefHeight="25.0" prefWidth="84.0" />
    </children>
 </AnchorPane>
