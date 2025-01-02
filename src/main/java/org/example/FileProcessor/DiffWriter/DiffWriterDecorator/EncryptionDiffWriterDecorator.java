@@ -30,11 +30,9 @@ public class EncryptionDiffWriterDecorator extends DiffWriterDecorator {
     private void encrypt() throws IOException{
         String path = super.getPath();
         byte[] b;
-
         try(FileInputStream fis = new FileInputStream(path)){
             b = fis.readAllBytes();
         }
-
         try(FileOutputStream fos = new FileOutputStream(path);
             CipherOutputStream cos = new CipherOutputStream(fos, cipher)){
             cos.write(b);

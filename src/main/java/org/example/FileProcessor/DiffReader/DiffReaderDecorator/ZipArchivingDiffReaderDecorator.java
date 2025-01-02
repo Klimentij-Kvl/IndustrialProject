@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipInputStream;
 
-public class ZipDiffReaderDecorator extends DearchivingDiffReaderDecorator {
-    public ZipDiffReaderDecorator(DiffReader dr){
+public class ZipArchivingDiffReaderDecorator extends DearchivingDiffReaderDecorator {
+    public ZipArchivingDiffReaderDecorator(DiffReader dr){
         super(dr);
     }
 
@@ -20,7 +20,6 @@ public class ZipDiffReaderDecorator extends DearchivingDiffReaderDecorator {
         Matcher matcher = pattern.matcher(path);
         if(matcher.matches()) {
             String pathRet = matcher.group(1) + "new" + matcher.group(2) + "." + super.getNextType();
-            //String fileName = matcher.group(2) + matcher.group(3);
 
             try (ZipInputStream zis = new ZipInputStream(new FileInputStream(path));
                  FileOutputStream fos = new FileOutputStream(pathRet)
@@ -34,7 +33,6 @@ public class ZipDiffReaderDecorator extends DearchivingDiffReaderDecorator {
                     zis.closeEntry();
 
             }
-            super.setPath(pathRet);
             super.setPath(pathRet);
         }
         else throw new FileNotFoundException();
