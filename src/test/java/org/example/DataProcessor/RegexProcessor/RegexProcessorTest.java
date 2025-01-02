@@ -12,9 +12,10 @@ class RegexProcessorTest {
 
     void testProcess() {
         regexProcessor.CreateFunction("abort", "x+y");
+        assertEquals(List.of("Разность -2 и -10"," 2 нас удивила."),regexProcessor.process(List.of("Разность -5+3 и -10"," - (-2) нас удивила.")));
         //assertEquals(List.of("Разность 3"),regexProcessor.process(List.of("Разность abort(1,2)")));
+        assertEquals(List.of("Рассчитайте 2,5 ."),regexProcessor.process(List.of("Рассчитайте ((2 + 3) * (5 - 3)) / 4.")));
         assertEquals(List.of("roflan"),regexProcessor.process(List.of("roflan")));
-        assertEquals(List.of("Разность -2 и -10","2 нас удивила."),regexProcessor.process(List.of("Разность -5+3 и -10"," - (-2) нас удивила.")));
         assertEquals(List.of("Сегодня мы решали"," 15 , и это оказалось просто."),regexProcessor.process(List.of("Сегодня мы решали"," 10 + 5, и это оказалось просто.")));
     }
 
