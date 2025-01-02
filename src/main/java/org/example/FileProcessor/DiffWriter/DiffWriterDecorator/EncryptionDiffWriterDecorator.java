@@ -15,7 +15,6 @@ import java.util.List;
 
 public class EncryptionDiffWriterDecorator extends DiffWriterDecorator {
     private Cipher cipher;
-    //private String path;
 
     public EncryptionDiffWriterDecorator(String key, DiffWriter dw){
         super(dw);
@@ -29,14 +28,14 @@ public class EncryptionDiffWriterDecorator extends DiffWriterDecorator {
     }
 
     private void encrypt() throws IOException{
-        File file = new File(super.getPath());
+        String path = super.getPath();
         byte[] b;
 
-        try(FileInputStream fis = new FileInputStream(file)){
+        try(FileInputStream fis = new FileInputStream(path)){
             b = fis.readAllBytes();
         }
 
-        try(FileOutputStream fos = new FileOutputStream(file);
+        try(FileOutputStream fos = new FileOutputStream(path);
             CipherOutputStream cos = new CipherOutputStream(fos, cipher)){
             cos.write(b);
         }

@@ -5,12 +5,10 @@ import org.example.FileProcessor.DiffWriter.DiffWriter;
 import java.io.*;
 import java.util.List;
 
-public abstract class DiffFileWriter implements DiffWriter, Flushable {
-    protected final FileOutputStream output;
+public abstract class DiffFileWriter implements DiffWriter {
     private final String path;
 
     public DiffFileWriter(File file) throws IOException{
-        output = new FileOutputStream(file);
         path = file.getPath();
     }
 
@@ -29,8 +27,5 @@ public abstract class DiffFileWriter implements DiffWriter, Flushable {
     }
 
     @Override
-    public void close() throws IOException { output.close(); }
-
-    @Override
-    public void flush() throws IOException{ output.flush(); }
+    public void close() throws IOException { }
 }

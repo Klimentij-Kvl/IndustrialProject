@@ -23,11 +23,11 @@ public abstract class SerializationAdapterDiffFileWriter extends DiffFileWriter{
 
     @Override
     public void write(String s) throws IOException {
-        mapper.writeValue(output, s);
+        mapper.writeValue(new File(super.getPath()), s);
     }
 
     @Override
     public void write(List<String> list) throws IOException {
-        mapper.writeValue(output, list);
+        mapper.writeValue(new File(super.getPath()), list);
     }
 }
