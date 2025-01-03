@@ -18,7 +18,7 @@ public class WriteFileCommand implements Command {
         DataStorage dataStorage = DataStorage.getInstance();
 
         if (dataStorage.getInputFileFormat() != null) {
-            try (DiffWriter dr = createWriter(dataStorage.getInputFileFormat(), dataStorage.getOutputFileName())) {
+            try (DiffWriter dr = createWriter(dataStorage.getOutputFileFormat(), dataStorage.getOutputFileName())) {
                 dr.write(dataStorage.getOutput());
                 System.out.println("\nFile successfully write");
             } catch (IOException e) {

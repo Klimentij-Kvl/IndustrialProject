@@ -18,7 +18,7 @@ public class ReadFileCommand implements Command {
 
         if (dataStorage.getInputFileFormat() != null) {
             try (DiffReader dr = createReader(dataStorage.getInputFileFormat(), dataStorage.getInputFileName())) {
-                dr.read();
+                dataStorage.setInput(dr.read());
                 System.out.println("\nFile successfully read");
             } catch (IOException e) {
                 throw new RuntimeException(e);
