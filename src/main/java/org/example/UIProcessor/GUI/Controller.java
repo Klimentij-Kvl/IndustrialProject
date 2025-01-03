@@ -3,12 +3,19 @@ package org.example.UIProcessor.GUI;
 import com.google.common.reflect.ClassPath;
 import javafx.fxml.FXML;
 
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.example.DataProcessor.DataProcessor;
 import org.example.DataProcessor.RegexProcessor.RegexProcessor;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -82,18 +89,18 @@ public class Controller {
             try {
                 Class<?> clazz = Class.forName("org.example.FileProcessor.DiffReader.DiffFileReader."
                         + inputType.getValue() + "DiffFileReader");
-
                 DiffReader dr = (DiffReader) clazz
                         .getConstructor(String.class).newInstance(inputPath.getText());
-
                 dr = decorateDiffReader(dr, inputOption1, inputParam1);
                 dr = decorateDiffReader(dr, inputOption2, inputParam2);
 
                 list = dr.read();
+
                 StringBuilder sb = new StringBuilder();
                 for (String s : list)
                     sb.append(s).append("\n");
                 fileArea.setText(sb.toString());
+
                 dr.close();
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -126,7 +133,6 @@ public class Controller {
                 DiffWriter dw = (DiffWriter) clazz.getConstructor(String.class).newInstance(
                         outputPackagePath.getText() + outputFileName.getText()
                                 + "." + outputType.getValue().toLowerCase());
-
                 dw = decorateDiffWriter(dw, outputOption1, outputParam1);
                 dw = decorateDiffWriter(dw, outputOption2, outputParam2);
 
@@ -154,5 +160,31 @@ public class Controller {
             sb.append(s).append("\n");
         sb.deleteCharAt(sb.lastIndexOf("\n"));
         fileArea.setText(sb.toString());
+    }
+
+    @FXML
+    public void ClickInputFile(){
+        FileChooser chooser = new FileChooser();
+        chooser.setInitialDirectory(new File("src/resources/"));
+        chooser.setTitle("Choose an input file:");
+        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
+                "all files", "*.txt", "*.xml", "*.json", "*.yaml", "*.zip", "*.tar"));
+        try{
+            inputPath.setText(chooser.showOpenDialog(new Stage()).getAbsolutePath());
+        }catch (NullPointerException e){
+            inputPath.setText("");
+        }
+    }
+
+    @FXML
+    public void ClickOutDir(){
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Choose an output folder:");
+        chooser.setInitialDirectory(new File("src/"));
+        try{
+            outputPackagePath.setText(chooser.showDialog(new Stage()).getAbsolutePath() + "\\");
+        }catch (NullPointerException e){
+            outputPackagePath.setText("");
+        }
     }
 }
