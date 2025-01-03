@@ -3,7 +3,6 @@ package org.example.UIProcessor.GUI;
 import com.google.common.reflect.ClassPath;
 import javafx.fxml.FXML;
 
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -13,8 +12,6 @@ import org.example.DataProcessor.RegexProcessor.RegexProcessor;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -177,7 +174,7 @@ public class Controller {
     }
 
     @FXML
-    public void ClickOutDir(){
+    public void ClickOutputDir(){
         DirectoryChooser chooser = new DirectoryChooser();
         chooser.setTitle("Choose an output folder:");
         chooser.setInitialDirectory(new File("src/"));

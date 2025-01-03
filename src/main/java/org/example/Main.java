@@ -1,24 +1,11 @@
 package org.example;
 
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import org.example.UIProcessor.GUI.GUI;
+import org.example.UIProcessor.UIProcessor;
 
-import java.io.IOException;
-
-public class Main extends Application {
-
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
-        primaryStage.setTitle("Industrial Project");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
+public class Main {
     public static void main(String[] args){
-        launch(args);
+        UIProcessor ui = new GUI();
+        ui.start();
     }
 }
