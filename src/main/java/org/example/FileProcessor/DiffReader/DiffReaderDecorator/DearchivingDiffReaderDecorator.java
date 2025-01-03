@@ -19,14 +19,4 @@ public abstract class DearchivingDiffReaderDecorator extends DiffReaderDecorator
         dearchive();
         return super.read();
     }
-
-    @Override
-    public String getPath(){
-        return super.getPath();
-    }
-
-    @Override
-    public void setPath(String path){
-        super.setPath(path);
-    }
 }

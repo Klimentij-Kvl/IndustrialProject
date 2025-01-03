@@ -29,4 +29,7 @@ public class TxtDiffFileReader extends DiffFileReader{
 
         return toRead;
     }
+
+    @Override
+    public String getType(){return "txt";}
 }

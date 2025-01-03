@@ -19,11 +19,10 @@ public class ZipDearchivingDiffReaderDecorator extends DearchivingDiffReaderDeco
         Pattern pattern = Pattern.compile("^(.+\\\\)(.+)(\\..+)$");
         Matcher matcher = pattern.matcher(path);
         if(matcher.matches()) {
-            String pathTxt = matcher.group(1) + matcher.group(2) + ".txt";
-            //String fileName = matcher.group(2) + matcher.group(3);
+            String pathRet = matcher.group(1) + "new" + matcher.group(2) + "." + super.getNextType();
 
             try (ZipInputStream zis = new ZipInputStream(new FileInputStream(path));
-                 FileOutputStream fos = new FileOutputStream(pathTxt)
+                 FileOutputStream fos = new FileOutputStream(pathRet)
             ) {
 
                     zis.getNextEntry();
@@ -34,9 +33,11 @@ public class ZipDearchivingDiffReaderDecorator extends DearchivingDiffReaderDeco
                     zis.closeEntry();
 
             }
-            super.setPath(pathTxt);
-            super.setPath(pathTxt);
+            super.setPath(pathRet);
         }
         else throw new FileNotFoundException();
     }
+
+    @Override
+    public String getType(){return "zip";}
 }

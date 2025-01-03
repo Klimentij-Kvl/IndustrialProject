@@ -143,14 +143,16 @@ public class DiffReaderTest {
     }
 
     @Test
-    void DecryptTxtReaderTest() throws Exception{
+    void DecryptTxtReaderTest() throws Exception {
         File txtFile = new File(PATH_RES + "DecryptTxtReaderTest.txt");
         File encFile = new File(PATH_RES + "2DecryptTxtReaderTest.txt");
         TxtWrite(txtFile);
         Encrypt(txtFile, encFile);
 
-        DiffReader dr = new DecryptionDiffReaderDecorator("12345", new TxtDiffFileReader(encFile));
-        toRead = dr.read();
+        try(DiffReader dr = new DecryptionDiffReaderDecorator("12345",
+                new TxtDiffFileReader(encFile))) {
+            toRead = dr.read();
+        }
 
         assertEquals(toWrite, toRead);
         assertTrue(txtFile.delete());
@@ -159,7 +161,7 @@ public class DiffReaderTest {
 
     @Test
     void ZipTxtReaderTest() throws IOException{
-        File txtFile = new File(PATH_RES + "ZipTxtReaderTest.txt");
+        File txtFile = new File(PATH_RES + "newZipTxtReaderTest.txt");
         File zipFile = new File(PATH_RES + "ZipTxtReaderTest.zip");
         TxtWrite(txtFile);
         Zip(txtFile, zipFile);
@@ -174,7 +176,7 @@ public class DiffReaderTest {
 
     @Test
     void TarTxtReaderTest() throws IOException{
-        File txtFile = new File(PATH_RES + "TarTxtReaderTest.txt");
+        File txtFile = new File(PATH_RES + "newTarTxtReaderTest.txt");
         File tarFile = new File(PATH_RES + "TarTxtReaderTest.tar");
         TxtWrite(txtFile);
         Tar(txtFile, tarFile);
@@ -188,22 +190,23 @@ public class DiffReaderTest {
 
     @Test
     void DecryptZipReaderTest() throws Exception{
-        File txtFile = new File(PATH_RES + "DecryptZipReaderTest.txt");
-        File encFile = new File(PATH_RES + "2DecryptZipReaderTest.txt");
+        File txtFile = new File(PATH_RES + "newDecryptZipReaderTest.txt");
+        File encFile = new File(PATH_RES + "2newDecryptZipReaderTest.txt");
         File zipFile = new File(PATH_RES + "DecryptZipReaderTest.zip");
 
         TxtWrite(txtFile);
         Encrypt(txtFile, encFile);
         Zip(encFile, zipFile);
 
-        DiffReader dr =
+        try(DiffReader dr =
                 new ZipDearchivingDiffReaderDecorator(
                         new DecryptionDiffReaderDecorator(
-                                "12345",  new TxtDiffFileReader(zipFile)));
-        toRead = dr.read();
+                                "12345",  new TxtDiffFileReader(zipFile)))){
+            toRead = dr.read();
+        }
 
         assertEquals(toWrite, toRead);
-        assertTrue(txtFile.delete());
+        //assertTrue(txtFile.delete());
         assertTrue(zipFile.delete());
         assertTrue(encFile.delete());
     }

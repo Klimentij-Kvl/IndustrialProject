@@ -13,4 +13,7 @@ public class XmlDiffFileReader extends SerializationDiffFileReader{
     public XmlDiffFileReader(String fileName) throws IOException {
         super(fileName, new XmlMapper());
     }
+
+    @Override
+    public String getType(){return "xml";}
 }

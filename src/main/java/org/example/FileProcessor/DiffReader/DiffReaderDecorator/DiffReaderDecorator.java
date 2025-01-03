@@ -16,7 +16,6 @@ public abstract class DiffReaderDecorator implements DiffReader {
         path = "";
     }
 
-
     @Override
     public List<String> read() throws IOException{
         return _dr.read();
@@ -38,4 +37,7 @@ public abstract class DiffReaderDecorator implements DiffReader {
         new File(path).delete();
         _dr.close();
     }
+
+    public String getNextType(){return _dr.getType();}
+
 }

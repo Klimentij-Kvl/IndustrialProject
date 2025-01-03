@@ -42,14 +42,15 @@ public class DiffWriterReaderIntegratedTest {
     void EncTxtWriteReadTest() throws IOException {
         File file = new File(PATH_RES + "EncTxtWriteReadTest.txt");
 
-        DiffWriter dw = new EncryptionDiffWriterDecorator("12345",
-                        new TxtDiffFileWriter(file));
-        dw.write(toWrite);
-        dw.close();
+        try(DiffWriter dw = new EncryptionDiffWriterDecorator("12345",
+                        new TxtDiffFileWriter(file))) {
+            dw.write(toWrite);
+        }
 
-        DiffReader dr = new DecryptionDiffReaderDecorator("12345",
-                        new TxtDiffFileReader(file));
-        toRead = dr.read();
+        try(DiffReader dr = new DecryptionDiffReaderDecorator("12345",
+                        new TxtDiffFileReader(file))) {
+            toRead = dr.read();
+        }
 
         assertEquals(toWrite, toRead);
         assertTrue(file.delete());
@@ -59,13 +60,15 @@ public class DiffWriterReaderIntegratedTest {
     void ZipTxtWriteReadTest() throws IOException {
         File file = new File(PATH_RES + "ZipTxtWriteReadTest.txt");
         File zipFile = new File(PATH_RES + "ZipTxtWriteReadTest.zip");
-        DiffWriter dw = new ZipArchivingDiffWriterDecorator(new TxtDiffFileWriter(file));
-        dw.write(toWrite);
-        dw.close();
+        try(DiffWriter dw = new ZipArchivingDiffWriterDecorator(
+                new TxtDiffFileWriter(file))) {
+            dw.write(toWrite);
+        }
 
-        DiffReader dr = new ZipDearchivingDiffReaderDecorator(new TxtDiffFileReader(zipFile));
-        toRead = dr.read();
-        dr.close();
+        try(DiffReader dr = new ZipDearchivingDiffReaderDecorator(
+                new TxtDiffFileReader(zipFile))) {
+            toRead = dr.read();
+        }
 
         assertEquals(toWrite, toRead);
         assertFalse(file.exists());

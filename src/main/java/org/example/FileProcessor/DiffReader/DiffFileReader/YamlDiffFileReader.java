@@ -13,4 +13,7 @@ public class YamlDiffFileReader extends SerializationDiffFileReader{
     public YamlDiffFileReader(String fileName) throws IOException {
         super(fileName, new YAMLMapper());
     }
+
+    @Override
+    public String getType(){return "yaml";}
 }

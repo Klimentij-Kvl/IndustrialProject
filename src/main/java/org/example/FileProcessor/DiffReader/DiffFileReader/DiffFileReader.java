@@ -29,5 +29,5 @@ public abstract class DiffFileReader implements DiffReader {
     }
 
     @Override
-    public void close(){}
+    public void close() throws IOException{}
 }
