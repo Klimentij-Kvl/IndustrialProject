@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TarArchivingDiffReaderDecorator extends DearchivingDiffReaderDecorator{
-    public TarArchivingDiffReaderDecorator(DiffReader dr){
+public class TarDearchivingDiffReaderDecorator extends DearchivingDiffReaderDecorator{
+    public TarDearchivingDiffReaderDecorator(DiffReader dr){
        super(dr);
     }
 

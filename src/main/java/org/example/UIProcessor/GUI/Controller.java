@@ -4,7 +4,7 @@ import com.google.common.reflect.ClassPath;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
-import org.apache.commons.lang3.builder.Diff;
+import org.example.DataProcessor.DataProcessor;
 import org.example.DataProcessor.RegexProcessor.RegexProcessor;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
@@ -12,6 +12,7 @@ import org.example.FileProcessor.DiffWriter.DiffWriter;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -21,9 +22,9 @@ import java.util.stream.Collectors;
 public class Controller {
     private List<String> list = new ArrayList<>();
     @FXML
-    private TextField inputPath, outputPath, paramInput1, paramInput2;
+    private TextField inputPath, outputPackagePath, outputFileName, inputParam1, inputParam2, outputParam1, outputParam2;
     @FXML
-    private ChoiceBox<String> inputType, outputType, decInput1, decInput2;
+    private ChoiceBox<String> inputType, outputType, inputOption1, inputOption2, outputOption1, outputOption2;
     @FXML
     private TextArea fileArea;
 
@@ -51,10 +52,28 @@ public class Controller {
     @FXML
     public void initialize() throws IOException{
         remakeChoiceBoxWithClasses(inputType, "DiffReader.DiffFileReader", "^(.+)DiffFileReader$");
-        remakeChoiceBoxWithClasses(decInput1, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
-        remakeChoiceBoxWithClasses(decInput2, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
+        remakeChoiceBoxWithClasses(inputOption1, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
+        remakeChoiceBoxWithClasses(inputOption2, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
 
         remakeChoiceBoxWithClasses(outputType, "DiffWriter.DiffFileWriter", "^(.+)DiffFileWriter$");
+        remakeChoiceBoxWithClasses(outputOption1, "DiffWriter.DiffWriterDecorator", "^(.+)DiffWriterDecorator$");
+        remakeChoiceBoxWithClasses(outputOption2, "DiffWriter.DiffWriterDecorator", "^(.+)DiffWriterDecorator$");
+    }
+
+    private DiffReader decorateDiffReader(DiffReader dr, ChoiceBox<String> option, TextField param) throws Exception{
+        if (option.getValue() != null) {
+            Class<?> clazz = Class.forName("org.example.FileProcessor.DiffReader.DiffReaderDecorator."
+                    + option.getValue() + "DiffReaderDecorator");
+            try {
+                dr = (DiffReader) clazz.getConstructor(DiffReader.class)
+                        .newInstance(dr);
+            }catch (NoSuchMethodException e){
+                dr = (DiffReader) clazz.getConstructor(String.class, DiffReader.class)
+                        .newInstance(param.getText(), dr);
+            }
+        }
+
+        return dr;
     }
 
     @FXML
@@ -67,29 +86,8 @@ public class Controller {
                 DiffReader dr = (DiffReader) clazz
                         .getConstructor(String.class).newInstance(inputPath.getText());
 
-                if (decInput1.getValue() != null) {
-                    clazz = Class.forName("org.example.FileProcessor.DiffReader.DiffReaderDecorator."
-                            + decInput1.getValue() + "DiffReaderDecorator");
-                    try {
-                        dr = (DiffReader) clazz.getConstructor(DiffReader.class)
-                                .newInstance(dr);
-                    }catch (NoSuchMethodException e){
-                        dr = (DiffReader) clazz.getConstructor(String.class, DiffReader.class)
-                                .newInstance(paramInput1.getText(),dr);
-                    }
-                }
-
-                if (decInput2.getValue() != null) {
-                    clazz = Class.forName("org.example.FileProcessor.DiffReader.DiffReaderDecorator."
-                            + decInput2.getValue() + "DiffReaderDecorator");
-                    try {
-                        dr = (DiffReader) clazz.getConstructor(DiffReader.class)
-                                .newInstance(dr);
-                    }catch (NoSuchMethodException e){
-                        dr = (DiffReader) clazz.getConstructor(String.class, DiffReader.class)
-                                .newInstance(paramInput2.getText(), dr);
-                    }
-                }
+                dr = decorateDiffReader(dr, inputOption1, inputParam1);
+                dr = decorateDiffReader(dr, inputOption2, inputParam2);
 
                 list = dr.read();
                 StringBuilder sb = new StringBuilder();
@@ -103,27 +101,58 @@ public class Controller {
         }
     }
 
+    private DiffWriter decorateDiffWriter(DiffWriter dw, ChoiceBox<String> option, TextField param) throws Exception{
+        if(option.getValue() != null){
+            Class<?> clazz = Class.forName("org.example.FileProcessor.DiffWriter.DiffWriterDecorator."
+                    + option.getValue() + "DiffWriterDecorator");
+            try {
+                dw = (DiffWriter) clazz.getConstructor(DiffWriter.class)
+                        .newInstance(dw);
+            }catch (NoSuchMethodException e){
+                dw = (DiffWriter) clazz.getConstructor(String.class, DiffWriter.class)
+                        .newInstance(param.getText(), dw);
+            }
+        }
+
+        return dw;
+    }
+
     @FXML
     public void ClickWrite(){
-        try{
-            Class<?> clazz = Class.forName("org.example.FileProcessor.DiffWriter.DiffFileWriter."
-                    + outputType.getValue() +  "DiffFileWriter");
-            try(DiffWriter dw = (DiffWriter)clazz
-                    .getConstructor(String.class).newInstance(outputPath.getText())){
-                dw.write(list);
+        if(outputType.getValue() != null){
+            try{
+                Class<?> clazz = Class.forName("org.example.FileProcessor.DiffWriter.DiffFileWriter."
+                        + outputType.getValue() + "DiffFileWriter");
+                DiffWriter dw = (DiffWriter) clazz.getConstructor(String.class).newInstance(
+                        outputPackagePath.getText() + outputFileName.getText()
+                                + "." + outputType.getValue().toLowerCase());
+
+                dw = decorateDiffWriter(dw, outputOption1, outputParam1);
+                dw = decorateDiffWriter(dw, outputOption2, outputParam2);
+
+                String[] strings = fileArea.getText().split("\n");
+                List<String> newList = Arrays.asList(strings);
+
+                dw.write(newList);
+                dw.close();
+            }catch (Exception e){
+                System.out.println(e.getMessage());
             }
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
 
     @FXML
     public void ClickEdit(){
-        RegexProcessor regexProcessor = new RegexProcessor();
-        list = regexProcessor.process(list);
+        DataProcessor proc = new RegexProcessor();
+
+        String[] strings = fileArea.getText().split("\n");
+        List<String> newList = Arrays.asList(strings);
+        newList = proc.process(newList);
+
         StringBuilder sb = new StringBuilder();
-        for(String s : list)
+        for(String s : newList)
             sb.append(s).append("\n");
+        sb.deleteCharAt(sb.lastIndexOf("\n"));
         fileArea.setText(sb.toString());
     }
 }

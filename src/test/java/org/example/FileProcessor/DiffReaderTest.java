@@ -9,8 +9,8 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.example.FileProcessor.DiffReader.DiffFileReader.*;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffReader.DiffReaderDecorator.DecryptionDiffReaderDecorator;
-import org.example.FileProcessor.DiffReader.DiffReaderDecorator.TarArchivingDiffReaderDecorator;
-import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipArchivingDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.TarDearchivingDiffReaderDecorator;
+import org.example.FileProcessor.DiffReader.DiffReaderDecorator.ZipDearchivingDiffReaderDecorator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
@@ -166,7 +166,7 @@ public class DiffReaderTest {
         TxtWrite(txtFile);
         Zip(txtFile, zipFile);
 
-        try(DiffReader dr = new ZipArchivingDiffReaderDecorator(new TxtDiffFileReader(zipFile))) {
+        try(DiffReader dr = new ZipDearchivingDiffReaderDecorator(new TxtDiffFileReader(zipFile))) {
             toRead = dr.read();
         }
         assertEquals(toWrite, toRead);
@@ -180,7 +180,7 @@ public class DiffReaderTest {
         File tarFile = new File(PATH_RES + "TarTxtReaderTest.tar");
         TxtWrite(txtFile);
         Tar(txtFile, tarFile);
-        try(DiffReader dr = new TarArchivingDiffReaderDecorator(new TxtDiffFileReader(tarFile))){
+        try(DiffReader dr = new TarDearchivingDiffReaderDecorator(new TxtDiffFileReader(tarFile))){
             toRead = dr.read();
         }
         assertEquals(toWrite, toRead);
@@ -199,7 +199,7 @@ public class DiffReaderTest {
         Zip(encFile, zipFile);
 
         try(DiffReader dr =
-                new ZipArchivingDiffReaderDecorator(
+                new ZipDearchivingDiffReaderDecorator(
                         new DecryptionDiffReaderDecorator(
                                 "12345",  new TxtDiffFileReader(zipFile)))){
             toRead = dr.read();
@@ -222,7 +222,7 @@ public class DiffReaderTest {
         Encrypt(zipFile, encFile);
 
         DiffReader dr = new DecryptionDiffReaderDecorator("12345",
-                new ZipArchivingDiffReaderDecorator(
+                new ZipDearchivingDiffReaderDecorator(
                         new TxtDiffFileReader(encFile)));
         toRead = dr.read();
         dr.close();

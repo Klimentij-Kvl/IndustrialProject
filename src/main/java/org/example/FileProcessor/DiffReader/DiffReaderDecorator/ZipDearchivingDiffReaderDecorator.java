@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipInputStream;
 
-public class ZipArchivingDiffReaderDecorator extends DearchivingDiffReaderDecorator {
-    public ZipArchivingDiffReaderDecorator(DiffReader dr){
+public class ZipDearchivingDiffReaderDecorator extends DearchivingDiffReaderDecorator {
+    public ZipDearchivingDiffReaderDecorator(DiffReader dr){
         super(dr);
     }
 

@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="647.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.UIProcessor.GUI.Controller">
+<AnchorPane prefHeight="746.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.UIProcessor.GUI.Controller">
    <children>
       <Label layoutX="36.0" layoutY="57.0" text="Type an asbsolute path to input file:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="inputPath" layoutX="36.0" layoutY="82.0" prefHeight="25.0" prefWidth="253.0">
+      <TextField fx:id="inputPath" layoutX="36.0" layoutY="82.0" prefHeight="25.0" prefWidth="253.0" text="src/resources/input.json">
          <font>
             <Font size="16.0" />
          </font></TextField>
-      <Label layoutX="36.0" layoutY="426.0" text="Type an asbsolute path to output file:">
+      <Label layoutX="36.0" layoutY="323.0" text="Type an asbsolute path to output package:">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="outputPath" layoutX="36.0" layoutY="451.0" prefHeight="25.0" prefWidth="264.0">
+      <TextField fx:id="outputPackagePath" layoutX="36.0" layoutY="356.0" prefHeight="25.0" prefWidth="264.0" text="src/resources/">
          <font>
             <Font size="16.0" />
          </font></TextField>
-      <Button layoutX="300.0" layoutY="82.0" mnemonicParsing="false" onAction="#ClickRead" text="Read">
+      <Button layoutX="409.0" layoutY="127.0" mnemonicParsing="false" onAction="#ClickRead" prefHeight="79.0" prefWidth="95.0" text="Read">
          <font>
             <Font size="16.0" />
          </font></Button>
-      <Button layoutX="309.0" layoutY="451.0" mnemonicParsing="false" onAction="#ClickWrite" text="Write">
+      <Button layoutX="409.0" layoutY="426.0" mnemonicParsing="false" onAction="#ClickWrite" prefHeight="69.0" prefWidth="84.0" text="Write">
          <font>
             <Font size="16.0" />
          </font></Button>
-      <TextArea fx:id="fileArea" layoutX="495.0" layoutY="97.0" prefHeight="456.0" prefWidth="416.0" />
-      <Button layoutX="431.0" layoutY="308.0" mnemonicParsing="false" onAction="#ClickEdit" text="Edit">
+      <TextArea fx:id="fileArea" layoutX="614.0" layoutY="70.0" prefHeight="456.0" prefWidth="416.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextArea>
+      <Button layoutX="704.0" layoutY="546.0" mnemonicParsing="false" onAction="#ClickEdit" prefHeight="101.0" prefWidth="118.0" text="Replace &#10;exprassions">
          <font>
             <Font size="16.0" />
          </font>
@@ -44,19 +51,19 @@
          </font>
       </Label>
       <ChoiceBox fx:id="inputType" layoutX="36.0" layoutY="159.0" prefHeight="25.0" prefWidth="108.0" />
-      <Label layoutX="36.0" layoutY="497.0" text="Type of output file:">
+      <Label layoutX="36.0" layoutY="480.0" text="Type of output file:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="outputType" layoutX="36.0" layoutY="528.0" prefHeight="25.0" prefWidth="93.0" />
+      <ChoiceBox fx:id="outputType" layoutX="36.0" layoutY="513.0" prefHeight="25.0" prefWidth="118.0" />
       <Label layoutX="168.0" layoutY="130.0" prefHeight="20.0" prefWidth="85.0" text="Add option 1:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="decInput1" layoutX="168.0" layoutY="159.0" prefHeight="25.0" prefWidth="85.0" />
-      <ChoiceBox fx:id="decInput2" layoutX="283.0" layoutY="159.0" prefHeight="25.0" prefWidth="85.0" />
+      <ChoiceBox fx:id="inputOption1" layoutX="168.0" layoutY="159.0" prefHeight="25.0" prefWidth="85.0" />
+      <ChoiceBox fx:id="inputOption2" layoutX="283.0" layoutY="159.0" prefHeight="25.0" prefWidth="85.0" />
       <Label layoutX="286.0" layoutY="132.0" text="Add option 2:">
          <font>
             <Font size="14.0" />
@@ -67,12 +74,58 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="paramInput1" layoutX="168.0" layoutY="225.0" prefHeight="25.0" prefWidth="84.0" />
+      <TextField fx:id="inputParam1" layoutX="168.0" layoutY="225.0" prefHeight="25.0" prefWidth="84.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
       <Label layoutX="286.0" layoutY="198.0" text="Add param 2:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="paramInput2" layoutX="284.0" layoutY="225.0" prefHeight="25.0" prefWidth="84.0" />
+      <TextField fx:id="inputParam2" layoutX="284.0" layoutY="225.0" prefHeight="25.0" prefWidth="84.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <Label layoutX="168.0" layoutY="480.0" text="Add option 1:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="outputOption1" layoutX="168.0" layoutY="513.0" prefHeight="25.0" prefWidth="85.0" />
+      <Label layoutX="273.0" layoutY="480.0" prefHeight="17.0" prefWidth="85.0" text="Add option 2:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ChoiceBox fx:id="outputOption2" layoutX="273.0" layoutY="513.0" prefHeight="25.0" prefWidth="85.0" />
+      <Label layoutX="169.0" layoutY="552.0" text="Add param 1:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="274.0" layoutY="552.0" prefHeight="20.0" prefWidth="84.0" text="Add param 2:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="outputParam1" layoutX="166.0" layoutY="581.0" prefHeight="25.0" prefWidth="84.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <TextField fx:id="outputParam2" layoutX="274.0" layoutY="581.0" prefHeight="25.0" prefWidth="84.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextField>
+      <Label layoutX="36.0" layoutY="401.0" text="Type a name for out file:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="outputFileName" layoutX="36.0" layoutY="433.0" prefHeight="25.0" prefWidth="264.0" text="out">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
    </children>
 </AnchorPane>
