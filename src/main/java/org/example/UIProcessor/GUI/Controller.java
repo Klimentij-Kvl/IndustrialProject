@@ -164,8 +164,9 @@ public class Controller {
         FileChooser chooser = new FileChooser();
         chooser.setInitialDirectory(new File("src/resources/"));
         chooser.setTitle("Choose an input file:");
+
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
-                "all files", "*.txt", "*.xml", "*.json", "*.yaml", "*.zip", "*.tar"));
+                "all files", "*.*"));
         try{
             inputPath.setText(chooser.showOpenDialog(new Stage()).getAbsolutePath());
         }catch (NullPointerException e){
