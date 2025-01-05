@@ -1,6 +1,7 @@
 package org.example.UIProcessor.GUI;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -26,7 +27,7 @@ public class GUI extends Application implements UIProcessor {
 
     @Override
     public void stop(){
-
+        Platform.exit();
     }
 
     @Override

@@ -26,7 +26,9 @@ import java.util.stream.Collectors;
 public class Controller {
     private List<String> list = new ArrayList<>();
     @FXML
-    private TextField inputPath, outputPackagePath, outputFileName, inputParam1, inputParam2, outputParam1, outputParam2;
+    private TextField inputPath, outputPackagePath, outputFileName,
+            inputParam1, inputParam2, outputParam1, outputParam2,
+            funcNameField, formulaField;
     @FXML
     private ChoiceBox<String> inputType, outputType, inputOption1, inputOption2, outputOption1, outputOption2;
     @FXML
@@ -165,7 +167,7 @@ public class Controller {
         chooser.setInitialDirectory(new File("src/resources/"));
         chooser.setTitle("Choose an input file:");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
-                "all files", "*.txt", "*.xml", "*.json", "*.yaml", "*.zip", "*.tar"));
+                "all files", "*.*"));
         try{
             inputPath.setText(chooser.showOpenDialog(new Stage()).getAbsolutePath());
         }catch (NullPointerException e){
@@ -183,5 +185,11 @@ public class Controller {
         }catch (NullPointerException e){
             outputPackagePath.setText("");
         }
+    }
+
+    @FXML
+    public void makeFunc(){
+        DataProcessor processor = new RegexProcessor();
+        processor.CreateFunction(funcNameField.getText(), formulaField.getText());
     }
 }

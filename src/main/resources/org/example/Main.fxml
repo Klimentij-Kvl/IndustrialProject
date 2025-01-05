@@ -4,20 +4,20 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="746.0" prefWidth="1062.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.UIProcessor.GUI.Controller">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.UIProcessor.GUI.Controller">
    <children>
       <Label layoutX="36.0" layoutY="57.0" text="Type an asbsolute path to input file:">
          <font>
-            <Font size="16.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="inputPath" layoutX="36.0" layoutY="82.0" prefHeight="25.0" prefWidth="253.0" />
+      <TextField fx:id="inputPath" layoutX="36.0" layoutY="82.0" prefHeight="25.0" prefWidth="272.0" />
       <Label layoutX="36.0" layoutY="323.0" text="Type an asbsolute path to output package:">
          <font>
-            <Font size="16.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="outputPackagePath" layoutX="36.0" layoutY="356.0" prefHeight="25.0" prefWidth="264.0" />
+      <TextField fx:id="outputPackagePath" layoutX="36.0" layoutY="356.0" prefHeight="25.0" prefWidth="272.0" />
       <Button layoutX="409.0" layoutY="127.0" mnemonicParsing="false" onAction="#ClickRead" prefHeight="79.0" prefWidth="95.0" text="Read">
          <font>
             <Font size="16.0" />
@@ -109,7 +109,7 @@
          </font></TextField>
       <Label layoutX="36.0" layoutY="401.0" text="Type a name for out file:">
          <font>
-            <Font size="16.0" />
+            <Font name="System Bold" size="16.0" />
          </font>
       </Label>
       <TextField fx:id="outputFileName" layoutX="36.0" layoutY="433.0" prefHeight="25.0" prefWidth="264.0">
@@ -117,7 +117,37 @@
             <Font size="16.0" />
          </font>
       </TextField>
-      <Button layoutX="303.0" layoutY="82.0" mnemonicParsing="false" onAction="#ClickInputFile" text="File" />
-      <Button layoutX="311.0" layoutY="361.0" mnemonicParsing="false" onAction="#ClickOutputDir" text="Dir" />
+      <Button layoutX="321.0" layoutY="82.0" mnemonicParsing="false" onAction="#ClickInputFile" text="File" />
+      <Button layoutX="322.0" layoutY="356.0" mnemonicParsing="false" onAction="#ClickOutputDir" text="Dir" />
+      <Label layoutX="50.0" layoutY="699.0" text="Make your own function:">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="funcNameField" layoutX="45.0" layoutY="770.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+      <Label layoutX="50.0" layoutY="735.0" text="Function name:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="277.0" layoutY="735.0" text="Formula:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="formulaField" layoutX="272.0" layoutY="770.0" prefHeight="35.0" prefWidth="144.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </TextField>
+      <Button layoutX="451.0" layoutY="770.0" mnemonicParsing="false" onAction="#makeFunc" text="Make">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
