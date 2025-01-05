@@ -242,4 +242,48 @@ class DiffWriterTest {
         assertTrue(txtFile.delete());
 
     }
+
+    @Test
+    void ZipZipTxtWriteTest() throws Exception{
+        File txtFile = new File(PATH_RES + "ZipZipTxtWriteTest.txt");
+        try(DiffWriter dw = new ZipArchivingDiffWriterDecorator(
+                            new ZipArchivingDiffWriterDecorator(
+                            new TxtDiffFileWriter(txtFile))))
+        {
+            dw.write(toWrite);
+        }
+
+        File zip2File = new File(PATH_RES + "ZipZipTxtWriteTest.zip");
+        File zipFile = new File(PATH_RES + "2ZipZipTxtWriteTest.zip");
+        DeZip(zip2File, zipFile);
+        DeZip(zipFile, txtFile);
+        toRead = TxtRead(txtFile);
+
+        assertEquals(toWrite, toRead);
+        assertTrue(zip2File.delete());
+        assertTrue(zipFile.delete());
+        assertTrue(txtFile.delete());
+    }
+
+    @Test
+    void TarTarTxtWriteTest() throws Exception{
+        File txtFile = new File(PATH_RES + "TarTarTxtWriteTest.txt");
+        try(DiffWriter dw = new TarArchivingDiffWriterDecorator(
+                new TarArchivingDiffWriterDecorator(
+                        new TxtDiffFileWriter(txtFile))))
+        {
+            dw.write(toWrite);
+        }
+
+        File tar2File = new File(PATH_RES + "TarTarTxtWriteTest.tar");
+        File tarFile = new File(PATH_RES + "2TarTarTxtWriteTest.tar");
+        DeTar(tar2File, tarFile);
+        DeTar(tarFile, txtFile);
+        toRead = TxtRead(txtFile);
+
+        assertEquals(toWrite, toRead);
+        assertTrue(tar2File.delete());
+        assertTrue(tarFile.delete());
+        assertTrue(txtFile.delete());
+    }
 }

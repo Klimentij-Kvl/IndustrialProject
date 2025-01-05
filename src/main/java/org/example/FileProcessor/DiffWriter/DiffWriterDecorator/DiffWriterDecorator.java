@@ -2,10 +2,11 @@ package org.example.FileProcessor.DiffWriter.DiffWriterDecorator;
 
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class DiffWriterDecorator implements DiffWriter {
+public abstract class DiffWriterDecorator implements DiffWriter {
 
     private final DiffWriter _dw;
 
@@ -24,12 +25,12 @@ public class DiffWriterDecorator implements DiffWriter {
     }
 
     @Override
-    public String getPath() {
-        return _dw.getPath();
+    public void close() throws IOException{
+        _dw.close();
     }
 
     @Override
-    public void close() throws IOException{
-        _dw.close();
+    public String getPath(){
+        return _dw.getPath();
     }
 }
