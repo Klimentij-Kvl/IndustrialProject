@@ -1,60 +1,91 @@
 package org.example.DataProcessor.RegexProcessor;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CalculateExpressionTest {
 
-    @Test
-    public void testSimpleExpressions(){
-        //Суммы и разности
-        assertEquals("5",CalculateExpression.calculate("3+2"));
-        assertEquals("-2",CalculateExpression.calculate("2-4"));
-        assertEquals("-1",CalculateExpression.calculate("-3+2"));
-        assertEquals("4", CalculateExpression.calculate("5+2-3"));
-        //Произведение
-        assertEquals("6",CalculateExpression.calculate("3*2"));
-        assertEquals("-6",CalculateExpression.calculate("-3*2"));
-        assertEquals("-6",CalculateExpression.calculate("3*-2"));
-        assertEquals("10", CalculateExpression.calculate("5*6/3"));
-        //Частное и деление на ноль
-        assertEquals("3",CalculateExpression.calculate("6/2"));
-        assertEquals("3",CalculateExpression.calculate("6÷2"));
-        assertEquals("-3",CalculateExpression.calculate("-6/2"));
-        assertEquals("1,5",CalculateExpression.calculate("6/4"));
-        assertEquals("-1,5",CalculateExpression.calculate("-6/4"));
-        assertEquals("-2,4",CalculateExpression.result("6/-2.5"));
-        assertEquals("2,4",CalculateExpression.result("-6/-2.5"));
+    @ParameterizedTest
+    @CsvSource({
+            "3, 3",
+            "-3, -3",
+            "+3, 3",
+            "--3, 3"
+    })
+    public void testNumber(String expression, String expected) {
+        assertEquals(expected, CalculateExpression.calculate(expression));
+    }
 
+    @ParameterizedTest
+    @CsvSource({
+            "3+2, 5",
+            "2-4, -2",
+            "-3+2, -1"
+    })
+    public void testSimpleSumAndDifference(String expression, String expected) {
+        assertEquals(expected, CalculateExpression.calculate(expression));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "3*2, 6",
+            "-3*2, -6",
+            "3*-2, -6",
+            "4/-2, -2",
+            "4/-2, -2",
+            "-4÷2, -2",
+            "-4÷2, -2",
+            "5*6/3, 10"
+    })
+    public void testSimpleMultiplicationAndDivision(String expression, String expected) {
+        assertEquals(expected, CalculateExpression.calculate(expression));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "6/4, 1.5",
+            "6÷4, 1.5",
+            "-6/4, -1.5",
+            "6/-2.5, -2.4",
+            "6÷-2.5, -2.4",
+            "-6/-2.5, 2.4"
+    })
+    public void testDivisionWithDecimals(String expression, String expected) {
+        String actual = CalculateExpression.calculate(expression).replace(',', '.');
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void testDivisionByZero() {
         assertThrows(ArithmeticException.class, () -> {
             CalculateExpression.calculate("6/0");
         });
     }
 
-    @Test
-    public void testNumber(){
-        assertEquals("3",CalculateExpression.calculate("3"));
-        assertEquals("-3",CalculateExpression.calculate("-3"));
-        assertEquals("3",CalculateExpression.calculate("+3"));
-        assertEquals("3",CalculateExpression.calculate("--3"));
+    @ParameterizedTest
+    @CsvSource({
+            "5+2-3, 4",
+            "(5+2)-3, 4",
+            "5+(2-3), 4",
+            "(5+2)-(2+3), 2",
+            "5*(2-3)+7, 2",
+            "5+(2-3)*7, -2",
+            "5+(2-3)*7-2*-3, 4",
+            "2-3*-2, 8",
+            "5+(2-3*-2), 13",
+            "5+(2-3/-2), 8.5"
+    })
+    public void testComplicatedExpressions(String expression, String expected) {
+        String actual = CalculateExpression.calculate(expression).replace(',', '.');
+        assertEquals(expected, actual);
     }
 
-
     @Test
-    public void testComplicatedExpressions(){
-        assertEquals("4", CalculateExpression.result("(5+2)-3"));
-        assertEquals("4", CalculateExpression.result("5+(2-3)"));
-        assertEquals("2", CalculateExpression.result("(5+2)-(2+3)"));
-        assertEquals("2", CalculateExpression.result("5*(2-3)+7"));
-        assertEquals("-2", CalculateExpression.result("5+(2-3)*7"));
-        assertEquals("4", CalculateExpression.calculate("5+(2-3)*7-2*-3"));
-        assertEquals("8", CalculateExpression.calculate("2-3*-2"));
-        assertEquals("13", CalculateExpression.calculate("5+(2-3*-2)"));
-        assertEquals("8,5", CalculateExpression.calculate("5+(2-3/-2)"));
-
+    public void testComplicatedExpressionWithDivisionByZero() {
         assertThrows(ArithmeticException.class, () -> {
             CalculateExpression.calculate("5+(2-3)/0");
         });
     }
-
 }
