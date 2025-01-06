@@ -7,11 +7,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RegexProcessorTest {
-    RegexProcessor regexProcessor = new RegexProcessor();
+    org.example.DataProcessor.RegexProcessor.RegexProcessor regexProcessor = new org.example.DataProcessor.RegexProcessor.RegexProcessor();
     @Test
 
     void testProcess() {
-        regexProcessor.CreateFunction("abort", "x+y");
+        //regexProcessor.CreateFunction("abort", "x+y");
         assertEquals(List.of("Разность -2 и -10"," 2 нас удивила."),regexProcessor.process(List.of("Разность -5+3 и -10"," - (-2) нас удивила.")));
         //assertEquals(List.of("Разность 3"),regexProcessor.process(List.of("Разность abort(1,2)")));
         assertEquals(List.of("Рассчитайте 2,5 ."),regexProcessor.process(List.of("Рассчитайте ((2 + 3) * (5 - 3)) / 4.")));
@@ -21,7 +21,7 @@ class RegexProcessorTest {
 
     @Test
     void testExtractExpressions() {
-        FindExpression findExpression = new FindExpression();
+        org.example.DataProcessor.RegexProcessor.FindExpression findExpression = new org.example.DataProcessor.RegexProcessor.FindExpression();
         List<TestCase> testCases = List.of(
                 new TestCase(List.of("Сегодня мы решали 10 + 5, и это оказалось просто."), List.of("10+5")),
                 new TestCase(List.of("Результат 12 * 2"," и 30 ÷ 5 был рассчитан за несколько минут."), List.of("12*2", "30÷5")),

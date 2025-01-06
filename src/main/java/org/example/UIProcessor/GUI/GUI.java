@@ -14,7 +14,7 @@ public class GUI extends Application implements UIProcessor {
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1920, 1080);
+        Scene scene = new Scene(fxmlLoader.load(), 1080, 900);
         primaryStage.setTitle("Industrial Project");
         primaryStage.setScene(scene);
         primaryStage.show();

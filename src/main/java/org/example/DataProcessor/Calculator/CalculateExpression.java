@@ -1,17 +1,20 @@
-package org.example.DataProcessor.RegexProcessor;
+package org.example.DataProcessor.Calculator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class CalculateExpression {
+public class CalculateExpression extends CalculatorAdapter {
     protected String expression;
 
-    public static String result(String expression)throws ArithmeticException{
+    public CalculateExpression(){}
+
+    public String result(String expression)throws ArithmeticException{
         String result = calculate(expression);
         return sign(result);
     }
 
-    public static String calculate(String expr) throws ArithmeticException {
+    @Override
+    public String calculate(String expr) throws ArithmeticException {
         {
             Pattern pattern = Pattern.compile("\\(([^()]+)\\)");
             Matcher matcher = pattern.matcher(expr);

@@ -1,17 +1,15 @@
-package org.example.DataProcessor.LibraryProcessor;
+package org.example.DataProcessor.Calculator;
 
 import tk.pratanumandal.expr4j.ExpressionEvaluator;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-public class LibraryProcessor
+public class LibraryCalculator extends CalculatorAdapter
 {
-
-    public static String calculate(String expr)
+    @Override
+    public String calculate(String expr)
     {
         try
         {
@@ -23,18 +21,12 @@ public class LibraryProcessor
         }
         catch (Exception e)
         {
-            throw new ArithmeticException("[Ошибка вычисления]");
+            //throw new ArithmeticException("[Ошибка вычисления]");
+            return expr;
         }
     }
 
-    public static List<String> processExpressions(List<String> data)
-    {
-        return data.stream()
-                .map(LibraryProcessor::extractAndCalculate)
-                .collect(Collectors.toList());
-    }
-
-    private static String extractAndCalculate(String line)
+    private String extractAndCalculate(String line)
     {
         Pattern pattern = Pattern.compile("\\s*([0-9+\\-*/().]+)\\s*");
         Matcher matcher = pattern.matcher(line);

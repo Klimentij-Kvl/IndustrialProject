@@ -7,8 +7,11 @@ import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.DataProcessor.DataProcessor;
-import org.example.DataProcessor.RegexProcessor.RegexProcessor;
+import org.example.DataProcessor.Calculator.CalculateExpression;
+import org.example.DataProcessor.Calculator.LibraryCalculator;
+import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
+import org.example.DataProcessor.Replacer.RegexReplacer;
+import org.example.DataProcessorFactory;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
@@ -148,7 +151,8 @@ public class Controller {
 
     @FXML
     public void ClickEdit(){
-        DataProcessor proc = new RegexProcessor();
+        DataProcessorFactory proc = new DataProcessorFactory(
+                new RegexExtractor(), new RegexReplacer(), new CalculateExpression());
 
         String[] strings = fileArea.getText().split("\n");
         List<String> newList = Arrays.asList(strings);
@@ -189,7 +193,6 @@ public class Controller {
 
     @FXML
     public void makeFunc(){
-        DataProcessor processor = new RegexProcessor();
-        processor.CreateFunction(funcNameField.getText(), formulaField.getText());
+        DataProcessorFactory.addFunction(funcNameField.getText(), formulaField.getText());
     }
 }

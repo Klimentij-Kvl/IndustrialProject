@@ -1,42 +1,14 @@
-package org.example.DataProcessor.RegexProcessor;
+package org.example.DataProcessor.Replacer;
 
 import org.example.DataBase.DataStorage;
-import org.example.DataProcessor.DataProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegexProcessor implements DataProcessor {
-
+public class RegexReplacer implements Replacer{
     @Override
-    public List<String> process(List<String> data) {
-        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
-        makeFuncExpression.makeFunctionsString();                               // Создаём выражения для функции
-        List<String> expressions = extractExpressions(data);                    // Извлекаем выражения
-        List<String> calculatedExpressions = calculateExpressions(expressions); // Вычисляем выражения
-        return replaceExpressionsInData(data, calculatedExpressions);           // Заменяем выражения в данных
-    }
+    public List<String> replace(List<String> rawList, List<String> calculatedExpressions){
 
-    @Override
-    public boolean CreateFunction(String functionName, String formula) {
-        DataStorage dataStorage = DataStorage.getInstance();
-        dataStorage.addFunction(functionName, formula);
-        return true;
-    }
-
-    List<String> extractExpressions(List<String> data) {
-        FindExpression findExpression = new FindExpression();
-        return new ArrayList<>(findExpression.find(data));
-    }
-    List<String> calculateExpressions(List<String> expressions) {
-        List<String> calculatedExpressions = new ArrayList<>();
-        for (String expression : expressions) {
-            calculatedExpressions.add(CalculateExpression.calculate(expression));
-        }
-        return calculatedExpressions;
-    }
-
-    List<String> replaceExpressionsInData(List<String> data, List<String> calculatedExpressions) {
         int index = 0;
         List<String> replacedExpressions = new ArrayList<>();
         DataStorage dataStorage = DataStorage.getInstance();
@@ -57,7 +29,7 @@ public class RegexProcessor implements DataProcessor {
                     + "|((-*\\s*)*)" + functionsPlus.substring(1) + ")";
         }
 
-        for (String line : data) {
+        for (String line : rawList) {
             String modifiedLine;
             do {
                 if (index >= calculatedExpressions.size()) {
@@ -76,6 +48,5 @@ public class RegexProcessor implements DataProcessor {
                 }
             } while (true);
         }
-        return replacedExpressions;
-    }
+        return replacedExpressions;    }
 }
