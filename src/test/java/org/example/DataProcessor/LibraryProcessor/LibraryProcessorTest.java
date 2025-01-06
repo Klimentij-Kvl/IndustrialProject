@@ -26,8 +26,22 @@ class LibraryProcessorTest
         assertThrows(ArithmeticException.class, () -> LibraryProcessor.calculate("6/0"));
     }
     @Test
-    void testNumberFormatting()
+    void testTrigonometricConstants()
     {
-        assertEquals("3.14159", LibraryProcessor.calculate("3.14159"));
+        assertEquals("0", LibraryProcessor.calculate("sin(pi)"));
+        assertEquals("0", LibraryProcessor.calculate("tan(0)"));
+        assertEquals("-1", LibraryProcessor.calculate("cos(pi)"));
+    }
+    @Test
+    void testArithmeticConstants()
+    {
+        assertEquals("1", LibraryProcessor.calculate("ln(e)"));
+        assertEquals("0", LibraryProcessor.calculate("ln(1)"));
+    }
+    @Test
+    void testMathematicalConstants()
+    {
+        assertEquals("3.1415926536", LibraryProcessor.calculate("pi"));
+        assertEquals("2.7182818285", LibraryProcessor.calculate("e"));
     }
 }
