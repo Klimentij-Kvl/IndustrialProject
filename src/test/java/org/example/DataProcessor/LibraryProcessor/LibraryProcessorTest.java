@@ -2,6 +2,7 @@ package org.example.DataProcessor.LibraryProcessor;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 class LibraryProcessorTest
 {
@@ -43,5 +44,12 @@ class LibraryProcessorTest
     {
         assertEquals("3.1415926536", LibraryProcessor.calculate("pi"));
         assertEquals("2.7182818285", LibraryProcessor.calculate("e"));
+    }
+    @Test
+    void testProcessExpressions()
+    {
+        List<String> input = List.of("  3 + 2", "3          * 2", "(5 + 2) - 3");
+        List<String> expected = List.of("5", "6", "4");
+        assertEquals(expected, LibraryProcessor.processExpressions(input));
     }
 }
