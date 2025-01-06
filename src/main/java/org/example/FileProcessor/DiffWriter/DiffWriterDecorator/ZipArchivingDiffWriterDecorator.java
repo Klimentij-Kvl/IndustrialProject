@@ -9,6 +9,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 public class ZipArchivingDiffWriterDecorator extends ArchivingDiffWriterDecorator {
+
+    private String path;
+
     public ZipArchivingDiffWriterDecorator(DiffWriter dw){
         super(dw);
     }
@@ -23,19 +26,27 @@ public class ZipArchivingDiffWriterDecorator extends ArchivingDiffWriterDecorato
             String pathZip = matcher.group(1) + matcher.group(2) + ".zip";
             String fileName = matcher.group(2) + matcher.group(3);
 
-            try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(pathZip));
-                 FileInputStream fis = new FileInputStream(path)
-            ) {
+            byte[] b;
+            try(FileInputStream fis = new FileInputStream(path)){
+                b = fis.readAllBytes();
+            }
+
+            try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(pathZip))) {
                 zos.putNextEntry(new ZipEntry(fileName));
-                byte[] b = fis.readAllBytes();
                 zos.write(b);
                 zos.closeEntry();
             }
 
             super.close();
-            super.path = pathZip;
-            file.delete();
+            this.path = pathZip;
+            if(!pathZip.equals(path))
+                file.delete();
         }
         else throw new FileNotFoundException();
+    }
+
+    @Override
+    public String getPath(){
+        return path;
     }
 }

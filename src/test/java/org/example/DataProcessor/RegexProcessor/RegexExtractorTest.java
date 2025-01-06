@@ -8,7 +8,7 @@ import static java.util.Arrays.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
-class FindExpressionTest {
+class RegexExtractorTest {
 
     private final FindExpression findExpression = new FindExpression();
 

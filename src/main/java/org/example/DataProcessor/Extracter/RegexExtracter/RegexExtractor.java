@@ -1,6 +1,7 @@
-package org.example.DataProcessor.RegexProcessor;
+package org.example.DataProcessor.Extracter.RegexExtracter;
 
 import org.example.DataBase.DataStorage;
+import org.example.DataProcessor.Extracter.Extracter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class FindExpression {
+public class RegexExtractor implements Extracter {
 
     private final DataStorage dataStorage;
     private final String functionsMul;
@@ -27,7 +28,7 @@ public class FindExpression {
     private final Pattern RETURN_USEFUL_BRACKETS_PATTERN;
 
 
-    public FindExpression(DataStorage dataStorage) {
+    public RegexExtractor(DataStorage dataStorage) {
         this.dataStorage = Objects.requireNonNull(dataStorage, "dataStorage must not be null");
 
         this.functionsMul = Optional.ofNullable(dataStorage.getFunctionsMul()).orElse("");
@@ -44,12 +45,15 @@ public class FindExpression {
         this.RETURN_USEFUL_BRACKETS_PATTERN = Pattern.compile("\\[([^\\[\\]]*)]");
     }
 
-    public FindExpression() {
+    public RegexExtractor() {
         this(DataStorage.getInstance());
     }
 
-    public List<String> find(List<String> lines) {
-        return lines.stream()
+    @Override
+    public List<String> extract(List<String> rawList) {
+        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
+        makeFuncExpression.makeFunctionsString();
+        return rawList.stream()
                 .flatMap(line -> findComputableExpressions(line).stream())
                 .map(this::deleteSpaces)
                 .map(this::deleteSingleObjectBrackets)

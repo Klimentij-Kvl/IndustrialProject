@@ -7,8 +7,11 @@ import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.DataProcessor.DataProcessor;
-import org.example.DataProcessor.RegexProcessor.RegexProcessor;
+import org.example.DataProcessor.Calculator.CalculateExpression;
+import org.example.DataProcessor.Calculator.LibraryCalculator;
+import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
+import org.example.DataProcessor.Replacer.RegexReplacer;
+import org.example.DataProcessorFactory;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 
@@ -26,7 +29,9 @@ import java.util.stream.Collectors;
 public class Controller {
     private List<String> list = new ArrayList<>();
     @FXML
-    private TextField inputPath, outputPackagePath, outputFileName, inputParam1, inputParam2, outputParam1, outputParam2;
+    private TextField inputPath, outputPackagePath, outputFileName,
+            inputParam1, inputParam2, outputParam1, outputParam2,
+            funcNameField, formulaField;
     @FXML
     private ChoiceBox<String> inputType, outputType, inputOption1, inputOption2, outputOption1, outputOption2;
     @FXML
@@ -146,7 +151,8 @@ public class Controller {
 
     @FXML
     public void ClickEdit(){
-        DataProcessor proc = new RegexProcessor();
+        DataProcessorFactory proc = new DataProcessorFactory(
+                new RegexExtractor(), new RegexReplacer(), new CalculateExpression());
 
         String[] strings = fileArea.getText().split("\n");
         List<String> newList = Arrays.asList(strings);
@@ -165,7 +171,7 @@ public class Controller {
         chooser.setInitialDirectory(new File("src/resources/"));
         chooser.setTitle("Choose an input file:");
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
-                "all files", "*.txt", "*.xml", "*.json", "*.yaml", "*.zip", "*.tar"));
+                "all files", "*.*"));
         try{
             inputPath.setText(chooser.showOpenDialog(new Stage()).getAbsolutePath());
         }catch (NullPointerException e){
@@ -183,5 +189,10 @@ public class Controller {
         }catch (NullPointerException e){
             outputPackagePath.setText("");
         }
+    }
+
+    @FXML
+    public void makeFunc(){
+        DataProcessorFactory.addFunction(funcNameField.getText(), formulaField.getText());
     }
 }

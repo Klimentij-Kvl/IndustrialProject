@@ -1,6 +1,7 @@
 package org.example.UIProcessor.GUI;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -13,7 +14,7 @@ public class GUI extends Application implements UIProcessor {
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 800);
+        Scene scene = new Scene(fxmlLoader.load(), 1080, 900);
         primaryStage.setTitle("Industrial Project");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -26,7 +27,7 @@ public class GUI extends Application implements UIProcessor {
 
     @Override
     public void stop(){
-
+        Platform.exit();
     }
 
     @Override
