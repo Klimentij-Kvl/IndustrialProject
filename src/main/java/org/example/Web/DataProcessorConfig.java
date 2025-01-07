@@ -26,10 +26,6 @@ import org.springframework.context.annotation.Configuration;
 })
 public class DataProcessorConfig {
 
-    /**
-     * NonRegexExtractor НЕ помечен @Component,
-     * поэтому создаём бин вручную.
-     */
     @Bean("NonRegexExtractor")
     public Extracter nonRegexExtractor() {
         return new NonRegexExtractor();
@@ -40,18 +36,11 @@ public class DataProcessorConfig {
         return new RegexExtractor();
     }
 
-    /**
-     * NonRegexReplacer НЕ помечен @Component,
-     * поэтому тоже создаём бин вручную.
-     */
     @Bean("NonRegexReplacer")
     public Replacer nonRegexReplacer() {
         return new NonRegexReplacer();
     }
 
-    /**
-     * ВАЖНО: Возвращаем Replacer (RegexReplacer), а не Extracter
-     */
     @Bean("RegexReplacer")
     public Replacer regexReplacer() {
         return new RegexReplacer();
