@@ -9,8 +9,7 @@ public abstract class CalculatorAdapter implements Calculator{
         List<String> calculatedExpressions = new ArrayList<>();
         for (String expression : expressions){
             calculatedExpressions.add(
-                    ReplaceAddedFunctionsToExpressions(
-                            calculate(expression) ));
+                            calculate(ReplaceAddedFunctionsToExpressions(expression)));
         }
         return calculatedExpressions;
     }
