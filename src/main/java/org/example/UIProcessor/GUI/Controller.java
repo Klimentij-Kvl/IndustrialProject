@@ -1,16 +1,16 @@
 package org.example.UIProcessor.GUI;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.reflect.ClassPath;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.DataProcessor.Calculator.CalculateExpression;
-import org.example.DataProcessor.Calculator.LibraryCalculator;
-import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
-import org.example.DataProcessor.Replacer.RegexReplacer;
+import okhttp3.*;
 import org.example.DataProcessorFactory;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
@@ -27,7 +27,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Controller {
-    private List<String> list = new ArrayList<>();
     @FXML
     private TextField inputPath, outputPackagePath, outputFileName,
             inputParam1, inputParam2, outputParam1, outputParam2,
@@ -96,7 +95,7 @@ public class Controller {
                 dr = decorateDiffReader(dr, inputOption1, inputParam1);
                 dr = decorateDiffReader(dr, inputOption2, inputParam2);
 
-                list = dr.read();
+                List<String> list = dr.read();
 
                 StringBuilder sb = new StringBuilder();
                 for (String s : list)
@@ -150,20 +149,68 @@ public class Controller {
     }
 
     @FXML
-    public void ClickEdit(){
-        DataProcessorFactory proc = new DataProcessorFactory(
-                new RegexExtractor(), new RegexReplacer(), new CalculateExpression());
+    public void ClickEdit() {
+        try {
+            OkHttpClient client = new OkHttpClient();
 
-        String[] strings = fileArea.getText().split("\n");
-        List<String> newList = Arrays.asList(strings);
-        newList = proc.process(newList);
+            String[] strings = fileArea.getText().split("\n");
+            List<String> rawList = Arrays.asList(strings);
 
-        StringBuilder sb = new StringBuilder();
-        for(String s : newList)
-            sb.append(s).append("\n");
-        sb.deleteCharAt(sb.lastIndexOf("\n"));
-        fileArea.setText(sb.toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            String rawListJson = objectMapper.writeValueAsString(rawList);
+
+            String extracterName = "org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor";
+            String calculatorName = "org.example.DataProcessor.Calculator.CalculateExpression";
+            String replacerName = "org.example.DataProcessor.Replacer.RegexReplacer";
+
+            String json = String.format("""
+                {
+                    "rawList": %s,
+                    "extracterName": "%s",
+                    "calculatorName": "%s",
+                    "replacerName": "%s"
+                }
+                """, rawListJson, extracterName, calculatorName, replacerName);
+
+            RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+
+            Request request = new Request.Builder()
+                    .url("http://localhost:8080/api/v1/calc/process")
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    Platform.runLater(() -> fileArea.setText("Ошибка: " + e.getMessage()));
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        String responseBody = response.body().string();
+                        List<String> resultList = objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
+                        Platform.runLater(() -> {
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : resultList) {
+                                sb.append(s).append("\n");
+                            }
+                            if (sb.length() > 0) {
+                                sb.deleteCharAt(sb.lastIndexOf("\n"));
+                            }
+                            fileArea.setText(sb.toString());
+                        });
+                    } else {
+                        Platform.runLater(() -> fileArea.setText("Ошибка: " + response.message()));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            fileArea.setText("Произошла ошибка: " + e.getMessage());
+        }
     }
+
 
     @FXML
     public void ClickInputFile(){
