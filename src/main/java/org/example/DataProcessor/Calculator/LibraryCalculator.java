@@ -8,6 +8,11 @@ import java.util.regex.Pattern;
 
 public class LibraryCalculator extends CalculatorAdapter
 {
+    protected String ReplaceAddedFunctionsToExpressions(String rawExpression){
+        //TODO: realize replacing user added functions to expressions
+        return rawExpression;
+    }
+
     @Override
     public String calculate(String expr)
     {

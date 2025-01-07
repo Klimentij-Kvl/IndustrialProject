@@ -1,5 +1,6 @@
-package org.example.DataProcessor.RegexProcessor;
+package org.example.DataProcessor.Extracter;
 
+import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -10,8 +11,41 @@ import java.util.List;
 
 class RegexExtractorTest {
 
-    private final FindExpression findExpression = new FindExpression();
+    private final RegexExtractor findExpression = new RegexExtractor();
 
+    private static class TestCase {
+        List<String> input;
+        List<String> expected;
+
+        TestCase(List<String> input, List<String> expected) {
+            this.input = input;
+            this.expected = expected;
+        }
+    }
+    @Test
+    void testExtractExpressions() {
+        List<TestCase> testCases = List.of(
+                new TestCase(List.of("Сегодня мы решали 10 + 5, и это оказалось просто."), List.of("10+5")),
+                new TestCase(List.of("Результат 12 * 2"," и 30 ÷ 5 был рассчитан за несколько минут."), List.of("12*2", "30÷5")),
+                new TestCase(List.of("Чтобы найти общий результат,"," нужно было вычислить )((7 + 8) * 2."), List.of("(7+8)*2")),
+                new TestCase(List.of("Выражение 5 * (3 + 2) - 7 ÷ (1 + 1) оказалось сложным."), List.of("5*(3+2)-7÷(1+1)")),
+                new TestCase(List.of("Для точного результата 22/7 использовалось как приближение числа π."), List.of("22/7")),
+                new TestCase(List.of("Разность -5 + 3 и -10"," - (-2) нас удивила."), List.of("-5+3","2+0")),
+                new TestCase(List.of("Рассчитайте ((2 + 3) * (5 - 3)) / 4."), List.of("((2+3)*(5-3))/4")),
+                new TestCase(List.of("Сегодня мы говорили о математике, но не решали никаких уравнений."), List.of()),
+                new TestCase(List.of("Сложное вычисление 12 - 5 + (3 * 2) / 4 - 1."), List.of("12-5+(3*2)/4-1")),
+                new TestCase(List.of("Рассчитайте    10   +    2    *   (  5 -  1 )"), List.of("10+2*(5-1)")),
+                new TestCase(List.of("Разность -2 и -10"," - (-2) нас удивила."),List.of("2+0"))
+        );
+
+        for (TestCase testCase : testCases) {
+            assertEquals(
+                    testCase.expected,
+                    findExpression.extract(testCase.input),
+                    "Ошибка с примером \"" + testCase.input + "\"");
+        }
+    }
+    
     @Test
     void testFindComputableExpression() {
         String input1 = "Бим б, 1 + 5 Бом";
@@ -163,22 +197,22 @@ class RegexExtractorTest {
     void testFind() {
         List<String> input1 = asList("Бим б,  (-3/5)(7+8) Бом","Парарам");
         List<String> expected1 = List.of("(-3/5)*(7+8)");
-        assertEquals(expected1, findExpression.find(input1), "Ошибка с примером \"" + input1 + "\"");
+        assertEquals(expected1, findExpression.extract(input1), "Ошибка с примером \"" + input1 + "\"");
 
         List<String> input2 = asList("Бара + 2 / 3 + бэмля-ля"," 8 / 6 + 1 Валера 22 + 2");
         List<String> expected2 = asList("2/3", "8/6+1", "22+2");
-        assertEquals(expected2, findExpression.find(input2), "Ошибка с примером \"" + input2 + "\"");
+        assertEquals(expected2, findExpression.extract(input2), "Ошибка с примером \"" + input2 + "\"");
 
         List<String> input3 = List.of("Проверяй, (3+(3* 8) должно быть изменено на двадцать семь");
         List<String> expected3 = List.of("3+(3*8)");
-        assertEquals(expected3, findExpression.find(input3), "Ошибка с примером \"" + input3 + "\"");
+        assertEquals(expected3, findExpression.extract(input3), "Ошибка с примером \"" + input3 + "\"");
 
         List<String> input4 = List.of("*- 3 +++ 5 -+-- 2)");
         List<String> expected4 = List.of("-3+5-2");
-        assertEquals(expected4, findExpression.find(input4), "Ошибка с примером \"" + input4 + "\"");
+        assertEquals(expected4, findExpression.extract(input4), "Ошибка с примером \"" + input4 + "\"");
 
         List<String> input5 = List.of(") (+10) * ((3 + 5) / 2 ");
         List<String> expected5 = List.of("10*(3+5)/2");
-        assertEquals(expected5, findExpression.find(input5), "Ошибка с примером \"" + input5 + "\"");
+        assertEquals(expected5, findExpression.extract(input5), "Ошибка с примером \"" + input5 + "\"");
     }
 }

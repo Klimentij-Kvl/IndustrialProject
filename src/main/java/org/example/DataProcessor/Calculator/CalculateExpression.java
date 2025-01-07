@@ -6,7 +6,10 @@ import java.util.regex.Pattern;
 public class CalculateExpression extends CalculatorAdapter {
     protected String expression;
 
-    public CalculateExpression(){}
+    protected String ReplaceAddedFunctionsToExpressions(String rawExpression){
+        //TODO: realize replacing user added functions to expressions
+        return rawExpression;
+    }
 
     public String result(String expression)throws ArithmeticException{
         String result = calculate(expression);
@@ -38,8 +41,6 @@ public class CalculateExpression extends CalculatorAdapter {
         return toChange;
     }
 }
-
-
 
 class CalculateSimpleExpression extends CalculateExpression {
     CalculateSimpleExpression(String expression) {
