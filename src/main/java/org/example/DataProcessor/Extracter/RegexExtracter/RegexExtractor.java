@@ -1,19 +1,15 @@
 package org.example.DataProcessor.Extracter.RegexExtracter;
 
-import org.example.DataBase.DataStorage;
 import org.example.DataProcessor.Extracter.Extracter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class RegexExtractor implements Extracter {
 
-    private final DataStorage dataStorage;
     private final String functionsMul;
     private final String functionsPlus;
 
@@ -28,11 +24,11 @@ public class RegexExtractor implements Extracter {
     private final Pattern RETURN_USEFUL_BRACKETS_PATTERN;
 
 
-    public RegexExtractor(DataStorage dataStorage) {
-        this.dataStorage = Objects.requireNonNull(dataStorage, "dataStorage must not be null");
-
-        this.functionsMul = Optional.ofNullable(dataStorage.getFunctionsMul()).orElse("");
-        this.functionsPlus = Optional.ofNullable(dataStorage.getFunctionsPlus()).orElse("");
+    public RegexExtractor() {
+        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
+        List<String> list = makeFuncExpression.makeFunctionsString();
+        functionsMul = list.get(0);
+        functionsPlus = list.get(1);
 
         this.REDUNDANT_MINUS_PATTERN = Pattern.compile("-([+]*?)-");
         this.REDUNDANT_PLUS_PATTERN = Pattern.compile("\\+\\++");
@@ -45,14 +41,8 @@ public class RegexExtractor implements Extracter {
         this.RETURN_USEFUL_BRACKETS_PATTERN = Pattern.compile("\\[([^\\[\\]]*)]");
     }
 
-    public RegexExtractor() {
-        this(DataStorage.getInstance());
-    }
-
     @Override
     public List<String> extract(List<String> rawList) {
-        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
-        makeFuncExpression.makeFunctionsString();
         return rawList.stream()
                 .flatMap(line -> findComputableExpressions(line).stream())
                 .map(this::deleteSpaces)

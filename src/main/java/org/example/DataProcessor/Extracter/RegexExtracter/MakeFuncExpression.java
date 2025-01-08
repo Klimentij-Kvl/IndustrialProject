@@ -3,6 +3,7 @@ package org.example.DataProcessor.Extracter.RegexExtracter;
 import org.example.DataBase.DataStorage;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -33,9 +34,8 @@ public class MakeFuncExpression {
      * @return количество уникальных букв (регистр не важен)
      */
     public int countUniqueLetters(String text) {
-        // Заменяем всё, что совпадает с (\\d+ + dataStorage.getFunctionsPlus()) на пустое
         String processed = text.toLowerCase()
-                .replaceAll("(\\d+" + safeFunctionsPlus() + ")", "");
+                .replaceAll("\\d+", "");
 
         Matcher matcher = LETTERS_PATTERN.matcher(processed);
         Set<Character> uniqueLetters = new HashSet<>();
@@ -49,7 +49,7 @@ public class MakeFuncExpression {
      * Из формул в dataStorage формирует паттерны для functionsMul и functionsPlus
      * и записывает их обратно в dataStorage.
      */
-    public void makeFunctionsString() {
+    public List<String> makeFunctionsString() {
         Map<String, String> mapFunc = dataStorage.getFunctions();
         StringBuilder mulBuilder = new StringBuilder();
         StringBuilder plusBuilder = new StringBuilder();
@@ -74,16 +74,6 @@ public class MakeFuncExpression {
             mulBuilder.append("\\)+)*");
             plusBuilder.append("\\)+)+");
         }
-
-        dataStorage.setFunctionsMul(mulBuilder.toString());
-        dataStorage.setFunctionsPlus(plusBuilder.toString());
-    }
-
-    /**
-     * Безопасно получить functionsPlus, чтобы не было NPE.
-     */
-    private String safeFunctionsPlus() {
-        String fp = dataStorage.getFunctionsPlus();
-        return fp != null ? fp : "";
+        return List.of(mulBuilder.toString(), plusBuilder.toString());
     }
 }

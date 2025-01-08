@@ -12,8 +12,6 @@ public class DataStorage {
     private String outputFileName;
     private String inputFileFormat;
     private String outputFileFormat;
-    private String functionsMul;
-    private String functionsPlus;
     private Map<String, String> functions;
 
     private DataStorage() {
@@ -81,17 +79,4 @@ public class DataStorage {
         functions.put(functionName, functionValue);
     }
 
-    public String getFunctionsMul() {
-        return functionsMul;
-    }
-    public void setFunctionsMul(String functionsMul) {
-        this.functionsMul = functionsMul;
-    }
-
-    public String getFunctionsPlus() {
-        return functionsPlus;
-    }
-    public void setFunctionsPlus(String functionsPlus) {
-        this.functionsPlus = functionsPlus;
-    }
 }

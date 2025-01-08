@@ -1,6 +1,6 @@
 package org.example.DataProcessor.Replacer;
 
-import org.example.DataBase.DataStorage;
+import org.example.DataProcessor.Extracter.RegexExtracter.MakeFuncExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,8 @@ public class RegexReplacer implements Replacer{
 
         int index = 0;
         List<String> replacedExpressions = new ArrayList<>();
-        DataStorage dataStorage = DataStorage.getInstance();
-        String functionsPlus = dataStorage.getFunctionsPlus();
+        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
+        String functionsPlus = makeFuncExpression.makeFunctionsString().get(1);
         String regex;
 
         if (functionsPlus.isEmpty()) {
