@@ -2,7 +2,7 @@ package org.example.UIProcessor.ConsoleUI.Commands;
 
 import org.example.DataBase.DataStorage;
 import org.example.DataProcessor.Calculator.CalculateExpression;
-import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
+import org.example.DataProcessor.Extractor.RegexExtractor.RegexExtractor;
 import org.example.DataProcessor.Replacer.RegexReplacer;
 import org.example.DataProcessorFactory;
 

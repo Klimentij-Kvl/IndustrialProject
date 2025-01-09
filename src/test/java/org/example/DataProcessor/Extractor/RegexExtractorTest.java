@@ -1,6 +1,6 @@
-package org.example.DataProcessor.Extracter;
+package org.example.DataProcessor.Extractor;
 
-import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
+import org.example.DataProcessor.Extractor.RegexExtractor.RegexExtractor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
