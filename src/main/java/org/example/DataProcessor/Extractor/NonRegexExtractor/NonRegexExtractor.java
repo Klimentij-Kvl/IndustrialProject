@@ -22,15 +22,13 @@ public class NonRegexExtractor implements Extractor {
         List<String> expressions = new ArrayList<>();
         String engAlph = "qwertyyuiopasdfghjklzxcvbnm";
         String rusAlph = "йцукенгшщзхъфывапролджэячсмитьбю";
-        String pynkt = ".,();:\"\"";
+        String pynkt = ".,;:\"\"";
+        s = s.replaceAll(" ", "");
         StringTokenizer st = new StringTokenizer(s,
                 engAlph + rusAlph + pynkt + engAlph.toUpperCase() + rusAlph.toUpperCase());
 
-        String buff;
         while(st.hasMoreTokens()){
-            buff = st.nextToken().replaceAll(" ", "");
-            if(!buff.isEmpty())
-                expressions.add(buff);
+            expressions.add(st.nextToken());
         }
 
         return expressions;
