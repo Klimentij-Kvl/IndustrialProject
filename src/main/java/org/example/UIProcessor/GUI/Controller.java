@@ -8,6 +8,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.example.DataProcessor.Calculator.CalculateExpression;
+import org.example.DataProcessor.Extractor.NonRegexExtractor.NonRegexExtractor;
 import org.example.DataProcessor.Extractor.RegexExtractor.RegexExtractor;
 import org.example.DataProcessor.Replacer.RegexReplacer;
 import org.example.DataProcessorFactory;
@@ -151,7 +152,7 @@ public class Controller {
     @FXML
     public void ClickEdit(){
         DataProcessorFactory proc = new DataProcessorFactory(
-                new RegexExtractor(), new RegexReplacer(), new CalculateExpression());
+                new NonRegexExtractor(), new RegexReplacer(), new CalculateExpression());
 
         String[] strings = fileArea.getText().split("\n");
         List<String> newList = Arrays.asList(strings);

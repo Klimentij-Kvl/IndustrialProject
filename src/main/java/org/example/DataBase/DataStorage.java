@@ -12,8 +12,8 @@ public class DataStorage {
     private String outputFileName;
     private String inputFileFormat;
     private String outputFileFormat;
-    private String functionsMul;
-    private String functionsPlus;
+    private String functionsMul="";
+    private String functionsPlus="";
     private Map<String, String> functions;
 
     private DataStorage() {
