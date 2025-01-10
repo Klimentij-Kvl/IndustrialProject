@@ -1,7 +1,7 @@
-package org.example.DataProcessor.Extracter;
+package org.example.DataProcessor.Extractor;
 
 import java.util.List;
 
-public interface Extracter {
+public interface Extractor {
     List<String> extract(List<String> rawList);
 }

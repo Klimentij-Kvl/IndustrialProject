@@ -1,7 +1,7 @@
 package org.example.DataProcessor;
 
-import org.example.DataProcessor.Calculator.CalculateExpression;
-import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
+import org.example.DataProcessor.Calculator.RegexCalculator;
+import org.example.DataProcessor.Extractor.RegexExtractor;
 import org.example.DataProcessor.Replacer.RegexReplacer;
 import org.example.DataProcessorFactory;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ public class DataProcessorTest {
     @Test
     void RegexProcessTest(){
         dataProcessor = new DataProcessorFactory(
-                new RegexExtractor(), new RegexReplacer(), new CalculateExpression());
+                new RegexExtractor(), new RegexReplacer(), new RegexCalculator());
         
         //dataProcessor.CreateFunction("abort", "x+y");
         assertEquals(List.of("Разность -2 и -10"," 2 нас удивила."),dataProcessor.process(List.of("Разность -5+3 и -10"," - (-2) нас удивила.")));
