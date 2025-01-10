@@ -1,16 +1,16 @@
 package org.example.UIProcessor.GUI;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.reflect.ClassPath;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import okhttp3.*;
+import org.example.DataProcessor.Calculator.CalculateExpression;
+import org.example.DataProcessor.Calculator.LibraryCalculator;
+import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
+import org.example.DataProcessor.Replacer.RegexReplacer;
 import org.example.DataProcessorFactory;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
@@ -27,12 +27,15 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Controller {
+    private List<String> list = new ArrayList<>();
     @FXML
     private TextField inputPath, outputPackagePath, outputFileName,
             inputParam1, inputParam2, outputParam1, outputParam2,
             funcNameField, formulaField;
     @FXML
-    private ChoiceBox<String> inputType, outputType, inputOption1, inputOption2, outputOption1, outputOption2;
+    private ChoiceBox<String> inputType, outputType, inputOption1,
+            inputOption2, outputOption1, outputOption2,
+            extractorChoice, calculatorChoice, replacerChoice;
     @FXML
     private TextArea fileArea;
 
@@ -47,25 +50,48 @@ public class Controller {
                 .collect(Collectors.toSet());
     }
 
-    private void remakeChoiceBoxWithClasses(ChoiceBox<String> toModify, String packageName, String pattern) throws IOException{
+    private Set<Class<?>> getConcreteClassesWithInterface(Class<?> interfaceClass) throws IOException{
+        return ClassPath.from(ClassLoader.getSystemClassLoader())
+                .getTopLevelClassesRecursive("org.example")
+                .stream()
+                .map(ClassPath.ClassInfo::load)
+                .filter(interfaceClass::isAssignableFrom)
+                .filter(load -> !Modifier.isAbstract(load.getModifiers()))
+                .collect(Collectors.toSet());
+    }
+
+    private void remakeFilesChoiceBoxWithClasses(ChoiceBox<String> toModify, String packageName, String pattern) throws IOException{
         toModify.getItems().add(null);
-        Set<Class<?>> DiffFileWriterClasses =
+        Set<Class<?>> Classes =
                 getConcreteClassesInPackage("org.example.FileProcessor." + packageName);
-        for(Class<?> clazz : DiffFileWriterClasses){
+        for(Class<?> clazz : Classes){
             Matcher matcher = Pattern.compile(pattern).matcher(clazz.getSimpleName());
             if(matcher.matches())
                 toModify.getItems().add(matcher.group(1));
         }
     }
+
+    private void remakeDataProcessorChoiceBoxWithClasses(ChoiceBox<String> toModify, Class<?> interfaceClass) throws IOException{
+        toModify.getItems().add(null);
+        Set<Class<?>> Classes = getConcreteClassesWithInterface(interfaceClass);
+        for(Class<?> clazz : Classes){
+            toModify.getItems().add(clazz.getSimpleName());
+        }
+    }
+
     @FXML
     public void initialize() throws IOException{
-        remakeChoiceBoxWithClasses(inputType, "DiffReader.DiffFileReader", "^(.+)DiffFileReader$");
-        remakeChoiceBoxWithClasses(inputOption1, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
-        remakeChoiceBoxWithClasses(inputOption2, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
+        remakeFilesChoiceBoxWithClasses(inputType, "DiffReader.DiffFileReader", "^(.+)DiffFileReader$");
+        remakeFilesChoiceBoxWithClasses(inputOption1, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
+        remakeFilesChoiceBoxWithClasses(inputOption2, "DiffReader.DiffReaderDecorator", "^(.+)DiffReaderDecorator$");
 
-        remakeChoiceBoxWithClasses(outputType, "DiffWriter.DiffFileWriter", "^(.+)DiffFileWriter$");
-        remakeChoiceBoxWithClasses(outputOption1, "DiffWriter.DiffWriterDecorator", "^(.+)DiffWriterDecorator$");
-        remakeChoiceBoxWithClasses(outputOption2, "DiffWriter.DiffWriterDecorator", "^(.+)DiffWriterDecorator$");
+        remakeFilesChoiceBoxWithClasses(outputType, "DiffWriter.DiffFileWriter", "^(.+)DiffFileWriter$");
+        remakeFilesChoiceBoxWithClasses(outputOption1, "DiffWriter.DiffWriterDecorator", "^(.+)DiffWriterDecorator$");
+        remakeFilesChoiceBoxWithClasses(outputOption2, "DiffWriter.DiffWriterDecorator", "^(.+)DiffWriterDecorator$");
+
+        remakeDataProcessorChoiceBoxWithClasses(extractorChoice, Extractor.class);
+        remakeDataProcessorChoiceBoxWithClasses(calculatorChoice, Calculator.class);
+        remakeDataProcessorChoiceBoxWithClasses(replacerChoice, Replacer.class);
     }
 
     private DiffReader decorateDiffReader(DiffReader dr, ChoiceBox<String> option, TextField param) throws Exception{
@@ -95,7 +121,7 @@ public class Controller {
                 dr = decorateDiffReader(dr, inputOption1, inputParam1);
                 dr = decorateDiffReader(dr, inputOption2, inputParam2);
 
-                List<String> list = dr.read();
+                list = dr.read();
 
                 StringBuilder sb = new StringBuilder();
                 for (String s : list)
@@ -210,7 +236,6 @@ public class Controller {
             fileArea.setText("Произошла ошибка: " + e.getMessage());
         }
     }
-
 
     @FXML
     public void ClickInputFile(){

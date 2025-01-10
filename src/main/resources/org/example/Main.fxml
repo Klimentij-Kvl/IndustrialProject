@@ -26,11 +26,11 @@
          <font>
             <Font size="16.0" />
          </font></Button>
-      <TextArea fx:id="fileArea" layoutX="614.0" layoutY="70.0" prefHeight="456.0" prefWidth="416.0">
+      <TextArea fx:id="fileArea" layoutX="619.0" layoutY="87.0" prefHeight="456.0" prefWidth="416.0">
          <font>
             <Font size="14.0" />
          </font></TextArea>
-      <Button layoutX="704.0" layoutY="546.0" mnemonicParsing="false" onAction="#ClickEdit" prefHeight="101.0" prefWidth="118.0" text="Replace &#10;exprassions">
+      <Button layoutX="619.0" layoutY="563.0" mnemonicParsing="false" onAction="#ClickEdit" prefHeight="101.0" prefWidth="118.0" text="Replace &#10;exprassions">
          <font>
             <Font size="16.0" />
          </font>
@@ -149,5 +149,23 @@
             <Font size="16.0" />
          </font>
       </Button>
+      <ChoiceBox fx:id="extractorChoice" layoutX="777.0" layoutY="596.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="calculatorChoice" layoutX="777.0" layoutY="676.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="replacerChoice" layoutX="777.0" layoutY="754.0" prefWidth="150.0" />
+      <Label layoutX="777.0" layoutY="577.0" text="Extractor">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="778.0" layoutY="652.0" text="Calculator">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="778.0" layoutY="729.0" text="Replacer">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

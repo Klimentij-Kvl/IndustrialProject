@@ -1,6 +1,6 @@
-package org.example.DataProcessor.Extracter.RegexExtracter;
+package org.example.DataProcessor.Extractor;
 
-import org.example.DataProcessor.Extracter.Extracter;
+import org.example.DataBase.DataStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class RegexExtractor implements Extracter {
+public class RegexExtractor implements Extractor {
 
     private final String functionsMul;
     private final String functionsPlus;
