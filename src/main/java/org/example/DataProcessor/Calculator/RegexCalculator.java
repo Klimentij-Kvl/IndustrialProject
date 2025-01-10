@@ -12,6 +12,8 @@ public class RegexCalculator extends CalculatorAdapter {
     protected String expression;
     private final DataStorage dataStorage = DataStorage.getInstance();
 
+    public RegexCalculator(){}
+
     @Override
     protected String ReplaceAddedFunctionsToExpressions(String rawExpression){
         Map<String, String> mapFunc = dataStorage.getFunctions();
