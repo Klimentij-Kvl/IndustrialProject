@@ -1,6 +1,4 @@
-package org.example.DataProcessor.Extractor.NonRegexExtractor;
-
-import org.example.DataProcessor.Extractor.Extractor;
+package org.example.DataProcessor.Extractor;
 
 import java.util.ArrayList;
 import java.util.List;

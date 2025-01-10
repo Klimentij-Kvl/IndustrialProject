@@ -1,6 +1,5 @@
 package org.example.DataProcessor.Extractor;
 
-import org.example.DataProcessor.Extractor.NonRegexExtractor.NonRegexExtractor;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

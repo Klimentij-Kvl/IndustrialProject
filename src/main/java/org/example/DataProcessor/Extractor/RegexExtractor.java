@@ -1,7 +1,6 @@
-package org.example.DataProcessor.Extractor.RegexExtractor;
+package org.example.DataProcessor.Extractor;
 
 import org.example.DataBase.DataStorage;
-import org.example.DataProcessor.Extractor.Extractor;
 
 import java.util.ArrayList;
 import java.util.List;

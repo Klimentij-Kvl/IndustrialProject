@@ -1,4 +1,4 @@
-package org.example.DataProcessor.Extractor.RegexExtractor;
+package org.example.DataProcessor.Extractor;
 
 import org.example.DataBase.DataStorage;
 
