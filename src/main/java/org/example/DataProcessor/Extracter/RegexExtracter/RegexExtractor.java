@@ -63,29 +63,30 @@ public class RegexExtractor implements Extracter {
         String regex;
         if (functionsPlus.isEmpty()) {
             regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
-                    + "((?:[\\s()\\-+]*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+))"
+                    + "((?:[\\s()\\-+]*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+)"
                     + "|"
                     + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*)";
         } else {
             // Если functionsPlus не пустой, используем расширенный шаблон
             regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
                     + "((?:[\\s()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*"
-                    + "(?:[+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+))"
+                    + "(?:[+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+)"
                     + "|"
                     + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*"
                     + "|((-*\\s*)*)" + functionsPlus.substring(1) + ")";
         }
-
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
-
         List<String> expressions = new ArrayList<>();
         while (matcher.find()) {
             StringBuilder expression = new StringBuilder();
             for (int i = 1; i <= matcher.groupCount(); i++) {
                 String group = matcher.group(i);
                 if (group != null) {
-                    expression.append(group);
+                    String[] splitedExpressions = group.split("\\d+ +\\d+");
+                    for (String splitedExpression : splitedExpressions) {
+                        expression.append(splitedExpression);
+                    }
                 }
             }
             expressions.add(expression.toString());
