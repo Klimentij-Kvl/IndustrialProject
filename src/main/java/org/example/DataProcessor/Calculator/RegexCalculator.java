@@ -1,16 +1,56 @@
 package org.example.DataProcessor.Calculator;
 
+import org.example.DataBase.DataStorage;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+
 public class RegexCalculator extends CalculatorAdapter {
     protected String expression;
+    private final DataStorage dataStorage = DataStorage.getInstance();
 
+    @Override
     protected String ReplaceAddedFunctionsToExpressions(String rawExpression){
-        //TODO: realize replacing user added functions to expressions
+        Map<String, String> mapFunc = dataStorage.getFunctions();
+        String funcName = mapFunc.keySet().iterator().next();
+        String funcExpr = mapFunc.get(funcName);
+
+        String regexFunc = funcName + "\\(\\d+(?:,\\d+)*\\)";
+
+        Pattern patternFunc = Pattern.compile(regexFunc);
+        Matcher matcherFunc = patternFunc.matcher(expression);
+        StringBuilder result = new StringBuilder();
+        String[] variableNames = {"x", "y", "z"};
+
+        while(matcherFunc.find()){
+            String argsStr = matcherFunc.group(1);
+            String[] args = argsStr.split(",");
+
+            Map<String, String> variables = new HashMap<>();
+
+            for (int i = 0; i < args.length && i < variableNames.length; i++) {
+                variables.put(variableNames[i], args[i]);
+            }
+
+            String updatedFuncExpr = funcExpr;
+            for (String var : variableNames) {
+                if (variables.containsKey(var)) {
+                    updatedFuncExpr = updatedFuncExpr.replace(var, variables.get(var));
+                } else {
+                    updatedFuncExpr = updatedFuncExpr.replace(var, var);
+                }
+            }
+
+            matcherFunc.appendReplacement(result, updatedFuncExpr);
+        }
+
+        matcherFunc.appendTail(result);
+        rawExpression = result.toString();
         return rawExpression;
     }
-
     public String result(String expression)throws ArithmeticException{
         String result = calculate(expression);
         return sign(result);
@@ -28,8 +68,7 @@ public class RegexCalculator extends CalculatorAdapter {
                 matcher = pattern.matcher(expr);
             }
             CalculateSimpleExpression calc = new CalculateSimpleExpression(expr);
-            String result = calc.simpleCalculator();
-            return result;
+            return calc.simpleCalculator();
         }
     }
 
@@ -42,7 +81,7 @@ public class RegexCalculator extends CalculatorAdapter {
     }
 
 
-    class CalculateSimpleExpression extends RegexCalculator {
+    static class CalculateSimpleExpression extends RegexCalculator {
         CalculateSimpleExpression(String expression) {
             this.expression = expression;
         }
