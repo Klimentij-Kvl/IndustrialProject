@@ -1,11 +1,11 @@
 package org.example.Web;
 
-import org.example.DataProcessor.Calculator.CalculateExpression;
 import org.example.DataProcessor.Calculator.Calculator;
 import org.example.DataProcessor.Calculator.LibraryCalculator;
-import org.example.DataProcessor.Extracter.Extracter;
-import org.example.DataProcessor.Extracter.NonRegexExtractor.NonRegexExtractor;
-import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
+import org.example.DataProcessor.Calculator.RegexCalculator;
+import org.example.DataProcessor.Extractor.Extractor;
+import org.example.DataProcessor.Extractor.NonRegexExtractor;
+import org.example.DataProcessor.Extractor.RegexExtractor;
 import org.example.DataProcessor.Replacer.NonRegexReplacer;
 import org.example.DataProcessor.Replacer.RegexReplacer;
 import org.example.DataProcessor.Replacer.Replacer;
@@ -19,20 +19,19 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan(basePackages = {
         "org.example.DataProcessor.Calculator",
-        "org.example.DataProcessor.Extracter.NonRegexExtractor",
-        "org.example.DataProcessor.Extracter.RegexExtracter",
         "org.example.DataProcessor.Replacer",
+        "org.example.DataProcessor.Extractor",
         "org.example.Web"
 })
 public class DataProcessorConfig {
 
     @Bean("NonRegexExtractor")
-    public Extracter nonRegexExtractor() {
+    public Extractor nonRegexExtractor() {
         return new NonRegexExtractor();
     }
 
     @Bean("RegexExtractor")
-    public Extracter regexExtractor() {
+    public Extractor regexExtractor() {
         return new RegexExtractor();
     }
 
@@ -48,7 +47,7 @@ public class DataProcessorConfig {
 
     @Bean("RegexCalculator")
     public Calculator calculator() {
-        return new CalculateExpression();
+        return new RegexCalculator();
     }
 
     @Bean("LibraryCalculator")

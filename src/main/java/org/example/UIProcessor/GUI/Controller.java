@@ -1,16 +1,19 @@
 package org.example.UIProcessor.GUI;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.reflect.ClassPath;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.example.DataProcessor.Calculator.CalculateExpression;
-import org.example.DataProcessor.Calculator.LibraryCalculator;
-import org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor;
-import org.example.DataProcessor.Replacer.RegexReplacer;
+import okhttp3.*;
+import org.example.DataProcessor.Calculator.Calculator;
+import org.example.DataProcessor.Extractor.Extractor;
+import org.example.DataProcessor.Replacer.Replacer;
 import org.example.DataProcessorFactory;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
@@ -201,7 +204,7 @@ public class Controller {
             RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
 
             Request request = new Request.Builder()
-                    .url("http://localhost:8080/api/v1/calc/process")
+                    .url("https://corovinus.online/api/v1/calc/process")
                     .post(body)
                     .build();
 

@@ -1,6 +1,6 @@
 package org.example.DataProcessor.Replacer;
 
-import org.example.DataProcessor.Extracter.RegexExtracter.MakeFuncExpression;
+import org.example.DataProcessor.Extractor.MakeFuncExpression;
 
 import java.util.ArrayList;
 import java.util.List;
