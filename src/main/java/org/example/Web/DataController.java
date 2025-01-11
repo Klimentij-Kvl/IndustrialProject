@@ -1,7 +1,7 @@
 package org.example.Web;
 
 import org.example.DataProcessor.Calculator.Calculator;
-import org.example.DataProcessor.Extracter.Extracter;
+import org.example.DataProcessor.Extractor.Extractor;
 import org.example.DataProcessor.Replacer.Replacer;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +20,12 @@ public class DataController {
     @PostMapping("/process")
     public List<String> process(@RequestBody ProcessRequestDto dto) throws ClassNotFoundException {
         List<String> rawList = dto.getRawList();
-        String extracterName = dto.getExtracterName();
+        String extractorName = dto.getExtractorName();
         String calculatorName = dto.getCalculatorName();
         String replacerName   = dto.getReplacerName();
 
-        Class<? extends Extracter> extracterClass =
-                (Class<? extends Extracter>) Class.forName(extracterName);
+        Class<? extends Extractor> extracterClass =
+                (Class<? extends Extractor>) Class.forName(extractorName);
         Class<? extends Calculator> calculatorClass =
                 (Class<? extends Calculator>) Class.forName(calculatorName);
         Class<? extends Replacer> replacerClass =

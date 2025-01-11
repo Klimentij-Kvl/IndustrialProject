@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ProcessRequestDto {
     private List<String> rawList;
-    private String extracterName;
+    private String extractorName;
     private String calculatorName;
     private String replacerName;
 
@@ -14,11 +14,11 @@ public class ProcessRequestDto {
     public void setRawList(List<String> rawList) {
         this.rawList = rawList;
     }
-    public String getExtracterName() {
-        return extracterName;
+    public String getExtractorName() {
+        return extractorName;
     }
-    public void setExtracterName(String extracterName) {
-        this.extracterName = extracterName;
+    public void setExtractorName(String extractorName) {
+        this.extractorName = extractorName;
     }
     public String getCalculatorName() {
         return calculatorName;
