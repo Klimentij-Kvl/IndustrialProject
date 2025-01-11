@@ -11,9 +11,9 @@ public class DataProcessorFactory {
     private final Extractor extractor;
     private final Replacer replacer;
     private final Calculator calculator;
-    private static final DataStorage dataStorage = DataStorage.getInstance();
 
     public static void addFunction(String functionName, String formula){
+        DataStorage dataStorage = DataStorage.getInstance();
         dataStorage.addFunction(functionName, formula);
     }
 

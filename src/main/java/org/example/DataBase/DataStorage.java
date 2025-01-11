@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataStorage {
-    private static DataStorage instance;
+    private static volatile DataStorage instance;
     private List<String> input;
     private List<String> output;
     private String inputFileName;
@@ -20,9 +20,13 @@ public class DataStorage {
         functions = new HashMap<>();
     }
 
-    public static synchronized DataStorage getInstance() {
+    public static DataStorage getInstance() {
         if (instance == null) {
-            instance = new DataStorage();
+            synchronized (DataStorage.class) {
+                if (instance == null) {
+                    instance = new DataStorage();
+                }
+            }
         }
         return instance;
     }
@@ -72,10 +76,10 @@ public class DataStorage {
     public Map<String, String> getFunctions() {
         return functions;
     }
-    public void setFunctions(Map<String, String> functions) {
+    public synchronized void setFunctions(Map<String, String> functions) {
         this.functions = functions;
     }
-    public void addFunction(String functionName, String functionValue) {
+    public synchronized void addFunction(String functionName, String functionValue) {
         functions.put(functionName, functionValue);
     }
 

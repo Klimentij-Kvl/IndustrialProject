@@ -17,6 +17,7 @@ import org.example.DataProcessor.Replacer.Replacer;
 import org.example.DataProcessorFactory;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -188,18 +189,18 @@ public class Controller {
             ObjectMapper objectMapper = new ObjectMapper();
             String rawListJson = objectMapper.writeValueAsString(rawList);
 
-            String extracterName = "org.example.DataProcessor.Extracter.RegexExtracter.RegexExtractor";
-            String calculatorName = "org.example.DataProcessor.Calculator.CalculateExpression";
-            String replacerName = "org.example.DataProcessor.Replacer.RegexReplacer";
+            String extractorName = "org.example.DataProcessor.Extractor." + extractorChoice.getValue();
+            String calculatorName = "org.example.DataProcessor.Calculator." + calculatorChoice.getValue();
+            String replacerName = "org.example.DataProcessor.Replacer." + replacerChoice.getValue();
 
             String json = String.format("""
                 {
                     "rawList": %s,
-                    "extracterName": "%s",
+                    "extractorName": "%s",
                     "calculatorName": "%s",
                     "replacerName": "%s"
                 }
-                """, rawListJson, extracterName, calculatorName, replacerName);
+                """, rawListJson, extractorName, calculatorName, replacerName);
 
             RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
 
@@ -210,13 +211,14 @@ public class Controller {
 
             client.newCall(request).enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e) {
+                public void onFailure(@NotNull Call call, IOException e) {
                     Platform.runLater(() -> fileArea.setText("Ошибка: " + e.getMessage()));
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                     if (response.isSuccessful()) {
+                        assert response.body() != null;
                         String responseBody = response.body().string();
                         List<String> resultList = objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
                         Platform.runLater(() -> {
@@ -224,7 +226,7 @@ public class Controller {
                             for (String s : resultList) {
                                 sb.append(s).append("\n");
                             }
-                            if (sb.length() > 0) {
+                            if (!sb.isEmpty()) {
                                 sb.deleteCharAt(sb.lastIndexOf("\n"));
                             }
                             fileArea.setText(sb.toString());

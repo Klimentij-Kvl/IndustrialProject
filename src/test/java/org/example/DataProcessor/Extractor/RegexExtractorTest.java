@@ -24,7 +24,7 @@ class RegexExtractorTest {
     @Test
     void testExtractExpressions() {
         List<TestCase> testCases = List.of(
-                new TestCase(List.of("Сегодня мы решали 10 + 5, и это оказалось просто."), List.of("10+5")),
+                new TestCase(List.of("Сегодня мы решали 10 + 5 11 + 4 88 + 9 3 * 33, и это оказалось просто.\n"), List.of("10+5","11+4","88+9","3*33")),
                 new TestCase(List.of("Результат 12 * 2"," и 30 ÷ 5 был рассчитан за несколько минут."), List.of("12*2", "30÷5")),
                 new TestCase(List.of("Чтобы найти общий результат,"," нужно было вычислить )((7 + 8) * 2."), List.of("(7+8)*2")),
                 new TestCase(List.of("Выражение 5 * (3 + 2) - 7 ÷ (1 + 1) оказалось сложным."), List.of("5*(3+2)-7÷(1+1)")),

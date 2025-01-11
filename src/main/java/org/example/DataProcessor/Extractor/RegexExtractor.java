@@ -1,7 +1,5 @@
 package org.example.DataProcessor.Extractor;
 
-import org.example.DataBase.DataStorage;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -10,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class RegexExtractor implements Extractor {
 
-    private final String functionsMul;
-    private final String functionsPlus;
+    private String functionsMul;
+    private String functionsPlus;
 
     private final Pattern REDUNDANT_MINUS_PATTERN;
     private final Pattern REDUNDANT_PLUS_PATTERN;
@@ -61,6 +59,11 @@ public class RegexExtractor implements Extractor {
 
     public List<String> findComputableExpressions(String input) {
         String regex;
+        MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
+        List<String> list = makeFuncExpression.makeFunctionsString();
+        functionsMul = list.get(0);
+        functionsPlus = list.get(1);
+
         if (functionsPlus.isEmpty()) {
             regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
                     + "((?:[\\s()\\-+]*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+)"
@@ -83,10 +86,18 @@ public class RegexExtractor implements Extractor {
             for (int i = 1; i <= matcher.groupCount(); i++) {
                 String group = matcher.group(i);
                 if (group != null) {
-                    String[] splitedExpressions = group.split("\\d+ +\\d+");
-                    for (String splitedExpression : splitedExpressions) {
-                        expression.append(splitedExpression);
+                    Pattern splitPattern = Pattern.compile("(\\d+" + functionsPlus + ") +(\\d+" + functionsPlus + ")");
+                    Matcher splitMatcher = splitPattern.matcher(group);
+                    int lastEnd = 0;
+                    while (splitMatcher.find()) {
+                        expression.append(group, lastEnd, splitMatcher.start());
+                        expression.append(splitMatcher.group(1));
+                        expressions.add(expression.toString());
+                        expression.delete(0, expression.length());
+                        expression.append(splitMatcher.group(2));
+                        lastEnd = splitMatcher.end();
                     }
+                    expression.append(group.substring(lastEnd));
                 }
             }
             expressions.add(expression.toString());
