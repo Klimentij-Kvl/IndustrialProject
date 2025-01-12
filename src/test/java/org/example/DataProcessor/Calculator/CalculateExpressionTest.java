@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class CalculateExpressionTest {
-    private final CalculateExpression calculateExpression = new CalculateExpression();
+    private final RegexCalculator calculateExpression = new RegexCalculator();
 
     @ParameterizedTest
     @CsvSource({

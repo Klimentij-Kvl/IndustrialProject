@@ -1,18 +1,23 @@
 package org.example.UIProcessor.GUI;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.reflect.ClassPath;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 
 import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import okhttp3.*;
+import org.example.DataBase.DataStorage;
 import org.example.DataProcessor.Calculator.Calculator;
 import org.example.DataProcessor.Extractor.Extractor;
 import org.example.DataProcessor.Replacer.Replacer;
-import org.example.DataProcessorFactory;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -174,28 +179,67 @@ public class Controller {
     }
 
     @FXML
-    public void ClickEdit(){
-        String[] strings = fileArea.getText().split("\n");
-        List<String> newList = Arrays.asList(strings);
-
+    public void ClickEdit() {
         try {
-            Extractor e = (Extractor) Class.forName("org.example.DataProcessor.Extractor."
-                    + extractorChoice.getValue()).getConstructor().newInstance();
-            Replacer r = (Replacer) Class.forName("org.example.DataProcessor.Replacer."
-                    + replacerChoice.getValue()).getConstructor().newInstance();
-            Calculator c = (Calculator) Class.forName("org.example.DataProcessor.Calculator."
-                    + calculatorChoice.getValue()).getConstructor().newInstance();
-            DataProcessorFactory dpf = new DataProcessorFactory(e,r,c);
-            newList = dpf.process(newList);
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+            OkHttpClient client = new OkHttpClient();
 
-        StringBuilder sb = new StringBuilder();
-        for(String s : newList)
-            sb.append(s).append("\n");
-        sb.deleteCharAt(sb.lastIndexOf("\n"));
-        fileArea.setText(sb.toString());
+            String[] strings = fileArea.getText().split("\n");
+            List<String> rawList = Arrays.asList(strings);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String rawListJson = objectMapper.writeValueAsString(rawList);
+
+            String extractorName = "org.example.DataProcessor.Extractor." + extractorChoice.getValue();
+            String calculatorName = "org.example.DataProcessor.Calculator." + calculatorChoice.getValue();
+            String replacerName = "org.example.DataProcessor.Replacer." + replacerChoice.getValue();
+
+            String json = String.format("""
+                {
+                    "rawList": %s,
+                    "extractorName": "%s",
+                    "calculatorName": "%s",
+                    "replacerName": "%s"
+                }
+                """, rawListJson, extractorName, calculatorName, replacerName);
+
+            RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
+
+            Request request = new Request.Builder()
+                    .url("https://corovinus.online/api/v1/calc/process")
+                    .post(body)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, IOException e) {
+                    Platform.runLater(() -> fileArea.setText("Ошибка: " + e.getMessage()));
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        assert response.body() != null;
+                        String responseBody = response.body().string();
+                        List<String> resultList = objectMapper.readValue(responseBody, new TypeReference<List<String>>() {});
+                        Platform.runLater(() -> {
+                            StringBuilder sb = new StringBuilder();
+                            for (String s : resultList) {
+                                sb.append(s).append("\n");
+                            }
+                            if (!sb.isEmpty()) {
+                                sb.deleteCharAt(sb.lastIndexOf("\n"));
+                            }
+                            fileArea.setText(sb.toString());
+                        });
+                    } else {
+                        Platform.runLater(() -> fileArea.setText("Ошибка: " + response.message()));
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            fileArea.setText("Произошла ошибка: " + e.getMessage());
+        }
     }
 
     @FXML
@@ -224,8 +268,9 @@ public class Controller {
         }
     }
 
+
     @FXML
     public void makeFunc(){
-        DataProcessorFactory.addFunction(funcNameField.getText(), formulaField.getText());
+        DataStorage.getInstance().addFunction(funcNameField.getText(), formulaField.getText());
     }
 }

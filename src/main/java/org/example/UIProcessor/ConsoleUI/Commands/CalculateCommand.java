@@ -4,7 +4,7 @@ import org.example.DataBase.DataStorage;
 import org.example.DataProcessor.Calculator.RegexCalculator;
 import org.example.DataProcessor.Extractor.RegexExtractor;
 import org.example.DataProcessor.Replacer.RegexReplacer;
-import org.example.DataProcessorFactory;
+import org.example.DataProcessor.DataProcessorFactory;
 
 public class CalculateCommand implements Command {
     @Override
