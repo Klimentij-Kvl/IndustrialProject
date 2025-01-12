@@ -1,5 +1,6 @@
 package org.example.DataProcessor.RegexProcessor;
 
+import org.example.DataProcessor.Calculator.RegexCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -15,7 +16,7 @@ class CalculateExpressionTest {
             "--3, 3"
     })
     public void testNumber(String expression, String expected) {
-        assertEquals(expected, CalculateExpression.calculate(expression));
+        assertEquals(expected, new RegexCalculator().calculate(expression));
     }
 
     @ParameterizedTest
@@ -25,7 +26,7 @@ class CalculateExpressionTest {
             "-3+2, -1"
     })
     public void testSimpleSumAndDifference(String expression, String expected) {
-        assertEquals(expected, CalculateExpression.calculate(expression));
+        assertEquals(expected, new RegexCalculator().calculate(expression));
     }
 
     @ParameterizedTest
@@ -40,7 +41,7 @@ class CalculateExpressionTest {
             "5*6/3, 10"
     })
     public void testSimpleMultiplicationAndDivision(String expression, String expected) {
-        assertEquals(expected, CalculateExpression.calculate(expression));
+        assertEquals(expected, new RegexCalculator().calculate(expression));
     }
 
     @ParameterizedTest
@@ -53,14 +54,14 @@ class CalculateExpressionTest {
             "-6/-2.5, 2.4"
     })
     public void testDivisionWithDecimals(String expression, String expected) {
-        String actual = CalculateExpression.calculate(expression).replace(',', '.');
+        String actual = new RegexCalculator().calculate(expression).replace(',', '.');
         assertEquals(expected, actual);
     }
 
     @Test
     public void testDivisionByZero() {
         assertThrows(ArithmeticException.class, () -> {
-            CalculateExpression.calculate("6/0");
+            new RegexCalculator().calculate("6/0");
         });
     }
 
@@ -78,14 +79,14 @@ class CalculateExpressionTest {
             "5+(2-3/-2), 8.5"
     })
     public void testComplicatedExpressions(String expression, String expected) {
-        String actual = CalculateExpression.calculate(expression).replace(',', '.');
+        String actual = new RegexCalculator().calculate(expression).replace(',', '.');
         assertEquals(expected, actual);
     }
 
     @Test
     public void testComplicatedExpressionWithDivisionByZero() {
         assertThrows(ArithmeticException.class, () -> {
-            CalculateExpression.calculate("5+(2-3)/0");
+            new RegexCalculator().calculate("5+(2-3)/0");
         });
     }
 }
