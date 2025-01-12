@@ -13,8 +13,8 @@ import java.io.IOException;
 public class GUI extends Application implements UIProcessor {
     @Override
     public void start(Stage primaryStage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Main.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1080, 900);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 400, 300);
         primaryStage.setTitle("Industrial Project");
         primaryStage.setScene(scene);
         primaryStage.show();
