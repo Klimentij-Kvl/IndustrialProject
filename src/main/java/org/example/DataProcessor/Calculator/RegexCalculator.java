@@ -15,7 +15,7 @@ public class RegexCalculator extends CalculatorAdapter {
 
     @Override
     protected String ReplaceAddedFunctionsToExpressions(String rawExpression) {
-        Map<String, String> functions = DataStorage.getInstance().getFunctions();
+        Map<String, String> functions = dataStorage.getFunctions();
         String funcName = functions.keySet().iterator().next(); // Имя функции
         String funcTemplate = functions.get(funcName); // Шаблон функции
         String regex = funcName + "\\((\\d+(?:,\\d+)*)\\)"; // Регулярное выражение для функции
@@ -51,6 +51,9 @@ public class RegexCalculator extends CalculatorAdapter {
     @Override
     public String calculate(String expr) throws ArithmeticException {
         {
+            if(!dataStorage.getFunctions().isEmpty()) {
+                expr = ReplaceAddedFunctionsToExpressions(expr);
+            }
             Pattern pattern = Pattern.compile("\\(([^()]+)\\)");
             Matcher matcher = pattern.matcher(expr);
             while(matcher.find()){
