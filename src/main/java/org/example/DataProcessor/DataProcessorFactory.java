@@ -1,4 +1,4 @@
-package org.example;
+package org.example.DataProcessor;
 
 import org.example.DataBase.DataStorage;
 import org.example.DataProcessor.Calculator.Calculator;

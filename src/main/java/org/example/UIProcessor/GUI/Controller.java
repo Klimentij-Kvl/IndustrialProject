@@ -11,10 +11,10 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import okhttp3.*;
+import org.example.DataBase.DataStorage;
 import org.example.DataProcessor.Calculator.Calculator;
 import org.example.DataProcessor.Extractor.Extractor;
 import org.example.DataProcessor.Replacer.Replacer;
-import org.example.DataProcessorFactory;
 import org.example.FileProcessor.DiffReader.DiffReader;
 import org.example.FileProcessor.DiffWriter.DiffWriter;
 import org.jetbrains.annotations.NotNull;
@@ -268,8 +268,9 @@ public class Controller {
         }
     }
 
+
     @FXML
     public void makeFunc(){
-        DataProcessorFactory.addFunction(funcNameField.getText(), formulaField.getText());
+        DataStorage.getInstance().addFunction(funcNameField.getText(), formulaField.getText());
     }
 }
