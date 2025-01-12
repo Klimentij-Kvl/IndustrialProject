@@ -1,8 +1,10 @@
-package org.example.Web;
+package org.example.Web.Controllers;
 
 import org.example.DataProcessor.Calculator.Calculator;
 import org.example.DataProcessor.Extractor.Extractor;
 import org.example.DataProcessor.Replacer.Replacer;
+import org.example.Web.DynamicDataProcessorService;
+import org.example.Web.ProcessRequestDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

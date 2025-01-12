@@ -3,7 +3,7 @@ package org.example.Web;
 import org.example.DataProcessor.Calculator.Calculator;
 import org.example.DataProcessor.Extractor.Extractor;
 import org.example.DataProcessor.Replacer.Replacer;
-import org.example.DataProcessorFactory;
+import org.example.DataProcessor.DataProcessorFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
