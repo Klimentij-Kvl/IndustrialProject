@@ -274,6 +274,7 @@ public class Controller {
         FileChooser chooser = new FileChooser();
         chooser.setInitialDirectory(new File("src/resources/"));
         chooser.setTitle("Choose an input file:");
+
         chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
                 "all files", "*.*"));
         try{
