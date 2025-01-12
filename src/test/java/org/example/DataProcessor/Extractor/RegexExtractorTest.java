@@ -48,11 +48,11 @@ class RegexExtractorTest {
     @Test
     void testFindComputableExpression() {
         String input1 = "Бим б, 1 + 5 Бом";
-        List<String> expected1 = List.of(" 1 + 5 ");
+        List<String> expected1 = List.of("1 + 5 ");
         assertEquals(expected1, findExpression.findComputableExpressions(input1), "Ошибка с примером \"" + input1 + "\"");
 
         String input2 = "Бара + 2 / 3 + бэмля-ля 8 / 6 + 1 Валера 22 + 2";
-        List<String> expected2 = asList(" + 2 / 3 ", " 8 / 6 + 1 ", " 22 + 2");
+        List<String> expected2 = asList("+ 2 / 3 ", "8 / 6 + 1 ", "22 + 2");
         assertEquals(expected2, findExpression.findComputableExpressions(input2), "Ошибка с примером \"" + input2 + "\"");
 
         String input3 = "т(ы5*3в";
@@ -64,7 +64,7 @@ class RegexExtractorTest {
         assertEquals(expected4, findExpression.findComputableExpressions(input4), "Ошибка с примером \"" + input4 + "\"");
 
         String input5 = " 10 * ((3 + 5) / 2 ";
-        List<String> expected5 = List.of(" 10 * ((3 + 5) / 2 ");
+        List<String> expected5 = List.of("10 * ((3 + 5) / 2 ");
         assertEquals(expected5, findExpression.findComputableExpressions(input5), "Ошибка с примером \"" + input5 + "\"");
 
         String input6 = "1 + 2 - 3 * 4 / 5 + 6";

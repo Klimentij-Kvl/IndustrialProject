@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class RegexExtractor implements Extractor {
 
-    private String functionsMul;
-    private String functionsPlus;
+    private final String functionsMul;
+    private final String functionsPlus;
 
     private final Pattern REDUNDANT_MINUS_PATTERN;
     private final Pattern REDUNDANT_PLUS_PATTERN;
@@ -57,27 +57,27 @@ public class RegexExtractor implements Extractor {
                 .collect(Collectors.toList());
     }
 
-    public List<String> findComputableExpressions(String input) {
-        String regex;
+    private String buildRegex() {
         MakeFuncExpression makeFuncExpression = new MakeFuncExpression();
-        List<String> list = makeFuncExpression.makeFunctionsString();
-        functionsMul = list.get(0);
-        functionsPlus = list.get(1);
+        String functionsPlus = makeFuncExpression.makeFunctionsString().get(1);
+
+        String baseRegex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*" +
+                "((?:(?:[()\\-+]+\\s*)*";
 
         if (functionsPlus.isEmpty()) {
-            regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
-                    + "((?:[\\s()\\-+]*\\d+[ ()]*(?:[+\\-*÷/][ ()\\-+]*\\d+[ ()]*)+)+)"
-                    + "|"
-                    + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+\\d+[()\\s]*)";
+            return baseRegex + "\\d+[ ()]*(?:[+\\-*\\u00f7/][ ()\\-+]*\\d+[ ()]*)+)+)" +
+                    "|" +
+                    "((?:(?:[()\\-+]+\\s*)*[()\\-+]{2,})+\\d+[()\\s]*)";
         } else {
-            // Если functionsPlus не пустой, используем расширенный шаблон
-            regex = "(?:\\((?:[ -'*-Z^-zА-яёЁ]*,+[ -'*-Z^-zА-яёЁ]*)+\\))*"
-                    + "((?:[\\s()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*"
-                    + "(?:[+\\-*÷/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+)"
-                    + "|"
-                    + "((?:\\s*[()\\-+]*\\s*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*"
-                    + "|((-*\\s*)*)" + functionsPlus.substring(1) + ")";
+            return baseRegex + "(?:\\d+" + functionsPlus + ")[ ()]*(?:[+\\-*\\u00f7/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+)" +
+                    "|" +
+                    "((?:(?:[()\\-+]+\\s*)*[()\\-+]{2,})+(?:\\d+)[()\\s]*)" +
+                    "|((?:[()\\-+]+\\s*)*" + functionsPlus.substring(1) + ")+";
         }
+    }
+
+    public List<String> findComputableExpressions(String input) {
+        String regex = buildRegex();
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(input);
         List<String> expressions = new ArrayList<>();
@@ -86,7 +86,7 @@ public class RegexExtractor implements Extractor {
             for (int i = 1; i <= matcher.groupCount(); i++) {
                 String group = matcher.group(i);
                 if (group != null) {
-                    Pattern splitPattern = Pattern.compile("(\\d+" + functionsPlus + ") +(\\d+" + functionsPlus + ")");
+                    Pattern splitPattern = Pattern.compile("(\\d+" + functionsPlus + ")\\s+(\\d+" + functionsPlus + ")");
                     Matcher splitMatcher = splitPattern.matcher(group);
                     int lastEnd = 0;
                     while (splitMatcher.find()) {

@@ -52,7 +52,8 @@ public class RegexReplacer implements Replacer {
         } else {
             return baseRegex + "(?:\\d+" + functionsPlus + ")[ ()]*(?:[+\\-*\\u00f7/][ ()\\-+]*(?:\\d+" + functionsPlus + ")[ ()]*)+)+)" +
                     "|" +
-                    "((?:(?:[()\\-+]+\\s*)*[()\\-+]{2,})+(?:\\d+" + functionsPlus + ")[()\\s]*)";
+                    "((?:(?:[()\\-+]+\\s*)*[()\\-+]{2,})+(?:\\d+)[()\\s]*)" +
+                    "|((?:[()\\-+]+\\s*)*" + functionsPlus.substring(1) + ")+";
         }
     }
 

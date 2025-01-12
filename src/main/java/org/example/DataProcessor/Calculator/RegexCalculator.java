@@ -2,7 +2,6 @@ package org.example.DataProcessor.Calculator;
 
 import org.example.DataBase.DataStorage;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,44 +14,35 @@ public class RegexCalculator extends CalculatorAdapter {
     public RegexCalculator(){}
 
     @Override
-    protected String ReplaceAddedFunctionsToExpressions(String rawExpression){
-        Map<String, String> mapFunc = dataStorage.getFunctions();
-        String funcName = mapFunc.keySet().iterator().next();
-        String funcExpr = mapFunc.get(funcName);
+    protected String ReplaceAddedFunctionsToExpressions(String rawExpression) {
+        Map<String, String> functions = DataStorage.getInstance().getFunctions();
+        String funcName = functions.keySet().iterator().next(); // Имя функции
+        String funcTemplate = functions.get(funcName); // Шаблон функции
+        String regex = funcName + "\\((\\d+(?:,\\d+)*)\\)"; // Регулярное выражение для функции
 
-        String regexFunc = funcName + "\\(\\d+(?:,\\d+)*\\)";
-
-        Pattern patternFunc = Pattern.compile(regexFunc);
-        Matcher matcherFunc = patternFunc.matcher(expression);
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(rawExpression);
         StringBuilder result = new StringBuilder();
-        String[] variableNames = {"x", "y", "z"};
+        String[] vars = {"x", "y", "z"}; // Переменные для аргументов
 
-        while(matcherFunc.find()){
-            String argsStr = matcherFunc.group(1);
-            String[] args = argsStr.split(",");
+        while (matcher.find()) {
+            String[] args = matcher.group(1).split(","); // Аргументы функции
+            String funcBody = funcTemplate;
 
-            Map<String, String> variables = new HashMap<>();
-
-            for (int i = 0; i < args.length && i < variableNames.length; i++) {
-                variables.put(variableNames[i], args[i]);
+            // Замена переменных аргументами
+            for (int i = 0; i < args.length && i < vars.length; i++) {
+                funcBody = funcBody.replace(vars[i], args[i]);
             }
 
-            String updatedFuncExpr = funcExpr;
-            for (String var : variableNames) {
-                if (variables.containsKey(var)) {
-                    updatedFuncExpr = updatedFuncExpr.replace(var, variables.get(var));
-                } else {
-                    updatedFuncExpr = updatedFuncExpr.replace(var, var);
-                }
-            }
-
-            matcherFunc.appendReplacement(result, updatedFuncExpr);
+            // Оборачиваем результат функции в скобки
+            matcher.appendReplacement(result, "(" + funcBody + ")");
         }
 
-        matcherFunc.appendTail(result);
-        rawExpression = result.toString();
-        return rawExpression;
+        matcher.appendTail(result); // Добавляем остаток строки
+        return result.toString();
     }
+
+
     public String result(String expression)throws ArithmeticException{
         String result = calculate(expression);
         return sign(result);
