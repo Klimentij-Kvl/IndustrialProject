@@ -85,4 +85,5 @@
 
 ## Организация "NoCompany"
 
-![img.png](img.png)
+![image](https://github.com/user-attachments/assets/fa048ff7-f167-4245-9e09-50dd3c5f657a)
+
